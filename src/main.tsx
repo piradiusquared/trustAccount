@@ -11,7 +11,8 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
 
       {/* Actual react frontend app */}
-      <App />  
+      <App />
+      
     </BrowserRouter>
   </StrictMode>,
 )
