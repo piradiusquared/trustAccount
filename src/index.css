@@ -1,0 +1,14 @@
+/* 
+index.css
+Used for GLOBAL styling of entire React APP
+*/
+
+/* Global styling */
+* {
+    border: 0;
+    margin: 0;
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}
