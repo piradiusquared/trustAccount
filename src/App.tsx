@@ -30,17 +30,13 @@ function App() {
 // Routing Functions
 function Dashboard() {
   return (
-    <div>
       <h1>Dashboard oh yeah</h1>
-    </div>
   )
 }
 
 function Owners() {
   return (
-    <div>
       <h1>Owners page and stuff</h1>
-    </div>
   )
 }
 
