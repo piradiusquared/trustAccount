@@ -1,0 +1,21 @@
+/* 
+app.css
+Persistent React styling ONLY
+*/
+
+
+/* Top navigation styling */
+#topnav {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    padding: 1rem;
+    background-color: wheat;
+}
+
+#topnav > .toplink {
+    text-decoration: none;
+    color: black;
+
+}

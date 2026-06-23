@@ -2,15 +2,17 @@
 import { Routes, Route, Link } from 'react-router-dom'
 
 // CSS imports
-import './App.css'
+import './app.css'
 
 function App() {
   
   return (
     <>
-      <nav style={{ padding: '20px', borderBottom: '1px solid #ccc' }}> {/* Remove inline styling */}
-        <Link to="/" style={{ marginRight: '10px' }}>Overview</Link>
-        <Link to="/owners">Owners</Link>
+      <nav id="topnav"> {/* Remove inline styling */}
+        <Link className='toplink' to="/">Overview</Link>
+        <Link className='toplink' to="/owners">Owners</Link>
+        <Link className='toplink' to="/properties">Properties</Link>
+        <Link className='toplink' to="/leases">Leases</Link>
       </nav>
 
       {/* Routing */}
@@ -18,6 +20,8 @@ function App() {
         {/* Actual routes */}
         <Route path="/" element={<Dashboard />} />
         <Route path="/owners" element={<Owners />} />
+        <Route path="/properties" element={<Properties />} />
+        <Route path="/leases" element={<Leases />} />
       </Routes>
     </>
   )
@@ -37,6 +41,18 @@ function Owners() {
     <div>
       <h1>Owners page and stuff</h1>
     </div>
+  )
+}
+
+function Properties() {
+  return (
+    <h1>properties</h1>
+  )
+}
+
+function Leases() {
+  return (
+    <h1>leases</h1>
   )
 }
 
