@@ -1,7 +1,11 @@
 // Package imports
 import { Routes, Route, Link } from 'react-router-dom'
-import { useAppSelector } from './core/hooks'
-import { service } from './core/services'
+
+// Modular tsx files
+import Owners from './pages/owners'
+import Dashboard from './pages/dashboard'
+import Properties from './pages/properties'
+import Leases from './pages/leases'
 
 // CSS imports
 import './app.css'
@@ -25,66 +29,6 @@ function App() {
         <Route path="/leases" element={<Leases />} />
       </Routes>
     </>
-  )
-}
-
-// Routing Functions
-function Dashboard() {
-  return (
-      <h1>Dashboard oh yeah</h1>
-  )
-}
-
-function Owners() {
-  // Testing
-  const owners = useAppSelector(state => state.owners);
-  function addGandalfOwner() {
-    service.createOwner({
-      reference: 'own1',
-      firstName: 'Gandalf',
-      surname: 'The Grey',
-      email: 'you.shall.not.pass@middleearth.com'
-    });
-  }
-  
-  return (
-    <>
-      <h1>Owners page and stuff</h1>
-      {/* Testing owners */}
-      <button onClick={addGandalfOwner}>
-        Add Gandalf
-      </button>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-          </tr>
-        </thead>
-        <tbody>
-          {owners.map((o) => (
-            <tr key={o.id}>
-              <td>{o.firstName} {o.surname}</td>
-              <td>{o.email}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>  
-    
-    </>
-  )
-}
-
-function Properties() {
-  return (
-    <h1>properties</h1>
-  )
-}
-
-function Leases() {
-  return (
-    <h1>leases</h1>
   )
 }
 
