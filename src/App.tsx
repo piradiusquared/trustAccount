@@ -1,6 +1,7 @@
 // Package imports
 import { Routes, Route, Link } from 'react-router-dom'
-import { useOwners, addOwner } from './core/useStore'
+import { useAppSelector } from './core/hooks'
+import { service } from './core/services'
 
 // CSS imports
 import './app.css'
@@ -36,13 +37,14 @@ function Dashboard() {
 
 function Owners() {
   // Testing
-  const owners = useOwners();
+  const owners = useAppSelector(state => state.owners);
   function addGandalfOwner() {
-    addOwner(
-      "Gandalf",
-      "The Grey",
-      "you.shall.not.pass@middleearth.com"
-    );
+    service.createOwner({
+      reference: 'own1',
+      firstName: 'Gandalf',
+      surname: 'The Grey',
+      email: 'you.shall.not.pass@middleearth.com'
+    });
   }
   
   return (
@@ -71,7 +73,6 @@ function Owners() {
       </table>  
     
     </>
-
   )
 }
 
