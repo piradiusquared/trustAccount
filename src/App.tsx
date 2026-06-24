@@ -1,11 +1,11 @@
 // Package imports
 import { Routes, Route, Link } from 'react-router-dom'
+import { useOwners, addOwner } from './core/useStore'
 
 // CSS imports
 import './app.css'
 
 function App() {
-  
   return (
     <>
       <nav id="topnav"> {/* Remove inline styling */}
@@ -35,8 +35,43 @@ function Dashboard() {
 }
 
 function Owners() {
+  // Testing
+  const owners = useOwners();
+  function addGandalfOwner() {
+    addOwner(
+      "Gandalf",
+      "The Grey",
+      "you.shall.not.pass@middleearth.com"
+    );
+  }
+  
   return (
+    <>
       <h1>Owners page and stuff</h1>
+      {/* Testing owners */}
+      <button onClick={addGandalfOwner}>
+        Add Gandalf
+      </button>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          {owners.map((o) => (
+            <tr key={o.id}>
+              <td>{o.firstName} {o.surname}</td>
+              <td>{o.email}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>  
+    
+    </>
+
   )
 }
 
