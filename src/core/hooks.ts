@@ -8,7 +8,7 @@ export function useAppSelector<T>(
   selector: (state: AppState) => T,
 ): T {
   return useSyncExternalStore(
-    store.subscribe.bind(store),
+    store.subscribe,
     () => selector(store.getSnapshot()),
   );
 }
