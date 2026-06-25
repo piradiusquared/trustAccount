@@ -13,12 +13,15 @@ import './app.css'
 function App() {
   return (
     <>
-      <nav id="topnav"> {/* Remove inline styling */}
-        <Link className='toplink' to="/">Overview</Link>
-        <Link className='toplink' to="/owners">Owners</Link>
-        <Link className='toplink' to="/properties">Properties</Link>
-        <Link className='toplink' to="/leases">Leases</Link>
-      </nav>
+      <div className="topnav-container">
+        <nav className="topnav"> {/* Remove inline styling */}
+          <Link className='toplink' to="/">Overview</Link>
+          <Link className='toplink' to="/owners">Owners</Link>
+          <Link className='toplink' to="/properties">Properties</Link>
+          <Link className='toplink' to="/leases">Leases</Link>
+        </nav>
+      </div>
+
 
       {/* Routing */}
       <Routes>
