@@ -29,11 +29,10 @@ export interface OwnerRecord {
   email?: string;
   mobile?: string;
   postalAddress?: string;
-  bankName?: string;
   accountName?: string;
   bsb?: string;
   accountNumber?: string;
-  paymentReference?: string;
+  paymentRef?: string;
   notes?: string;
   createdAt: IsoDate;
   updatedAt: IsoDate;
@@ -51,7 +50,7 @@ export interface CreateOwnerInput {
   accountName?: string;
   bsb?: string;
   accountNumber?: string;
-  paymentReference?: string;
+  paymentRef?: string;
   notes?: string;
 }
 
