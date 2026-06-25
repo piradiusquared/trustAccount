@@ -25,3 +25,31 @@ Used for GLOBAL styling of entire React APP
     height: 100px;
     border: 2px solid red;
 }
+
+.drop-right {
+    filter: drop-shadow(6px 4px 0 gray);
+    transition: 250ms ease-in-out;
+}
+
+.drop-left {
+    filter: drop-shadow(-6px 4px 0 gray);
+    transition: 250ms ease-in-out;
+}
+
+.drop-right-static {
+    filter: drop-shadow(12px 10px 0 gray);
+}
+
+.drop-left-static {
+    filter: drop-shadow(-12px 10px 0 gray);
+}
+
+.drop-right:hover {
+    transform: translate(6px, 4px);
+    filter: none;
+}
+
+.drop-left:hover {
+    transform: translate(-6px, 4px);
+    filter: none;
+}
