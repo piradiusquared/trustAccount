@@ -76,6 +76,7 @@ function formatPostalAddress(form: OwnerFormState): string {
         .join(', ');
 }
 
+
 export default function Owners() {
     const owners = useAppSelector(state => state.owners);
     const [form, setForm] = useState<OwnerFormState>(emptyForm);
@@ -107,9 +108,9 @@ export default function Owners() {
 
         setForm(emptyForm);
     }
-
+    
     return (
-    <div className='owners-container'>
+    <div className='content-container'>
 
         <header className='owners-header'>
             <h1>Owners</h1>

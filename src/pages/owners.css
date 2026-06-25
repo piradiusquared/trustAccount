@@ -1,13 +1,4 @@
 
-.owners-container {
-    margin: 2%;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-
-    width: 100%;
-}
-
 .owners-header {
     display: flex;
     justify-content: space-between;
