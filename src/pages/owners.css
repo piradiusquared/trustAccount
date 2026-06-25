@@ -1,7 +1,11 @@
 
 .owners-container {
     margin: 2%;
-    /* background-color: aqua; */
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    width: 100%;
 }
 
 .owners-header {
@@ -39,7 +43,6 @@
     padding: 0.2rem;
 }
 
-
 .owners-form-flex > label > span {
     font-size: larger;
 }
@@ -48,22 +51,28 @@
     background-color: lightgray;
 }
 
-.owners-form-flex > label > input {
+.owners-form-flex input, .owners-form-flex select {
+    width: 40%;
+
     border: 1px solid black;
     border-radius: 5px;
+    outline-color: lightskyblue;
+
+    padding: 0.2rem;
+}
+
+.owners-form-actions {
+    width: 20%;
+    display: flex;
+    justify-content: space-evenly;
 }
 
 .owners-form-actions > button {
-    background-color: lightblue;
+    background-color: lightskyblue;
     padding: 0.6rem 0.8rem;
     border-radius: 10px;
 
-    transition: all 250ms;
-}
-
-.owners-form-actions > button:hover {
-    background-color: lightskyblue;
-    
+    cursor: pointer;
 }
 
 

@@ -22,11 +22,20 @@ type OwnerFormState = {
     suburb: string;
     state: string;
     postcode: string;
+
+    // Banking
+    accountName: string,
+    bsb: string,
+    accountNumber: string,
+    paymentRef: string,
+
+    // Notes
+    ownerNotes: string
 };
 
 const emptyForm: OwnerFormState = {
     reference: '',
-    title: '',
+    title: '-',
     firstName: '',
     surname: '',
     email: '',
@@ -40,6 +49,14 @@ const emptyForm: OwnerFormState = {
     suburb: '',
     state: '',
     postcode: '',
+
+    // Banking
+    accountName: '',
+    bsb: '',
+    accountNumber: '',
+    paymentRef: '',
+
+    ownerNotes: '',
 };
 
 // Combine into a single postal address
@@ -101,33 +118,40 @@ export default function Owners() {
         <form className="owners-form" onSubmit={handleSubmit}>
             <div className="owners-form-flex">
                 <label>
-                    <span>Reference</span>
-                    <input name="reference" value={form.reference} onChange={handleChange} placeholder="OWN001" required />
+                    <span>Reference:</span>
+                    <input name="reference" value={form.reference} onChange={handleChange} placeholder="OWN001" />
                 </label>
 
                 <label>
-                    <span>Title</span>
-                    <input name="title" value={form.title} onChange={handleChange} placeholder="Mr, Mrs, Dr" />
+                    <span>Title:</span>
+                    <select name="title" value={form.title} onChange={handleChange}>
+                        <option value="-">-</option>
+                        <option value="Mr.">Mr.</option>
+                        <option value="Mrs.">Mrs.</option>
+                        <option value="Ms.">Ms.</option>
+                        <option value="Miss.">Miss.</option>
+                        <option value="Dr.">Dr.</option>
+                    </select>
                 </label>
 
                 <label>
-                    <span>First Name</span>
+                    <span>First Name:</span>
                     <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="Jane" required />
                 </label>
 
                 <label>
-                    <span>Surname</span>
+                    <span>Surname:</span>
                     <input name="surname" value={form.surname} onChange={handleChange} placeholder="Doe" />
                 </label>
 
                 <label>
-                    <span>Email</span>
-                    <input name="email" value={form.email} onChange={handleChange} placeholder="jane@example.com" type="email" />
+                    <span>Email:</span>
+                    <input name="email" value={form.email} onChange={handleChange} placeholder="jane@example.com" type="email"required />
                 </label>
 
                 <label>
-                    <span>Mobile</span>
-                    <input name="mobile" value={form.mobile} onChange={handleChange} placeholder="0400 000 000" />
+                    <span>Mobile:</span>
+                    <input name="mobile" value={form.mobile} onChange={handleChange} placeholder="0400 000 000" required />
                 </label>
 
                 {/* Country Selector */}
@@ -220,9 +244,12 @@ export default function Owners() {
                 </label>
             </div>
 
-            <div className="owners-form-actions drop-right">
-                <button type="submit">
+            <div className="owners-form-actions">
+                <button type="submit" className='drop-right'>
                     Create Owner
+                </button>
+                <button className='drop-right'>
+                    Cancel
                 </button>
             </div>
         </form>
