@@ -12,7 +12,16 @@ type OwnerFormState = {
     surname: string;
     email: string;
     mobile: string;
-    postalAddress: string;
+
+    // Detailed address
+    country: string;
+    overseasAddress: string;
+    unitNumber: string;
+    streetNumber: string;
+    streetName: string;
+    suburb: string;
+    state: string;
+    postcode: string;
 };
 
 const emptyForm: OwnerFormState = {
@@ -22,15 +31,41 @@ const emptyForm: OwnerFormState = {
     surname: '',
     email: '',
     mobile: '',
-    postalAddress: '',
+
+    country: 'Australia',
+    overseasAddress: '',
+    unitNumber: '',
+    streetNumber: '',
+    streetName: '',
+    suburb: '',
+    state: '',
+    postcode: '',
 };
+
+// Combine into a single postal address
+function formatPostalAddress(form: OwnerFormState): string {
+    if (form.country !== "Australia") {
+        return `${form.overseasAddress}, ${form.country}`;
+    }
+
+    // For Australian addresses, build the string step-by-step
+    const unit = form.unitNumber ? `Unit ${form.unitNumber}, ` : '';
+    const street = `${form.streetNumber} ${form.streetName}`.trim();
+    const location = `${form.suburb} ${form.state} ${form.postcode}`.trim();
+
+    // Combine them, filtering out any empty parts
+    return [unit + street, location, form.country]
+        .filter(part => part.trim() !== '')
+        .join(', ');
+}
 
 export default function Owners() {
     const owners = useAppSelector(state => state.owners);
     const [form, setForm] = useState<OwnerFormState>(emptyForm);
 
-    function handleChange(event: ChangeEvent<HTMLInputElement>) {
-        const { name, value } = event.target;
+    function handleChange(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+        const target = event.target as HTMLInputElement | HTMLSelectElement;
+        const { name, value } = target;
 
         setForm((current) => ({
             ...current,
@@ -41,6 +76,8 @@ export default function Owners() {
     function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
 
+        const combinedAddress = formatPostalAddress(form);
+
         service.createOwner({
             reference: form.reference,
             title: form.title,
@@ -48,7 +85,7 @@ export default function Owners() {
             surname: form.surname,
             email: form.email,
             mobile: form.mobile,
-            postalAddress: form.postalAddress,
+            postalAddress: combinedAddress,
         });
 
         setForm(emptyForm);
@@ -62,7 +99,7 @@ export default function Owners() {
         </header>
 
         <form className="owners-form" onSubmit={handleSubmit}>
-            <div className="owners-form-grid">
+            <div className="owners-form-flex">
                 <label>
                     <span>Reference</span>
                     <input name="reference" value={form.reference} onChange={handleChange} placeholder="OWN001" required />
@@ -93,13 +130,97 @@ export default function Owners() {
                     <input name="mobile" value={form.mobile} onChange={handleChange} placeholder="0400 000 000" />
                 </label>
 
-                <label className="owners-form-span-2">
-                    <span>Postal Address</span>
-                    <input name="postalAddress" value={form.postalAddress} onChange={handleChange} placeholder="123 Example St, Brisbane" />
+                {/* Country Selector */}
+                <label>
+                    <span>Country:</span>
+                    <select name="country" value={form.country} onChange={handleChange}>
+                        <option value="Australia">Australia</option>
+                        <option value="New Zealand">New Zealand</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                        {/* ...other countries */}
+                    </select>
+                </label>
+
+                {/* Overseas Address (Disabled if Country is Australia) */}
+                <label>
+                    <span>Overseas Address:</span>
+                    <input 
+                        name="overseasAddress" 
+                        value={form.overseasAddress} 
+                        onChange={handleChange} 
+                        disabled={form.country === 'Australia'} 
+                        placeholder="Enter overseas address"
+                    />
+                </label>
+
+                {/* Unit Number (Disabled if Country is NOT Australia) */}
+                <label>
+                    <span>Unit Number:</span>
+                    <input 
+                        name="unitNumber" 
+                        value={form.unitNumber} 
+                        onChange={handleChange} 
+                        disabled={form.country !== 'Australia'}
+                    />
+                </label>
+
+                {/* Street Number */}
+                <label>
+                    <span>Street Number:</span>
+                    <input 
+                        name="streetNumber" 
+                        value={form.streetNumber} 
+                        onChange={handleChange} 
+                        disabled={form.country !== 'Australia'}
+                    />
+                </label>
+
+                {/* Street Name / PO Box */}
+                <label>
+                    <span>Street Name / PO Box:</span>
+                    <input 
+                        name="streetName" 
+                        value={form.streetName} 
+                        onChange={handleChange} 
+                        disabled={form.country !== 'Australia'} 
+                    />
+                </label>
+
+                {/* Suburb */}
+                <label>
+                    <span>Suburb:</span>
+                    <input 
+                        name="suburb" 
+                        value={form.suburb} 
+                        onChange={handleChange} 
+                        disabled={form.country !== 'Australia'} 
+                    />
+                </label>
+
+                {/* State */}
+                <label>
+                    <span>State:</span>
+                    <input 
+                        name="state" 
+                        value={form.state} 
+                        onChange={handleChange} 
+                        disabled={form.country !== 'Australia'} 
+                    />
+                </label>
+
+                {/* Postcode */}
+                <label>
+                    <span>Postcode:</span>
+                    <input 
+                        name="postcode" 
+                        value={form.postcode} 
+                        onChange={handleChange} 
+                        disabled={form.country !== 'Australia'} 
+                    />
                 </label>
             </div>
 
-            <div className="owners-form-actions">
+            <div className="owners-form-actions drop-right">
                 <button type="submit">
                     Create Owner
                 </button>
