@@ -11,56 +11,63 @@
     margin-bottom: 1rem;
 }
 
+
+/* Form */
 .owners-form {
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    border: 2px solid #222;
-    border-radius: 0.75rem;
-    background: #faf7ef;
-}
-
-.owners-form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem 1rem;
-}
-
-.owners-form-grid label {
+    border: 2px solid black;
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
-    font-size: 0.95rem;
+    align-items: center;
+
+    gap: 2rem;
+    padding: 1rem;
 }
 
-.owners-form-grid input {
-    padding: 0.7rem 0.8rem;
-    border: 1px solid #777;
-    border-radius: 0.5rem;
-    background: white;
-}
-
-.owners-form-span-2 {
-    grid-column: span 2;
-}
-
-.owners-form-actions {
-    margin-top: 1rem;
+.owners-form-flex {
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
 }
 
-.owners-form-actions button {
-    padding: 0.75rem 1.1rem;
-    border-radius: 0.5rem;
-    background: #222;
-    color: white;
-    cursor: pointer;
+.owners-form-flex > label {
+    display: flex;
+    width: 30%;
+    justify-content: space-between;
+    padding: 0.2rem;
 }
 
-.owners-form-actions button:hover {
-    opacity: 0.9;
+
+.owners-form-flex > label > span {
+    font-size: larger;
 }
 
+.owners-form-flex > label > input:disabled {
+    background-color: lightgray;
+}
+
+.owners-form-flex > label > input {
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.owners-form-actions > button {
+    background-color: lightblue;
+    padding: 0.6rem 0.8rem;
+    border-radius: 10px;
+
+    transition: all 250ms;
+}
+
+.owners-form-actions > button:hover {
+    background-color: lightskyblue;
+    
+}
+
+
+/* Table */
 table {
     width: 100%;
     border: 4px solid black;
