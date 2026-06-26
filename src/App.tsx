@@ -1,82 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import { getDatabase } from './database';
+// Package imports
+import { Routes, Route, Link } from 'react-router-dom'
 
-interface User {
-  id: number;
-  name: string;
-}
+// Modular tsx files
+import Owners from './pages/pages-tsx/owners'
+import Dashboard from './pages/pages-tsx/dashboard'
+import Properties from './pages/pages-tsx/properties'
+import Leases from './pages/pages-tsx/leases'
+import TestDb from './pages/pages-tsx/test-db'
+
+// CSS imports
+import './app.css'
 
 function App() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [nameInput, setNameInput] = useState('');
-  const [loading, setLoading] = useState(true);
-
-  // Fetch all users from the SQLite DB
-  const fetchUsers = async () => {
-    try {
-      const db = await getDatabase();
-      const result = await db.select<User[]>('SELECT id, name FROM users');
-      setUsers(result);
-    } catch (error) {
-      console.error('Failed to fetch users:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Add a new user to the SQLite DB
-  const handleAddUser = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!nameInput.trim()) return;
-
-    try {
-      const db = await getDatabase();
-      // Uses positional placeholder ($1) for security
-      await db.execute('INSERT INTO users (name) VALUES ($1)', [nameInput]);
-      setNameInput('');
-      await fetchUsers();
-    } catch (error) {
-      console.error('Failed to add user:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  if (loading) {
-    return <div style={{ padding: '20px' }}>Loading database...</div>;
-  }
-
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
-      <h1>SQLite + React + Tauri Demo</h1>
-      
-      <form onSubmit={handleAddUser} style={{ marginBottom: '20px' }}>
-        <input
-          type="text"
-          value={nameInput}
-          onChange={(e) => setNameInput(e.target.value)}
-          placeholder="Enter user name"
-          style={{ padding: '8px', marginRight: '8px' }}
-        />
-        <button type="submit" style={{ padding: '8px 16px' }}>Add User</button>
-      </form>
+    <>
+      <div className="topnav-container">
+        <nav className="topnav"> {/* Remove inline styling */}
+          <Link className='toplink' to="/">Overview</Link>
+          <Link className='toplink' to="/owners">Owners</Link>
+          <Link className='toplink' to="/properties">Properties</Link>
+          <Link className='toplink' to="/leases">Leases</Link>
+          <Link className='toplink' to="/testdb">Test DB</Link>
+        </nav>
+      </div>
 
-      <h2>Database Records</h2>
-      {users.length === 0 ? (
-        <p>No records found.</p>
-      ) : (
-        <ul>
-          {users.map((user) => (
-            <li key={user.id}>
-              {user.name} (ID: {user.id})
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
+
+      {/* Routing */}
+      <Routes>
+        {/* Actual routes */}
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/owners" element={<Owners />} />
+        <Route path="/properties" element={<Properties />} />
+        <Route path="/leases" element={<Leases />} />
+        <Route path="/testdb" element={<TestDb />} />
+      </Routes>
+    </>
+  )
 }
 
-export default App;
+export default App
