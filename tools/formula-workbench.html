@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Simply Property Formula Workbench</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --page: #f5f7fa;
+        --surface: #ffffff;
+        --surface-soft: #eef2f6;
+        --line: #d6dde5;
+        --text: #17212b;
+        --muted: #617080;
+        --primary: #0b6f6a;
+        --primary-strong: #07544f;
+        --answer-bg: #fff6cc;
+        --answer-line: #c48a00;
+        --danger: #a91515;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--text);
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 15px;
+        line-height: 1.4;
+      }
+
+      header {
+        background: var(--surface);
+        border-bottom: 1px solid var(--line);
+        padding: 18px 24px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 700;
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: 320px minmax(0, 1fr);
+        gap: 20px;
+        padding: 20px 24px 28px;
+      }
+
+      label {
+        display: block;
+        font-weight: 700;
+      }
+
+      select,
+      input,
+      button {
+        font: inherit;
+      }
+
+      select,
+      input {
+        width: 100%;
+        min-height: 38px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: #fff;
+        color: var(--text);
+        padding: 8px 10px;
+      }
+
+      button {
+        min-height: 40px;
+        border: 1px solid var(--primary);
+        border-radius: 6px;
+        background: var(--primary);
+        color: #fff;
+        cursor: pointer;
+        font-weight: 700;
+        padding: 8px 14px;
+      }
+
+      button:hover {
+        background: var(--primary-strong);
+      }
+
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      .panel-header {
+        border-bottom: 1px solid var(--line);
+        padding: 14px 16px;
+      }
+
+      .panel-title {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .panel-body {
+        padding: 16px;
+      }
+
+      .stack {
+        display: grid;
+        gap: 12px;
+      }
+
+      .meta {
+        color: var(--muted);
+        font-size: 13px;
+        margin-top: 4px;
+      }
+
+      .formula-description {
+        color: var(--muted);
+        margin: 0;
+      }
+
+      .formula-confidence {
+        display: inline-block;
+        margin-top: 8px;
+        color: var(--primary-strong);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 760px;
+        background: var(--surface);
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid var(--line);
+        padding: 10px 12px;
+        text-align: left;
+        vertical-align: middle;
+      }
+
+      th {
+        background: var(--surface-soft);
+        font-size: 13px;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .field-note {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .outputs {
+        margin-top: 16px;
+      }
+
+      .answer {
+        background: var(--answer-bg);
+        border-left: 4px solid var(--answer-line);
+        font-weight: 800;
+        text-decoration: underline;
+      }
+
+      .error {
+        color: var(--danger);
+        font-weight: 700;
+      }
+
+      @media (max-width: 840px) {
+        main {
+          grid-template-columns: 1fr;
+          padding: 14px;
+        }
+
+        header {
+          padding: 16px 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Simply Property Formula Workbench</h1>
+    </header>
+
+    <main>
+      <aside class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Formula</h2>
+        </div>
+        <div class="panel-body stack">
+          <label for="formulaSelect">Select Function</label>
+          <select id="formulaSelect"></select>
+          <div>
+            <p id="formulaDescription" class="formula-description"></p>
+            <span id="formulaConfidence" class="formula-confidence"></span>
+          </div>
+          <button id="runButton" type="button">Run Calculation</button>
+          <div id="error" class="error" role="alert"></div>
+        </div>
+      </aside>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Inputs And Output</h2>
+          <div class="meta">Inputs are shown as rows. Calculated answers appear at the end in bold and underlined cells.</div>
+        </div>
+        <div class="panel-body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Input</th>
+                  <th>Type</th>
+                  <th>Value</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody id="inputRows"></tbody>
+            </table>
+          </div>
+
+          <div class="outputs table-wrap" id="outputWrap" hidden>
+            <table>
+              <thead>
+                <tr>
+                  <th>Output</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody id="outputRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const formulas = [
+        {
+          id: 'qld-bond-cap',
+          name: 'QLD Bond Cap',
+          group: 'Bond',
+          description: 'Maximum bond from weekly rent and tenancy type.',
+          confidence: 'Official RTA rule',
+          fields: [
+            { id: 'weeklyRent', label: 'Weekly Rent', type: 'money', defaultValue: '455.00' },
+            {
+              id: 'tenancyType',
+              label: 'Tenancy Type',
+              type: 'select',
+              defaultValue: 'general',
+              options: [
+                { label: 'General', value: 'general' },
+                { label: 'Rooming', value: 'rooming' },
+                { label: 'Moveable', value: 'moveable' },
+                { label: 'Moveable With Electricity', value: 'moveable-with-electricity' },
+              ],
+            },
+          ],
+          run(input) {
+            const weeklyRentCents = moneyInput(input, 'weeklyRent');
+            const multipliers = {
+              general: 4,
+              rooming: 4,
+              moveable: 2,
+              'moveable-with-electricity': 3,
+            };
+            const maxBondCents = weeklyRentCents * multipliers[input.tenancyType];
+
+            return [
+              output('Weekly rent', formatMoney(weeklyRentCents)),
+              output('Tenancy type', formatLabel(input.tenancyType)),
+              output('Max bond', formatMoney(maxBondCents), true),
+            ];
+          },
+        },
+        {
+          id: 'qld-rent-in-advance',
+          name: 'QLD Rent In Advance Cap',
+          group: 'Rent',
+          description: 'Maximum rent in advance that can be requested at tenancy start.',
+          confidence: 'Official RTA rule',
+          fields: [
+            { id: 'weeklyRent', label: 'Weekly Rent', type: 'money', defaultValue: '455.00' },
+            {
+              id: 'agreementType',
+              label: 'Agreement Type',
+              type: 'select',
+              defaultValue: 'fixed-term',
+              options: [
+                { label: 'Fixed Term', value: 'fixed-term' },
+                { label: 'Periodic', value: 'periodic' },
+                { label: 'Moveable', value: 'moveable' },
+                { label: 'Rooming', value: 'rooming' },
+              ],
+            },
+          ],
+          run(input) {
+            const weeklyRentCents = moneyInput(input, 'weeklyRent');
+            const maxAdvanceCents =
+              input.agreementType === 'fixed-term'
+                ? roundHalfUp((weeklyRentCents * 52) / 12)
+                : weeklyRentCents * 2;
+
+            return [
+              output('Weekly rent', formatMoney(weeklyRentCents)),
+              output('Agreement type', formatLabel(input.agreementType)),
+              output('Maximum rent in advance', formatMoney(maxAdvanceCents), true),
+            ];
+          },
+        },
+        {
+          id: 'qld-rent-increase-date',
+          name: 'QLD Earliest Rent Increase Date',
+          group: 'Rent',
+          description: 'Earliest date after the 12-month rent increase frequency rule.',
+          confidence: 'Official RTA rule; notice rules still need separate validation',
+          fields: [
+            {
+              id: 'currentRentBecamePayableDate',
+              label: 'Current Rent Became Payable',
+              type: 'date',
+              defaultValue: '2026-05-14',
+            },
+          ],
+          run(input) {
+            return [
+              output('Current rent became payable', input.currentRentBecamePayableDate),
+              output('Earliest increase date', addCalendarMonths(input.currentRentBecamePayableDate, 12), true),
+            ];
+          },
+        },
+        {
+          id: 'qld-water-eligibility',
+          name: 'QLD Water Charging Eligibility',
+          group: 'Water',
+          description: 'Checks whether full water consumption can be passed to the tenant.',
+          confidence: 'Official RTA rule',
+          fields: [
+            { id: 'premisesIndividuallyMetered', label: 'Individually Metered', type: 'boolean', defaultValue: true },
+            { id: 'premisesWaterEfficient', label: 'Water Efficient', type: 'boolean', defaultValue: true },
+            { id: 'agreementSaysTenantPaysConsumption', label: 'Agreement Says Tenant Pays', type: 'boolean', defaultValue: true },
+          ],
+          run(input) {
+            const canCharge =
+              booleanInput(input, 'premisesIndividuallyMetered') &&
+              booleanInput(input, 'premisesWaterEfficient') &&
+              booleanInput(input, 'agreementSaysTenantPaysConsumption');
+
+            return [
+              output('Individually metered', formatBoolean(booleanInput(input, 'premisesIndividuallyMetered'))),
+              output('Water efficient', formatBoolean(booleanInput(input, 'premisesWaterEfficient'))),
+              output('Agreement says tenant pays', formatBoolean(booleanInput(input, 'agreementSaysTenantPaysConsumption'))),
+              output('Can charge full consumption', formatBoolean(canCharge), true),
+            ];
+          },
+        },
+        {
+          id: 'water-meter-charge',
+          name: 'Water Charge By Meter Reading',
+          group: 'Water',
+          description: 'Calculates tenant water usage from start/end meter readings.',
+          confidence: 'Accounting method backed by RTA charge eligibility',
+          fields: [
+            { id: 'startReadingKl', label: 'Start Reading kL', type: 'number', defaultValue: '100' },
+            { id: 'endReadingKl', label: 'End Reading kL', type: 'number', defaultValue: '112.5' },
+            { id: 'eligibleRatePerKl', label: 'Eligible Rate Per kL', type: 'money', defaultValue: '3.00' },
+          ],
+          run(input) {
+            const startReadingKl = numberInput(input, 'startReadingKl');
+            const endReadingKl = numberInput(input, 'endReadingKl');
+            const eligibleRateCentsPerKl = moneyInput(input, 'eligibleRatePerKl');
+            const usageKl = endReadingKl - startReadingKl;
+
+            if (usageKl < 0) {
+              throw new Error('End reading cannot be lower than start reading.');
+            }
+
+            return [
+              output('Usage', `${formatNumber(usageKl)} kL`),
+              output('Rate', `${formatMoney(eligibleRateCentsPerKl)} per kL`),
+              output('Water charge', formatMoney(roundHalfUp(usageKl * eligibleRateCentsPerKl)), true),
+            ];
+          },
+        },
+        {
+          id: 'water-bill-proportion',
+          name: 'Water Charge By Bill Proportion',
+          group: 'Water',
+          description: 'Apportions a water usage bill by tenancy occupancy days.',
+          confidence: 'Accounting method; prefer meter readings where available',
+          fields: [
+            { id: 'billableUsage', label: 'Billable Usage Amount', type: 'money', defaultValue: '900.00' },
+            { id: 'billStartDate', label: 'Bill Start Date', type: 'date', defaultValue: '2026-01-01' },
+            { id: 'billEndDateExclusive', label: 'Bill End Date Exclusive', type: 'date', defaultValue: '2026-04-01' },
+            { id: 'tenancyStartDate', label: 'Tenancy Start Date', type: 'date', defaultValue: '2026-02-01' },
+            { id: 'tenancyEndDateExclusive', label: 'Tenancy End Date Exclusive', type: 'date', defaultValue: '2026-04-01' },
+          ],
+          run(input) {
+            const billableUsageCents = moneyInput(input, 'billableUsage');
+            const billDays = overlapDays(input.billStartDate, input.billEndDateExclusive, input.billStartDate, input.billEndDateExclusive);
+            const tenantDays = overlapDays(input.billStartDate, input.billEndDateExclusive, input.tenancyStartDate, input.tenancyEndDateExclusive);
+
+            if (billDays <= 0) {
+              throw new Error('Bill period must be at least one day.');
+            }
+
+            return [
+              output('Bill days', String(billDays)),
+              output('Tenant occupied days', String(tenantDays)),
+              output('Tenant charge', formatMoney(roundHalfUp((billableUsageCents * tenantDays) / billDays)), true),
+            ];
+          },
+        },
+        {
+          id: 'gst-exclusive',
+          name: 'GST From Exclusive Amount',
+          group: 'GST',
+          description: 'Adds Australian GST to a GST-exclusive agency or supplier amount.',
+          confidence: 'Official ATO rate',
+          fields: [{ id: 'exGstAmount', label: 'Ex GST Amount', type: 'money', defaultValue: '141.50' }],
+          run(input) {
+            const exGstCents = moneyInput(input, 'exGstAmount');
+            const gstCents = roundHalfUp(exGstCents * 0.1);
+
+            return [
+              output('Ex GST amount', formatMoney(exGstCents)),
+              output('GST', formatMoney(gstCents)),
+              output('Inc GST amount', formatMoney(exGstCents + gstCents), true),
+            ];
+          },
+        },
+        {
+          id: 'gst-inclusive',
+          name: 'GST Split From Inclusive Amount',
+          group: 'GST',
+          description: 'Splits GST from a GST-inclusive amount using one-eleventh at 10 percent.',
+          confidence: 'Official ATO method for 10 percent GST-inclusive taxable amounts',
+          fields: [{ id: 'incGstAmount', label: 'Inc GST Amount', type: 'money', defaultValue: '155.65' }],
+          run(input) {
+            const incGstCents = moneyInput(input, 'incGstAmount');
+            const gstCents = roundHalfUp(incGstCents / 11);
+
+            return [
+              output('Inc GST amount', formatMoney(incGstCents)),
+              output('GST', formatMoney(gstCents)),
+              output('Ex GST amount', formatMoney(incGstCents - gstCents), true),
+            ];
+          },
+        },
+        {
+          id: 'reconciliation-row',
+          name: 'Reconciliation Row',
+          group: 'Reconciliation',
+          description: 'Property360-style row calculation for commission, GST, and withheld amount.',
+          confidence: 'Inferred from screenshots; needs more real examples',
+          fields: [
+            { id: 'grossRent', label: 'Gross Rent', type: 'money', defaultValue: '1820.00' },
+            { id: 'commissionRatePercent', label: 'Comm Rate %', type: 'number', defaultValue: '7.5' },
+            { id: 'adminFee', label: 'Admin Fee', type: 'money', defaultValue: '5.00' },
+            { id: 'repairsAndMaintenance', label: 'R & M', type: 'money', defaultValue: '0.00' },
+            { id: 'lettingFee', label: 'Letting', type: 'money', defaultValue: '0.00' },
+            { id: 'advertisingAndPromotion', label: 'Adv & Pro', type: 'money', defaultValue: '0.00' },
+            { id: 'cleaningAndGardening', label: 'Clean & Gardening', type: 'money', defaultValue: '0.00' },
+            { id: 'otherExpense', label: 'Other Expense', type: 'money', defaultValue: '0.00' },
+            { id: 'paymentsMade', label: 'Payments Made', type: 'money', defaultValue: '129.00' },
+            { id: 'ownerPayments', label: 'Owner Payments', type: 'money', defaultValue: '0.00' },
+            { id: 'deposits', label: 'Deposits', type: 'money', defaultValue: '0.00' },
+          ],
+          run(input) {
+            const grossRentCents = moneyInput(input, 'grossRent');
+            const commissionCents = roundHalfUp(grossRentCents * (numberInput(input, 'commissionRatePercent') / 100));
+            const agencyFeesExGstCents =
+              commissionCents +
+              moneyInput(input, 'adminFee') +
+              moneyInput(input, 'lettingFee') +
+              moneyInput(input, 'advertisingAndPromotion');
+            const ownersGstCents = roundHalfUp(agencyFeesExGstCents * 0.1);
+            const externalOrOwnerPaymentsCents =
+              moneyInput(input, 'repairsAndMaintenance') +
+              moneyInput(input, 'cleaningAndGardening') +
+              moneyInput(input, 'otherExpense') +
+              moneyInput(input, 'paymentsMade') +
+              moneyInput(input, 'ownerPayments');
+            const chequeAmountWithheldCents =
+              grossRentCents +
+              moneyInput(input, 'deposits') -
+              agencyFeesExGstCents -
+              ownersGstCents -
+              externalOrOwnerPaymentsCents;
+
+            return [
+              output('Commission', formatMoney(commissionCents)),
+              output('Agency fees ex GST', formatMoney(agencyFeesExGstCents)),
+              output('Owners GST', formatMoney(ownersGstCents)),
+              output('External/owner payments', formatMoney(externalOrOwnerPaymentsCents)),
+              output('Chq amount withheld', formatMoney(chequeAmountWithheldCents), true),
+            ];
+          },
+        },
+        {
+          id: 'gross-yield',
+          name: 'Gross Rental Yield',
+          group: 'Performance',
+          description: 'Annualised weekly rent divided by property value.',
+          confidence: 'Finance convention',
+          fields: [
+            { id: 'weeklyRent', label: 'Weekly Rent', type: 'money', defaultValue: '650.00' },
+            { id: 'propertyValue', label: 'Property Value', type: 'money', defaultValue: '800000.00' },
+          ],
+          run(input) {
+            const weeklyRentCents = moneyInput(input, 'weeklyRent');
+            const propertyValueCents = moneyInput(input, 'propertyValue');
+
+            if (propertyValueCents <= 0) {
+              throw new Error('Property value must be greater than zero.');
+            }
+
+            const yieldPercent = roundHalfUp(((weeklyRentCents * 52) / propertyValueCents) * 10000) / 100;
+
+            return [
+              output('Weekly rent', formatMoney(weeklyRentCents)),
+              output('Property value', formatMoney(propertyValueCents)),
+              output('Gross yield', `${yieldPercent.toFixed(2)}%`, true),
+            ];
+          },
+        },
+      ];
+
+      const formulaSelect = document.querySelector('#formulaSelect');
+      const formulaDescription = document.querySelector('#formulaDescription');
+      const formulaConfidence = document.querySelector('#formulaConfidence');
+      const inputRows = document.querySelector('#inputRows');
+      const outputRows = document.querySelector('#outputRows');
+      const outputWrap = document.querySelector('#outputWrap');
+      const runButton = document.querySelector('#runButton');
+      const errorBox = document.querySelector('#error');
+      let selectedFormula = formulas[0];
+
+      for (const formula of formulas) {
+        const option = document.createElement('option');
+        option.value = formula.id;
+        option.textContent = `${formula.group} - ${formula.name}`;
+        formulaSelect.append(option);
+      }
+
+      formulaSelect.addEventListener('change', selectFormula);
+      runButton.addEventListener('click', runSelectedFormula);
+      selectFormula();
+      runSelectedFormula();
+
+      function selectFormula() {
+        selectedFormula = formulas.find((formula) => formula.id === formulaSelect.value) || formulas[0];
+        formulaDescription.textContent = selectedFormula.description;
+        formulaConfidence.textContent = selectedFormula.confidence;
+        outputWrap.hidden = true;
+        outputRows.replaceChildren();
+        errorBox.textContent = '';
+        renderInputs();
+      }
+
+      function renderInputs() {
+        inputRows.replaceChildren();
+
+        for (const field of selectedFormula.fields) {
+          const row = document.createElement('tr');
+          row.append(cell(field.label), cell(field.type), inputCell(field), cell(field.note || '', 'field-note'));
+          inputRows.append(row);
+        }
+      }
+
+      function inputCell(field) {
+        const tableCell = document.createElement('td');
+
+        if (field.type === 'select') {
+          const select = document.createElement('select');
+          select.id = field.id;
+
+          for (const item of field.options || []) {
+            const option = document.createElement('option');
+            option.value = item.value;
+            option.textContent = item.label;
+            select.append(option);
+          }
+
+          select.value = String(field.defaultValue);
+          tableCell.append(select);
+          return tableCell;
+        }
+
+        if (field.type === 'boolean') {
+          const select = document.createElement('select');
+          select.id = field.id;
+
+          for (const item of [
+            { label: 'Yes', value: 'true' },
+            { label: 'No', value: 'false' },
+          ]) {
+            const option = document.createElement('option');
+            option.value = item.value;
+            option.textContent = item.label;
+            select.append(option);
+          }
+
+          select.value = String(field.defaultValue);
+          tableCell.append(select);
+          return tableCell;
+        }
+
+        const input = document.createElement('input');
+        input.id = field.id;
+        input.value = String(field.defaultValue);
+        input.type = field.type === 'date' ? 'date' : 'text';
+        input.inputMode = field.type === 'number' || field.type === 'money' ? 'decimal' : 'text';
+        tableCell.append(input);
+        return tableCell;
+      }
+
+      function runSelectedFormula() {
+        errorBox.textContent = '';
+        outputRows.replaceChildren();
+
+        try {
+          const input = {};
+
+          for (const field of selectedFormula.fields) {
+            input[field.id] = document.getElementById(field.id).value;
+          }
+
+          renderOutputs(selectedFormula.run(input));
+        } catch (error) {
+          outputWrap.hidden = true;
+          errorBox.textContent = error instanceof Error ? error.message : String(error);
+        }
+      }
+
+      function renderOutputs(outputs) {
+        outputRows.replaceChildren();
+
+        for (const item of outputs) {
+          const row = document.createElement('tr');
+
+          if (item.isAnswer) {
+            row.className = 'answer';
+          }
+
+          row.append(cell(item.isAnswer ? `Answer: ${item.label}` : item.label), cell(item.value));
+          outputRows.append(row);
+        }
+
+        outputWrap.hidden = false;
+      }
+
+      function cell(text, className = '') {
+        const tableCell = document.createElement('td');
+        tableCell.textContent = text;
+        tableCell.className = className;
+        return tableCell;
+      }
+
+      function output(label, value, isAnswer = false) {
+        return { label, value, isAnswer };
+      }
+
+      function moneyInput(input, id) {
+        const value = Number(String(input[id]).replace(/[$,]/g, ''));
+
+        if (!Number.isFinite(value)) {
+          throw new Error(`${id} must be a valid money value.`);
+        }
+
+        return roundHalfUp(value * 100);
+      }
+
+      function numberInput(input, id) {
+        const value = Number(input[id]);
+
+        if (!Number.isFinite(value)) {
+          throw new Error(`${id} must be a valid number.`);
+        }
+
+        return value;
+      }
+
+      function booleanInput(input, id) {
+        return input[id] === true || input[id] === 'true';
+      }
+
+      function roundHalfUp(value) {
+        return value >= 0 ? Math.floor(value + 0.5) : Math.ceil(value - 0.5);
+      }
+
+      function addCalendarMonths(date, months) {
+        const [year, month, day] = date.split('-').map(Number);
+        const totalMonths = year * 12 + (month - 1) + months;
+        const newYear = Math.floor(totalMonths / 12);
+        const newMonth = modulo(totalMonths, 12) + 1;
+        const newDay = Math.min(day, daysInMonth(newYear, newMonth));
+        return formatIsoDate(newYear, newMonth, newDay);
+      }
+
+      function overlapDays(aStart, aEnd, bStart, bEnd) {
+        const start = Math.max(toEpochDay(aStart), toEpochDay(bStart));
+        const end = Math.min(toEpochDay(aEnd), toEpochDay(bEnd));
+        return Math.max(0, end - start);
+      }
+
+      function toEpochDay(date) {
+        const [year, month, day] = date.split('-').map(Number);
+        return Math.floor(Date.UTC(year, month - 1, day) / 86400000);
+      }
+
+      function daysInMonth(year, month) {
+        return new Date(Date.UTC(year, month, 0)).getUTCDate();
+      }
+
+      function formatIsoDate(year, month, day) {
+        return [String(year).padStart(4, '0'), String(month).padStart(2, '0'), String(day).padStart(2, '0')].join('-');
+      }
+
+      function modulo(value, divisor) {
+        return ((value % divisor) + divisor) % divisor;
+      }
+
+      function formatMoney(cents) {
+        return new Intl.NumberFormat('en-AU', {
+          style: 'currency',
+          currency: 'AUD',
+        }).format(cents / 100);
+      }
+
+      function formatNumber(value) {
+        return new Intl.NumberFormat('en-AU', {
+          maximumFractionDigits: 4,
+        }).format(value);
+      }
+
+      function formatBoolean(value) {
+        return value ? 'Yes' : 'No';
+      }
+
+      function formatLabel(value) {
+        return String(value)
+          .split('-')
+          .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+          .join(' ');
+      }
+    </script>
+  </body>
+</html>
