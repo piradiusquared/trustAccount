@@ -1,5 +1,5 @@
 /* 
-index.css
+shared.css
 Used for GLOBAL styling of entire React APP
 */
 
@@ -14,6 +14,15 @@ Used for GLOBAL styling of entire React APP
 *::-webkit-scrollbar {
     display: none;
 }
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+
 
 .card-active {
     width: 100%;
