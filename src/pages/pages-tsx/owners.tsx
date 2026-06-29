@@ -1,5 +1,6 @@
 
-import '../pages-css/owners.css'
+import { Link } from 'react-router-dom'
+import '../pages-css/form.css'
 
 // type OwnerFormState = {
 //     reference: string;
@@ -73,7 +74,7 @@ import '../pages-css/owners.css'
 // }
 
 
-export default function Owners() {
+export function Owners() {
 
     // const [form, setForm] = useState<OwnerFormState>(emptyForm);
 
@@ -104,16 +105,15 @@ export default function Owners() {
 
     //     setForm(emptyForm);
     // }
-
     return (
         <div className='content-container'>
-
-            <header className='owners-header'>
+            <Link to='/owners/add-owner'>New Owner</Link>
+            <header className='content-header'>
                 <h1>Owners</h1>
             </header>
 
-            <form className="owners-form">
-                <div className="owners-form-flex">
+            <form className="content-form">
+                <div className="content-form-flex">
                     <label>
                         <span>Reference:</span>
                         <input name="reference" placeholder="OWN001" />
@@ -239,7 +239,7 @@ export default function Owners() {
                     </label>
                 </div>
 
-                <div className="owners-form-actions">
+                <div className="content-form-actions">
                     <button type="submit" className='drop-right'>
                         Create Owner
                     </button>
@@ -252,16 +252,16 @@ export default function Owners() {
             <div className="card-active">
                 <h2>Active</h2>
                 {/* Table. thead heading row, tbody actual content. */}
-                <table>
+                <table className='content-table'>
                     <thead>
                         <tr>
-                            <th>Reference</th>
-                            <th>Title</th>
-                            <th>First Name</th>
-                            <th>Surname</th>
-                            <th>Email</th>
-                            <th>Mobile Number</th>
-                            <th>Postal Address</th>
+                            <th className='content-table-th'>Reference</th>
+                            <th className='content-table-th'>Title</th>
+                            <th className='content-table-th'>First Name</th>
+                            <th className='content-table-th'>Surname</th>
+                            <th className='content-table-th'>Email</th>
+                            <th className='content-table-th'>Mobile Number</th>
+                            <th className='content-table-th'>Postal Address</th>
                             {/* TODO: actions */}
                         </tr>
                     </thead>
@@ -288,6 +288,15 @@ export default function Owners() {
 
 
 
-        </div >
+        </div>
     );
+}
+
+export function NewOwner() {
+    return (
+        <>
+        <h1> New Owner</h1>
+        <Link to='/owners'>Back</Link>
+        </>
+    )
 }
