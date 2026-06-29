@@ -5,12 +5,8 @@ Persistent React styling ONLY
 
 /* Top navigation styling */
 
-.topnav-container {
-  width: fit-content;
-  height: 100vh;
-}
-
 .topnav {
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -18,11 +14,14 @@ Persistent React styling ONLY
 
   padding: 1rem;
 
-  background-color: wheat;
+  width: fit-content;
+  height: 100vh;
+
+  background-color: lightblue;
   height: calc(100vh - 2rem);
 }
 
-.topnav>.toplink {
+.topnav > .toplink {
   text-decoration: none;
   color: black;
 
