@@ -106,11 +106,62 @@ export function Owners() {
     //     setForm(emptyForm);
     // }
     return (
-        <div className='content-container'>
-            <Link to='/owners/add-owner'>New Owner</Link>
+        <section className='content-container'>
             <header className='content-header'>
                 <h1>Owners</h1>
+                <Link to='/owners/new-owner'>New Owner</Link>
             </header>
+
+            <div className="card-active">
+                <h2>Active</h2>
+                {/* Table. thead heading row, tbody actual content. */}
+                <table className='content-table'>
+                    <thead>
+                        <tr>
+                            <th className='content-table-th'>Reference</th>
+                            <th className='content-table-th'>Title</th>
+                            <th className='content-table-th'>First Name</th>
+                            <th className='content-table-th'>Surname</th>
+                            <th className='content-table-th'>Email</th>
+                            <th className='content-table-th'>Mobile Number</th>
+                            <th className='content-table-th'>Postal Address</th>
+                            {/* TODO: actions */}
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {/* {owners.map(owner => (
+                            <tr key={owner.id}>
+                                <td>{owner.reference}</td>
+                                <td>{owner.title}</td>
+                                <td>{owner.firstName}</td>
+                                <td>{owner.surname}</td>
+                                <td>{owner.email}</td>
+                                <td>{owner.mobile}</td>
+                                <td>{owner.postalAddress}</td>
+                            </tr>
+                        ))} */}
+                    </tbody>
+                </table>
+            </div>
+
+            <div className="card-inactive">
+
+            </div>
+
+
+
+        </section>
+    );
+}
+
+export function NewOwner() {
+    return (
+        <div className="content-container">
+            <div className="content-header">
+                <h1> New Owner</h1>
+                <Link to='/owners'>Back</Link>
+            </div>
 
             <form className="content-form">
                 <div className="content-form-flex">
@@ -242,61 +293,10 @@ export function Owners() {
                 <div className="content-form-actions">
                     <button type="submit" className='drop-right'>
                         Create Owner
-                    </button>
-                    <button className='drop-right'>
-                        Cancel
-                    </button>
+                    </button>                    
                 </div>
             </form >
-
-            <div className="card-active">
-                <h2>Active</h2>
-                {/* Table. thead heading row, tbody actual content. */}
-                <table className='content-table'>
-                    <thead>
-                        <tr>
-                            <th className='content-table-th'>Reference</th>
-                            <th className='content-table-th'>Title</th>
-                            <th className='content-table-th'>First Name</th>
-                            <th className='content-table-th'>Surname</th>
-                            <th className='content-table-th'>Email</th>
-                            <th className='content-table-th'>Mobile Number</th>
-                            <th className='content-table-th'>Postal Address</th>
-                            {/* TODO: actions */}
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {/* {owners.map(owner => (
-                            <tr key={owner.id}>
-                                <td>{owner.reference}</td>
-                                <td>{owner.title}</td>
-                                <td>{owner.firstName}</td>
-                                <td>{owner.surname}</td>
-                                <td>{owner.email}</td>
-                                <td>{owner.mobile}</td>
-                                <td>{owner.postalAddress}</td>
-                            </tr>
-                        ))} */}
-                    </tbody>
-                </table>
-            </div>
-
-            <div className="card-inactive">
-
-            </div>
-
-
-
         </div>
-    );
-}
 
-export function NewOwner() {
-    return (
-        <>
-        <h1> New Owner</h1>
-        <Link to='/owners'>Back</Link>
-        </>
     )
 }

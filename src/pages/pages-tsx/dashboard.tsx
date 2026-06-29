@@ -1,8 +1,10 @@
 
 export default function Dashboard() {
     return (
-        <>
-            <h1>dashboard</h1>
-        </>
+        <div className="content-container">
+            <header className="content-header">
+                <h1>Dashboard</h1>
+            </header>
+        </div>
     )
 }
