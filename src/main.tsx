@@ -1,18 +1,15 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
-import './shared.css'
-import App from './App.tsx'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { BrowserRouter } from "react-router";
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+import './pages/pages-css/shared.css'
 
-    {/* Router wrapper */}
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  <React.StrictMode>
     <BrowserRouter>
-
-      {/* Actual react frontend app */}
       <App />
-      
+
     </BrowserRouter>
-  </StrictMode>,
-)
+  </React.StrictMode>,
+);

@@ -8,14 +8,6 @@ export type InvoiceStatus = 'unpaid' | 'paid' | 'reversed' | 'void';
 export type LeaseStatus = 'active' | 'historic';
 export type RentFrequency = 'weekly' | 'fortnightly' | 'monthly';
 
-// AppState for RAM
-export interface AppState {
-  owners: OwnerRecord[];
-  properties: PropertyRecord[];
-  leases: LeaseRecord[];
-  ledgerEntries: LedgerEntryRecord[];
-  invoices: InvoiceRecord[];
-}
 
 /*
 Owner RECORD. Plus Owner fields for entry
@@ -135,60 +127,4 @@ export interface CreateLeaseInput {
   actualMoveOutDate?: IsoDate;
   lettingFeeSelection?: string;
   status?: LeaseStatus;
-}
-
-/*
-Ledge RECORDS and entry.
-Historical records of ALL transactions
-*/
-export interface LedgerEntryRecord {
-  id: EntityId;
-  targetType: LedgerTargetType;
-  targetId: EntityId;
-  kind: LedgerKind;
-  amountCents: MoneyCents;
-  deltaCents: MoneyCents;
-  occurredOn: IsoDate;
-  note?: string;
-  createdAt: IsoDate;
-}
-
-export interface CreateLedgerEntryInput {
-  targetType: LedgerTargetType;
-  targetId: EntityId;
-  kind: LedgerKind;
-  amountCents: MoneyCents;
-  occurredOn: IsoDate;
-  note?: string;
-}
-
-/*
-Invoice RECORDS and entry.
-Created when required.
-*/
-export interface InvoiceRecord {
-  id: EntityId;
-  issueTo: string;
-  auditNo: string;
-  category: string;
-  description: string;
-  invoiceDate: IsoDate;
-  dueDate: IsoDate;
-  amountCents: MoneyCents;
-  paymentDate?: IsoDate;
-  reversalDate?: IsoDate;
-  voidDate?: IsoDate;
-  status: InvoiceStatus;
-  createdAt: IsoDate;
-  updatedAt: IsoDate;
-}
-
-export interface CreateInvoiceInput {
-  issueTo: string;
-  auditNo: string;
-  category: string;
-  description: string;
-  invoiceDate: IsoDate;
-  dueDate: IsoDate;
-  amountCents: MoneyCents;
 }

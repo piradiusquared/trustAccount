@@ -1,14 +1,6 @@
-
-.owners-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-
 /* Form */
-.owners-form {
+
+.content-form {
     border: 2px solid black;
     display: flex;
     flex-direction: column;
@@ -18,7 +10,7 @@
     padding: 1rem;
 }
 
-.owners-form-flex {
+.content-form-flex {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -27,22 +19,23 @@
     width: 100%;
 }
 
-.owners-form-flex > label {
+.content-form-flex > label {
     display: flex;
     width: 30%;
     justify-content: space-between;
     padding: 0.2rem;
 }
 
-.owners-form-flex > label > span {
+.content-form-flex > label > span {
     font-size: larger;
 }
 
-.owners-form-flex > label > input:disabled {
+.content-form-flex > label > input:disabled {
     background-color: lightgray;
 }
 
-.owners-form-flex input, .owners-form-flex select {
+.content-form-flex input,
+.content-form-flex select {
     width: 40%;
 
     border: 1px solid black;
@@ -52,13 +45,13 @@
     padding: 0.2rem;
 }
 
-.owners-form-actions {
+.content-form-actions {
     width: 20%;
     display: flex;
     justify-content: space-evenly;
 }
 
-.owners-form-actions > button {
+.content-form-actions > button {
     background-color: lightskyblue;
     padding: 0.6rem 0.8rem;
     border-radius: 10px;
@@ -68,15 +61,16 @@
 
 
 /* Table */
-table {
+.content-table {
     width: 100%;
+    height: 100dvh;
     border: 4px solid black;
     border-collapse: collapse;
     background: white;
 }
 
-th,
-td {
+.content-table-th,
+.content-table-td {
     border: 1px solid black;
     padding: 0.65rem 0.5rem;
     text-align: left;
