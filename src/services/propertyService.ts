@@ -1,34 +1,53 @@
-import { getDatabase } from "../lib/database";
+import { getDatabase } from '../lib/database';
+import { PropertyRecord, CreatePropertyInput, EntityId } from '../lib/datatypes';
 
-export interface Property {
-    id?: number;
-    owner_id: number;
-    address: string;
-    property_type: string;
+export interface PropertyWithOwner extends PropertyRecord {
+  ownerName: string;
 }
 
 export const propertyService = {
-    async getAllProperties(): Promise<Property[]> {
-        const db = await getDatabase();
-        return await db.select<Property[]>('SELECT * FROM properties');
-    },
-    
-    // Fetch properties belonging to a specific owner (Relational Query)
-    async getPropertiesByOwner(ownerId: number): Promise<Property[]> {
-        const db = await getDatabase();
-        return await db.select<Property[]>(
-        'SELECT * FROM properties WHERE owner_id = ?',
-        [ownerId]
-        );
-    },
+  // Fetch properties and join the owner's name for your master property list dashboard
+  async getAllWithOwners(): Promise<PropertyWithOwner[]> {
+    const db = await getDatabase();
+    return await db.select<PropertyWithOwner[]>(
+      `SELECT p.*, (o.firstName || ' ' || o.surname) as ownerName
+       FROM properties p
+       INNER JOIN owners o ON p.ownerId = o.id
+       ORDER BY p.reference ASC`
+    );
+  },
 
-    // Insert a property
-    async createProperty(property: Omit<Property, 'id'>): Promise<void> {
-        const db = await getDatabase();
-        await db.execute(
-        'INSERT INTO properties (owner_id, address, property_type) VALUES (?, ?, ?)',
-        [property.owner_id, property.address, property.property_type]
-        );
-    }
-}
+  // Fetch properties belonging to a specific owner
+  async getByOwnerId(ownerId: EntityId): Promise<PropertyRecord[]> {
+    const db = await getDatabase();
+    return await db.select<PropertyRecord[]>('SELECT * FROM properties WHERE ownerId = ?', [ownerId]);
+  },
 
+  // Create a property
+  async create(input: CreatePropertyInput): Promise<PropertyRecord> {
+    const db = await getDatabase();
+    const now = new Date().toISOString();
+
+    const record: PropertyRecord = {
+      ...input,
+      id: crypto.randomUUID(),
+      status: 'active',
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    await db.execute(
+      `INSERT INTO properties (
+        id, reference, ownerId, propertyType, address, rentFrequency, rentCents,
+        commissionRatePercent, adminFeeCents, backyardMaintenanceFeeCents,
+        advertisementFeeCents, agreedSpendingLimitCents, notes, status, createdAt, updatedAt
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        record.id, record.reference, record.ownerId, record.propertyType, record.address, record.rentFrequency, record.rentCents,
+        record.commissionRatePercent, record.adminFeeCents, record.backyardMaintenanceFeeCents,
+        record.advertisementFeeCents, record.agreedSpendingLimitCents, record.notes, record.status, record.createdAt, record.updatedAt
+      ]
+    );
+    return record;
+  }
+};
