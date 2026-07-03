@@ -1,5 +1,5 @@
 // Package imports
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, Link } from 'react-router'
 
 // Modular tsx files
 import { Owners, NewOwner } from './pages/pages-tsx/owners'
