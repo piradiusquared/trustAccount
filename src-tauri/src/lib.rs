@@ -33,6 +33,7 @@ pub fn run() {
                         email TEXT,
                         mobile TEXT,
                         postalAddress TEXT,
+                        bankName TEXT,
                         accountName TEXT,
                         bsb TEXT,            -- Changed to TEXT to preserve leading zeros and dashes
                         accountNumber TEXT,  -- Changed to TEXT to preserve leading zeros
