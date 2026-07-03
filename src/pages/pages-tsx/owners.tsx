@@ -1,8 +1,10 @@
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useSubmit } from 'react-router'
+import { CreateOwnerInput } from '../../lib/datatypes';
 import { useState, ChangeEvent, SubmitEvent } from 'react';
 
 import '../pages-css/form.css'
+import { ownerService } from '../../services/ownerService';
 
 type OwnerFormState = {
     reference: string;
@@ -131,6 +133,8 @@ function formatPostalAddress(form: OwnerFormState): string {
 
 export function NewOwner() {
     const [form, setForm] = useState<OwnerFormState>(emptyForm);
+    const navigate = useNavigate();
+
 
     function handleChange(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
         const target = event.target as HTMLInputElement | HTMLSelectElement;
@@ -142,14 +146,37 @@ export function NewOwner() {
         }));
     }
 
-    function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+    async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
 
         const combinedAddress = formatPostalAddress(form);
+        const payload: CreateOwnerInput = {
+            reference: form.reference.trim(),
+            title: form.title === '-' ? undefined : form.title,
+            firstName: form.firstName.trim(),
+            surname: form.surname ? form.surname.trim() : undefined,
+            email: form.email ? form.email.trim() : undefined,
+            mobile: form.mobile ? form.mobile.trim() : undefined,
+            postalAddress: combinedAddress || undefined,
+            accountName: form.accountName ? form.accountName.trim() : undefined,
+            bankName: form.bankName ? form.bankName.trim() : undefined,
+            bsb: form.bsb ? form.bsb.trim() : undefined,
+            accountNumber: form.accountNumber ? form.accountNumber.trim() : undefined,
+            paymentRef: form.paymentRef ? form.paymentRef.trim() : undefined,
+            notes: form.notes ? form.notes.trim() : undefined,
+        }
+        try {
+            const newOwner = await ownerService.create(payload);
+            console.log('[Frontend] Database write success: ', newOwner);
 
-        setForm(emptyForm);
+            const testQuery = await ownerService.getAll();
+            console.log('[Frontend] Current owners in database: ', testQuery);
+            setForm(emptyForm);
+            navigate('/owners');
+        } catch (error) {
+            console.error('Failed to create new Owner', error);
+        }
     }
-
 
     return (
         <div className="content-container">
@@ -162,12 +189,12 @@ export function NewOwner() {
                 <div className="content-form-flex">
                     <label>
                         <span>Reference:</span>
-                        <input name="reference" placeholder="OWN001" />
+                        <input name="reference" onChange={handleChange} placeholder="OWN001" />
                     </label>
 
                     <label>
                         <span>Title:</span>
-                        <select name="title" >
+                        <select name="title" onChange={handleChange}>
                             <option value="-">-</option>
                             <option value="Mr.">Mr.</option>
                             <option value="Mrs.">Mrs.</option>
@@ -280,11 +307,11 @@ export function NewOwner() {
                 </div>
 
                 <div className="content-form-actions">
-                    <button type="submit" className='drop-right' >
+                    <button type="submit" className='drop-right'>
                         Create Owner
-                    </button>                    
+                    </button>
                 </div>
-            </form >
+            </form>
         </div>
 
     )
