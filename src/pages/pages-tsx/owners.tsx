@@ -1,110 +1,73 @@
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router'
+import { CreateOwnerInput, OwnerRecord } from '../../lib/datatypes';
+import { useState, ChangeEvent, SubmitEvent, useEffect } from 'react';
+
 import '../pages-css/form.css'
+import { ownerService } from '../../services/ownerService';
 
-// type OwnerFormState = {
-//     reference: string;
-//     title: string;
-//     firstName: string;
-//     surname: string;
-//     email: string;
-//     mobile: string;
+type OwnerFormState = {
+    reference: string;
+    title: string;
+    firstName: string;
+    surname: string;
+    email: string;
+    mobile: string;
 
-//     // Detailed address
-//     country: string;
-//     overseasAddress: string;
-//     unitNumber: string;
-//     streetNumber: string;
-//     streetName: string;
-//     suburb: string;
-//     state: string;
-//     postcode: string;
+    // Detailed address
+    country: string;
+    overseasAddress: string;
+    unitNumber: string;
+    streetNumber: string;
+    streetName: string;
+    suburb: string;
+    state: string;
+    postcode: string;
 
-//     // Banking
-//     accountName: string,
-//     bsb: string,
-//     accountNumber: string,
-//     paymentRef: string,
+    // Banking
+    bankName?: string,
+    accountName: string,
+    bsb: string,
+    accountNumber: string,
+    paymentRef: string,
 
-//     // Notes
-//     ownerNotes: string
-// };
+    // Notes
+    notes?: string
+};
 
-// const emptyForm: OwnerFormState = {
-//     reference: '',
-//     title: '-',
-//     firstName: '',
-//     surname: '',
-//     email: '',
-//     mobile: '',
+const emptyForm: OwnerFormState = {
+    reference: '',
+    title: '-',
+    firstName: '',
+    surname: '',
+    email: '',
+    mobile: '',
 
-//     country: 'Australia',
-//     overseasAddress: '',
-//     unitNumber: '',
-//     streetNumber: '',
-//     streetName: '',
-//     suburb: '',
-//     state: '',
-//     postcode: '',
+    country: 'Australia',
+    overseasAddress: '',
+    unitNumber: '',
+    streetNumber: '',
+    streetName: '',
+    suburb: '',
+    state: '',
+    postcode: '',
 
-//     // Banking
-//     accountName: '',
-//     bsb: '',
-//     accountNumber: '',
-//     paymentRef: '',
+    // Banking
+    bankName: '',
+    accountName: '',
+    bsb: '',
+    accountNumber: '',
+    paymentRef: '',
 
-//     ownerNotes: '',
-// };
-
-// Combine into a single postal address
-// function formatPostalAddress(form: OwnerFormState): string {
-//     if (form.country !== "Australia") {
-//         return `${form.overseasAddress}, ${form.country}`;
-//     }
-
-//     // For Australian addresses, build the string step-by-step
-//     const unit = form.unitNumber ? `Unit ${form.unitNumber}, ` : '';
-//     const street = `${form.streetNumber} ${form.streetName}`.trim();
-//     const location = `${form.suburb} ${form.state} ${form.postcode}`.trim();
-
-//     // Combine them, filtering out any empty parts
-//     return [unit + street, location, form.country]
-//         .filter(part => part.trim() !== '')
-//         .join(', ');
-// }
-
+    notes: ''
+};
 
 export function Owners() {
+    const [owners, setOwners] = useState<OwnerRecord[]>([]);
+    useEffect(() => {
+        ownerService.getAll().then(setOwners);
+    })
 
-    // const [form, setForm] = useState<OwnerFormState>(emptyForm);
-
-    // function handleChange(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-    //     const target = event.target as HTMLInputElement | HTMLSelectElement;
-    //     const { name, value } = target;
-
-    //     setForm((current) => ({
-    //         ...current,
-    //         [name]: value,
-    //     }));
-    // }
-
-    // function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
-    //     event.preventDefault();
-
-    //     const combinedAddress = formatPostalAddress(form);
-
-    //     service.createOwner({
-    //         reference: form.reference,
-    //         title: form.title,
-    //         firstName: form.firstName,
-    //         surname: form.surname,
-    //         email: form.email,
-    //         mobile: form.mobile,
-    //         postalAddress: combinedAddress,
-    //     });
-
-    //     setForm(emptyForm);
-    // }
     return (
         <section className='content-container'>
             <header className='content-header'>
@@ -112,6 +75,7 @@ export function Owners() {
                 <Link to='/owners/new-owner'>New Owner</Link>
             </header>
 
+            {/* query active */}
             <div className="card-active">
                 <h2>Active</h2>
                 {/* Table. thead heading row, tbody actual content. */}
@@ -130,32 +94,97 @@ export function Owners() {
                     </thead>
 
                     <tbody>
-                        {/* {owners.map(owner => (
-                            <tr key={owner.id}>
-                                <td>{owner.reference}</td>
-                                <td>{owner.title}</td>
-                                <td>{owner.firstName}</td>
-                                <td>{owner.surname}</td>
-                                <td>{owner.email}</td>
-                                <td>{owner.mobile}</td>
-                                <td>{owner.postalAddress}</td>
-                            </tr>
-                        ))} */}
+                        {owners.map(owner => {
+                            return (
+                                <tr key={owner.id}>
+                                    <td>{owner.reference}</td>
+                                    <td>{owner.title}</td>
+                                    <td>{owner.firstName}</td>
+                                    <td>{owner.surname}</td>
+                                    <td>{owner.email}</td>
+                                    <td>{owner.mobile}</td>
+                                    <td>{owner.postalAddress}</td>
+                                </tr>
+                            )
+                        })}
                     </tbody>
                 </table>
             </div>
-
+            
+            {/* query inactive */}
             <div className="card-inactive">
 
             </div>
-
-
-
         </section>
     );
 }
 
+
+// Combine into a single postal address
+function formatPostalAddress(form: OwnerFormState): string {
+    if (form.country !== "Australia") {
+        return `${form.overseasAddress}, ${form.country}`;
+    }
+
+    // For Australian addresses, build the string step-by-step
+    const unit = form.unitNumber ? `Unit ${form.unitNumber}, ` : '';
+    const street = `${form.streetNumber} ${form.streetName}`.trim();
+    const location = `${form.suburb} ${form.state} ${form.postcode}`.trim();
+
+    // Combine them, filtering out any empty parts
+    return [unit + street, location, form.country]
+        .filter(part => part.trim() !== '')
+        .join(', ');
+}
+
+
 export function NewOwner() {
+    const [form, setForm] = useState<OwnerFormState>(emptyForm);
+    const navigate = useNavigate();
+
+
+    function handleChange(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+        const target = event.target as HTMLInputElement | HTMLSelectElement;
+        const { name, value } = target;
+
+        setForm((current) => ({
+            ...current,
+            [name]: value,
+        }));
+    }
+
+    async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+        event.preventDefault();
+
+        const combinedAddress = formatPostalAddress(form);
+        const payload: CreateOwnerInput = {
+            reference: form.reference.trim(),
+            title: form.title === '-' ? undefined : form.title,
+            firstName: form.firstName.trim(),
+            surname: form.surname ? form.surname.trim() : undefined,
+            email: form.email ? form.email.trim() : undefined,
+            mobile: form.mobile ? form.mobile.trim() : undefined,
+            postalAddress: combinedAddress || undefined,
+            accountName: form.accountName ? form.accountName.trim() : undefined,
+            bankName: form.bankName ? form.bankName.trim() : undefined,
+            bsb: form.bsb ? form.bsb.trim() : undefined,
+            accountNumber: form.accountNumber ? form.accountNumber.trim() : undefined,
+            paymentRef: form.paymentRef ? form.paymentRef.trim() : undefined,
+            notes: form.notes ? form.notes.trim() : undefined,
+        }
+        try {
+            const newOwner = await ownerService.create(payload);
+            console.log('[Frontend] Database write success: ', newOwner);
+
+            const testQuery = await ownerService.getAll();
+            console.log('[Frontend] Current owners in database: ', testQuery);
+            setForm(emptyForm);
+            navigate('/owners');
+        } catch (error) {
+            console.error('Failed to create new Owner', error);
+        }
+    }
+
     return (
         <div className="content-container">
             <div className="content-header">
@@ -163,16 +192,16 @@ export function NewOwner() {
                 <Link to='/owners'>Back</Link>
             </div>
 
-            <form className="content-form">
+            <form className="content-form" onSubmit={handleSubmit}>
                 <div className="content-form-flex">
                     <label>
                         <span>Reference:</span>
-                        <input name="reference" placeholder="OWN001" />
+                        <input name="reference" onChange={handleChange} placeholder="OWN001" />
                     </label>
 
                     <label>
                         <span>Title:</span>
-                        <select name="title" >
+                        <select name="title" onChange={handleChange}>
                             <option value="-">-</option>
                             <option value="Mr.">Mr.</option>
                             <option value="Mrs.">Mrs.</option>
@@ -184,28 +213,28 @@ export function NewOwner() {
 
                     <label>
                         <span>First Name:</span>
-                        <input name="firstName" placeholder="Jane" required />
+                        <input name="firstName" onChange={handleChange} placeholder="Jane" required />
                     </label>
 
                     <label>
                         <span>Surname:</span>
-                        <input name="surname" placeholder="Doe" />
+                        <input name="surname" onChange={handleChange} placeholder="Doe" />
                     </label>
 
                     <label>
                         <span>Email:</span>
-                        <input name="email" placeholder="jane@example.com" type="email" required />
+                        <input name="email" onChange={handleChange} placeholder="jane@example.com" type="email" required />
                     </label>
 
                     <label>
                         <span>Mobile:</span>
-                        <input name="mobile" placeholder="0400 000 000" required />
+                        <input name="mobile" onChange={handleChange} placeholder="0400 000 000" required />
                     </label>
 
                     {/* Country Selector */}
                     <label>
                         <span>Country:</span>
-                        <select name="country" >
+                        <select name="country" onChange={handleChange} >
                             <option value="Australia">Australia</option>
                             <option value="New Zealand">New Zealand</option>
                             <option value="United Kingdom">United Kingdom</option>
@@ -218,10 +247,8 @@ export function NewOwner() {
                         <span>Overseas Address:</span>
                         <input
                             name="overseasAddress"
-
-
-                            // disabled={ === 'Australia'}
-                            placeholder="Enter overseas address"
+                            disabled={form.country === 'Australia'}
+                            onChange={handleChange} placeholder="Enter overseas address"
                         />
                     </label>
 
@@ -230,8 +257,8 @@ export function NewOwner() {
                         <span>Unit Number:</span>
                         <input
                             name="unitNumber"
-
-                        // disabled={form.country !== 'Australia'}
+                            onChange={handleChange}
+                            disabled={form.country !== 'Australia'}
                         />
                     </label>
 
@@ -240,9 +267,8 @@ export function NewOwner() {
                         <span>Street Number:</span>
                         <input
                             name="streetNumber"
-
-
-                        // disabled={form.country !== 'Australia'}
+                            onChange={handleChange}
+                            disabled={form.country !== 'Australia'}
                         />
                     </label>
 
@@ -251,9 +277,8 @@ export function NewOwner() {
                         <span>Street Name / PO Box:</span>
                         <input
                             name="streetName"
-
-
-                        // disabled={form.country !== 'Australia'}
+                            onChange={handleChange}
+                            disabled={form.country !== 'Australia'}
                         />
                     </label>
 
@@ -262,9 +287,8 @@ export function NewOwner() {
                         <span>Suburb:</span>
                         <input
                             name="suburb"
-
-
-                        // disabled={form.country !== 'Australia'}
+                            onChange={handleChange}
+                            disabled={form.country !== 'Australia'}
                         />
                     </label>
 
@@ -273,9 +297,8 @@ export function NewOwner() {
                         <span>State:</span>
                         <input
                             name="state"
-
-
-                        // disabled={form.country !== 'Australia'}
+                            onChange={handleChange}
+                            disabled={form.country !== 'Australia'}
                         />
                     </label>
 
@@ -284,8 +307,8 @@ export function NewOwner() {
                         <span>Postcode:</span>
                         <input
                             name="postcode"
-
-                        // disabled={form.country !== 'Australia'}
+                            onChange={handleChange}
+                            disabled={form.country !== 'Australia'}
                         />
                     </label>
                 </div>
@@ -293,9 +316,9 @@ export function NewOwner() {
                 <div className="content-form-actions">
                     <button type="submit" className='drop-right'>
                         Create Owner
-                    </button>                    
+                    </button>
                 </div>
-            </form >
+            </form>
         </div>
 
     )

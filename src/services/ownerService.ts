@@ -1,5 +1,6 @@
 import { getDatabase } from '../lib/database';
 import { OwnerRecord, CreateOwnerInput, EntityId } from '../lib/datatypes';
+import { getLocalIsoString } from './utils';
 
 export const ownerService = {
   // Fetch all owners
@@ -18,7 +19,7 @@ export const ownerService = {
   // Create a new owner
   async create(input: CreateOwnerInput): Promise<OwnerRecord> {
     const db = await getDatabase();
-    const now = new Date().toISOString();
+    const now = getLocalIsoString();
     
     const record: OwnerRecord = {
       ...input,
@@ -30,11 +31,11 @@ export const ownerService = {
     await db.execute(
       `INSERT INTO owners (
         id, reference, title, firstName, surname, email, mobile, postalAddress,
-        accountName, bsb, accountNumber, paymentRef, notes, createdAt, updatedAt
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        bankName, accountName, bsb, accountNumber, paymentRef, notes, createdAt, updatedAt
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         record.id, record.reference, record.title, record.firstName, record.surname, record.email, record.mobile, record.postalAddress,
-        record.accountName, record.bsb, record.accountNumber, record.paymentRef, record.notes, record.createdAt, record.updatedAt
+        record.bankName, record.accountName, record.bsb, record.accountNumber, record.paymentRef, record.notes, record.createdAt, record.updatedAt
       ]
     );
     return record;

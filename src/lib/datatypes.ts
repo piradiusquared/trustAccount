@@ -21,6 +21,7 @@ export interface OwnerRecord {
   email?: string;
   mobile?: string;
   postalAddress?: string;
+  bankName?: string;
   accountName?: string;
   bsb?: string;
   accountNumber?: string;
@@ -37,6 +38,7 @@ export interface CreateOwnerInput {
   surname?: string;
   email?: string;
   mobile?: string;
+  
   postalAddress?: string;
   bankName?: string;
   accountName?: string;
