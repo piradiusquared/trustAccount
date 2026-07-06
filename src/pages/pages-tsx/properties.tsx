@@ -1,8 +1,16 @@
 
 import { Link } from "react-router"
 import '../pages-css/form.css'
+import { useEffect, useState } from "react"
+import { PropertyRecord } from "../../lib/datatypes"
+import { propertyService } from "../../services/propertyService";
+
 
 export function Properties() {
+    const [properties, setProperties] = useState<PropertyRecord[]>([]);
+    useEffect(() => {
+        propertyService.getAllWithOwners().then(setProperties);
+    })
 
     return (
         <section className="content-container">
@@ -29,16 +37,16 @@ export function Properties() {
                     </thead>
 
                     <tbody>
-                        {/* {properties.map(owner => (
-                            <tr key={owner.id}>
-                                <td>{owner.reference}</td>
-                                <td>{owner.propertyType}</td>
-                                <td>{owner.address}</td>
-                                <td>{owner.rentCents}</td>
-                                <td>{owner.commissionRatePercent}</td>
-                                <td>{owner.ownerId}</td>
+                        {properties.map(property => (
+                            <tr key={property.id}>
+                                <td>{property.reference}</td>
+                                <td>{property.propertyType}</td>
+                                <td>{property.address}</td>
+                                <td>{property.rentCents}</td>
+                                <td>{property.commissionRatePercent}</td>
+                                <td>{property.ownerId}</td>
                             </tr>
-                        ))} */}
+                        ))}
                     </tbody>
                 </table>
             </div>

@@ -68,9 +68,6 @@ export function Owners() {
         ownerService.getAll().then(setOwners);
     })
 
-    // const owners = await ownerService.getAll();
-
-
     return (
         <section className='content-container'>
             <header className='content-header'>
