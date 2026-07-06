@@ -1,7 +1,7 @@
 
-import { Link, useNavigate, useSubmit } from 'react-router'
-import { CreateOwnerInput } from '../../lib/datatypes';
-import { useState, ChangeEvent, SubmitEvent } from 'react';
+import { Link, useNavigate } from 'react-router'
+import { CreateOwnerInput, OwnerRecord } from '../../lib/datatypes';
+import { useState, ChangeEvent, SubmitEvent, useEffect } from 'react';
 
 import '../pages-css/form.css'
 import { ownerService } from '../../services/ownerService';
@@ -63,6 +63,14 @@ const emptyForm: OwnerFormState = {
 };
 
 export function Owners() {
+    const [owners, setOwners] = useState<OwnerRecord[]>([]);
+    useEffect(() => {
+        ownerService.getAll().then(setOwners);
+    })
+
+    // const owners = await ownerService.getAll();
+
+
     return (
         <section className='content-container'>
             <header className='content-header'>
@@ -89,17 +97,19 @@ export function Owners() {
                     </thead>
 
                     <tbody>
-                        {/* {owners.map(owner => (
-                            <tr key={owner.id}>
-                                <td>{owner.reference}</td>
-                                <td>{owner.title}</td>
-                                <td>{owner.firstName}</td>
-                                <td>{owner.surname}</td>
-                                <td>{owner.email}</td>
-                                <td>{owner.mobile}</td>
-                                <td>{owner.postalAddress}</td>
-                            </tr>
-                        ))} */}
+                        {owners.map(owner => {
+                            return (
+                                <tr key={owner.id}>
+                                    <td>{owner.reference}</td>
+                                    <td>{owner.title}</td>
+                                    <td>{owner.firstName}</td>
+                                    <td>{owner.surname}</td>
+                                    <td>{owner.email}</td>
+                                    <td>{owner.mobile}</td>
+                                    <td>{owner.postalAddress}</td>
+                                </tr>
+                            )
+                        })}
                     </tbody>
                 </table>
             </div>
