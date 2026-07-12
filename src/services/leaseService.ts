@@ -27,7 +27,7 @@ export const leaseService = {
     const record: LeaseRecord = {
       ...input,
       id: crypto.randomUUID(),
-      status: input.status || 'active',
+      status: 'active', // Might need to do some pre-processing checks if lease can be active (i.e. no lease starting in the future)
       createdAt: now,
       updatedAt: now,
     };
@@ -56,7 +56,7 @@ export const leaseService = {
 
     await db.execute(
       `UPDATE leases 
-       SET status = 'historic', actualMoveOutDate = ?, updatedAt = ? 
+       SET status = 'inactive', actualMoveOutDate = ?, updatedAt = ? 
        WHERE id = ?`,
       [moveOutDate, now, id]
     );
