@@ -39,6 +39,7 @@ pub fn run() {
                         accountNumber TEXT,  -- Changed to TEXT to preserve leading zeros
                         paymentRef TEXT,
                         notes TEXT,           -- Removed trailing comma to prevent SQLite syntax error
+                        status TEXT NOT NULL CHECK (status IN ('active', 'inactive')),
                         createdAt STRING,
                         updatedAt STRING
                     );
@@ -81,7 +82,7 @@ pub fn run() {
                         specialConditionNotes TEXT,
                         actualMoveOutDate TEXT,
                         lettingFeeSelection TEXT,
-                        status TEXT NOT NULL CHECK (status IN ('active', 'historic')),
+                        status TEXT NOT NULL CHECK (status IN ('active', 'inactive')),
                         createdAt STRING,
                         updatedAt STRING,
                         FOREIGN KEY (propertyId) REFERENCES properties(id) ON DELETE CASCADE
