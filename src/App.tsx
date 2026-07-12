@@ -6,7 +6,6 @@ import { Owners, NewOwner } from './pages/pages-tsx/owners'
 import Dashboard from './pages/pages-tsx/dashboard'
 import { Properties, NewProperty} from './pages/pages-tsx/properties'
 import { Leases, NewLease } from './pages/pages-tsx/leases'
-import TestDb from './pages/pages-tsx/test-db'
 
 // CSS imports
 import './app.css'
