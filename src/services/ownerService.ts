@@ -9,6 +9,12 @@ export const ownerService = {
     return await db.select<OwnerRecord[]>('SELECT * FROM owners ORDER BY reference ASC');
   },
 
+  // TODO: not done yet, add in active/inactive flag
+  async getInactive(): Promise<OwnerRecord[]> {
+    const db = await getDatabase();
+    return await db.select<OwnerRecord[]>('SELECT * FROM owners');
+  },
+
   // Fetch a single owner
   async getById(id: EntityId): Promise<OwnerRecord | null> {
     const db = await getDatabase();
