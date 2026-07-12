@@ -106,7 +106,7 @@ export interface LeaseRecord {
   tenantCount?: number;
   petsAllowed?: boolean;
   petCount?: number;
-  specialConditionNotes?: string;
+  notes?: string;
   actualMoveOutDate?: IsoDate;
   lettingFeeSelection?: string;
   status: RecordStatus;
@@ -128,7 +128,7 @@ export interface CreateLeaseInput {
   tenantCount?: number;
   petsAllowed?: boolean;
   petCount?: number;
-  specialConditionNotes?: string;
+  notes?: string;
   actualMoveOutDate?: IsoDate;
   lettingFeeSelection?: string;
 }

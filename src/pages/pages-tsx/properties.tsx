@@ -6,6 +6,14 @@ import { PropertyRecord } from "../../lib/datatypes"
 import { propertyService } from "../../services/propertyService";
 
 
+type PropertyFormState = {
+
+};
+
+const emptyForm: PropertyFormState = {
+
+};
+
 export function Properties() {
     const [properties, setProperties] = useState<PropertyRecord[]>([]);
     useEffect(() => {

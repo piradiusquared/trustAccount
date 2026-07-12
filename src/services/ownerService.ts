@@ -30,6 +30,7 @@ export const ownerService = {
     const record: OwnerRecord = {
       ...input,
       id: crypto.randomUUID(), // Standard UUID generation
+      status: "active",
       createdAt: now,
       updatedAt: now,
     };

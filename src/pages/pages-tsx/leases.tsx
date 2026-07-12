@@ -2,6 +2,14 @@
 import { Link } from "react-router"
 import '../pages-css/form.css'
 
+type LeaseFormState = {
+
+};
+
+const emptyForm: LeaseFormState = {
+
+};
+
 export function Leases() {
 
     return (
@@ -104,10 +112,52 @@ export function NewLease() {
                         <span>Existing Tenant Credit:</span>
                         <input name="tenantCredit"></input>
                     </label>
+
+                    <br></br>
+
+                    <label>
+                        <span>No. of Tenants:</span>
+                        <input name="tenantCount"></input>
+                    </label>
+
+                    <label>
+                        <span>Notes:</span>
+                        <input name="notes"></input>
+                    </label>
+
+                    <br></br>
+                    <label> 
+                        <span>Pets Allowed:</span>
+                        <select name="petAllowed">
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        <span>Pets Count:</span>
+                        <input name="petCount"></input>
+                    </label>
+
+                    <label>
+                        <span>Actual Move Out Date:</span>
+                        <input type="date" name="actualMoveOutDate"></input>
+                    </label>
+
+                    <label>
+                        <span>New Lease Letting Fee:</span>
+                        <select name="lettingFee">
+                            <option value="100">100%</option>
+                            <option value="50">50%</option>
+                            <option value="0">0%, Manual</option>
+                        </select>
+                    </label>
                 </div>
 
                 <div className="content-form-actions">
-
+                    <button type="submit" className="drop-right">
+                        Create Lease
+                    </button>
                 </div>
             </form>
         </div>
