@@ -19,7 +19,6 @@ function App() {
         <Link className='toplink' to='/owners'>Owners</Link>
         <Link className='toplink' to='/properties'>Properties</Link>
         <Link className='toplink' to='/leases'>Leases</Link>
-        <Link className='toplink' to='/testdb'>Test DB</Link>
       </nav>
 
 
@@ -40,9 +39,6 @@ function App() {
         {/* Leases */}
         <Route path='/leases' element={<Leases />} />
         <Route path='/leases/new-lease' element={<NewLease />} />
-
-        <Route path='/testdb' element={<TestDb />} />
-
 
       </Routes>
     </>
