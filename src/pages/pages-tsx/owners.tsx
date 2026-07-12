@@ -64,8 +64,10 @@ const emptyForm: OwnerFormState = {
 
 export function Owners() {
     const [owners, setOwners] = useState<OwnerRecord[]>([]);
+    const [inactiveOwners, setInactive] = useState<OwnerRecord[]>([]);
     useEffect(() => {
         ownerService.getAll().then(setOwners);
+        ownerService.getInactive().then(setInactive);
     })
 
     return (
@@ -97,13 +99,13 @@ export function Owners() {
                         {owners.map(owner => {
                             return (
                                 <tr key={owner.id}>
-                                    <td>{owner.reference}</td>
-                                    <td>{owner.title}</td>
-                                    <td>{owner.firstName}</td>
-                                    <td>{owner.surname}</td>
-                                    <td>{owner.email}</td>
-                                    <td>{owner.mobile}</td>
-                                    <td>{owner.postalAddress}</td>
+                                    <td className='content-table-td'>{owner.reference}</td>
+                                    <td className='content-table-td'>{owner.title}</td>
+                                    <td className='content-table-td'>{owner.firstName}</td>
+                                    <td className='content-table-td'>{owner.surname}</td>
+                                    <td className='content-table-td'>{owner.email}</td>
+                                    <td className='content-table-td'>{owner.mobile}</td>
+                                    <td className='content-table-td'>{owner.postalAddress}</td>
                                 </tr>
                             )
                         })}
@@ -113,7 +115,44 @@ export function Owners() {
             
             {/* query inactive */}
             <div className="card-inactive">
+                <h2>Active</h2>
+                {/* Table. thead heading row, tbody actual content. */}
+                <table className='content-table'>
+                    <thead>
+                        <tr>
+                            <th className='content-table-th'>Reference</th>
+                            <th className='content-table-th'>Title</th>
+                            <th className='content-table-th'>First Name</th>
+                            <th className='content-table-th'>Surname</th>
+                            <th className='content-table-th'>Email</th>
+                            <th className='content-table-th'>Mobile Number</th>
+                            <th className='content-table-th'>Postal Address</th>
+                            {/* TODO: actions */}
+                        </tr>
+                    </thead>
 
+                    <tbody>
+                        {/* TEST FOR DEV ONLY */}
+                        <td className='content-table-td'>Reference: 1</td>
+                        <td className='content-table-td'>Title: Ts</td>
+                        <td className='content-table-td'>Firstname: test</td>
+                        <td className='content-table-td'>Surname: Test</td>
+                        {/* END TEST FOR DEV */}
+                        {owners.map(owner => {
+                            return (
+                                <tr key={owner.id}>
+                                    <td className='content-table-td'>{owner.reference}</td>
+                                    <td className='content-table-td'>{owner.title}</td>
+                                    <td className='content-table-td'>{owner.firstName}</td>
+                                    <td className='content-table-td'>{owner.surname}</td>
+                                    <td className='content-table-td'>{owner.email}</td>
+                                    <td className='content-table-td'>{owner.mobile}</td>
+                                    <td className='content-table-td'>{owner.postalAddress}</td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
             </div>
         </section>
     );
