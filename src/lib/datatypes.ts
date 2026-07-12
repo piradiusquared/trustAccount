@@ -5,7 +5,7 @@ export type MoneyCents = number;
 export type LedgerTargetType = 'lease' | 'property' | 'owner';
 export type LedgerKind = 'deposit' | 'payment' | 'expense' | 'withheld' | 'adjustment';
 export type InvoiceStatus = 'unpaid' | 'paid' | 'reversed' | 'void';
-export type LeaseStatus = 'active' | 'historic';
+export type RecordStatus = 'active' | 'inactive';
 export type RentFrequency = 'weekly' | 'fortnightly' | 'monthly';
 
 
@@ -27,6 +27,7 @@ export interface OwnerRecord {
   accountNumber?: string;
   paymentRef?: string;
   notes?: string;
+  status?: RecordStatus;
   createdAt: IsoDate;
   updatedAt: IsoDate;
 }
@@ -67,7 +68,7 @@ export interface PropertyRecord {
   advertisementFeeCents?: MoneyCents;
   agreedSpendingLimitCents?: MoneyCents;
   notes?: string;
-  status: 'active' | 'inactive';
+  status: RecordStatus;
   createdAt: IsoDate;
   updatedAt: IsoDate;
 }
@@ -108,12 +109,14 @@ export interface LeaseRecord {
   specialConditionNotes?: string;
   actualMoveOutDate?: IsoDate;
   lettingFeeSelection?: string;
-  status: LeaseStatus;
+  status: RecordStatus;
   createdAt: IsoDate;
   updatedAt: IsoDate;
 }
 
+
 export interface CreateLeaseInput {
+  // Note: status will automatically be set to "active" for a new lease
   propertyId: EntityId;
   tenantName: string;
   startDate: IsoDate;
@@ -128,5 +131,4 @@ export interface CreateLeaseInput {
   specialConditionNotes?: string;
   actualMoveOutDate?: IsoDate;
   lettingFeeSelection?: string;
-  status?: LeaseStatus;
 }
