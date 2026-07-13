@@ -133,12 +133,12 @@ export function Owners() {
 
                     <tbody>
                         {/* TEST FOR DEV ONLY */}
-                        <td className='content-table-td'>Reference: 1</td>
+                        {/* <td className='content-table-td'>Reference: 1</td>
                         <td className='content-table-td'>Title: Ts</td>
                         <td className='content-table-td'>Firstname: test</td>
-                        <td className='content-table-td'>Surname: Test</td>
+                        <td className='content-table-td'>Surname: Test</td> */}
                         {/* END TEST FOR DEV */}
-                        {owners.map(owner => {
+                        {/* {owners.map(owner => {
                             return (
                                 <tr key={owner.id}>
                                     <td className='content-table-td'>{owner.reference}</td>
@@ -150,7 +150,7 @@ export function Owners() {
                                     <td className='content-table-td'>{owner.postalAddress}</td>
                                 </tr>
                             )
-                        })}
+                        })} */}
                     </tbody>
                 </table>
             </div>
