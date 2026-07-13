@@ -6,6 +6,7 @@ import { useState, ChangeEvent, SubmitEvent, useEffect } from 'react';
 import '../pages-css/form.css'
 import { ownerService } from '../../services/ownerService';
 
+// TODO: move to datatypes ts file
 type OwnerFormState = {
     reference: string;
     title: string;
