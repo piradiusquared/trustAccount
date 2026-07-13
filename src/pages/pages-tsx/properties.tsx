@@ -2,10 +2,11 @@
 import { Link } from "react-router"
 import '../pages-css/form.css'
 import { useEffect, useState } from "react"
-import { PropertyRecord } from "../../lib/datatypes"
+import { OwnerRecord, PropertyRecord } from "../../lib/datatypes"
 import { propertyService } from "../../services/propertyService";
+import { ownerService } from "../../services/ownerService";
 
-
+// TODO: create the state and forms
 type PropertyFormState = {
 
 };
@@ -67,7 +68,11 @@ export function Properties() {
     )
 }
 
-export function NewProperty() { 
+export function NewProperty() {
+    const [ownerList, setOwners] = useState<OwnerRecord[]>([]);
+    useEffect(() => {
+        ownerService.getAll().then(setOwners);
+    })
     return (
         <div className="content-container">
             <header className="content-header">
@@ -83,8 +88,16 @@ export function NewProperty() {
                     </label>
 
                     <label>
-                        {/* TODO: Query from all existing owners and create dropdown */}
-                        <span>Owner: [INCOMPLETE]</span>
+                        {/* Use joins to identify required information from the user ID */}
+                        <span>Owner:</span>
+                        <select name="owner">
+                            {ownerList.map((owner) => (
+                                <option key={owner.id}>
+                                    {owner.title || ''} {owner.firstName} {owner.surname || ''}
+                                </option>
+                            ))}
+                        </select>
+
                     </label>
 
                     <label>
