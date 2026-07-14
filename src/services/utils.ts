@@ -19,3 +19,23 @@ export function getLocalIsoString(): string {
 
   return localDate.toISOString().slice(0, -1);
 }
+
+/*
+Combines detailed address components into a single address.
+Overseas address is optional for now
+*/
+export function formatPostalAddress(form: any): string {
+    if (form.country !== "Australia") {
+        return `${form.overseasAddress}, ${form.country}`;
+    }
+
+    // For Australian addresses, build the string step-by-step
+    const unit = form.unitNumber ? `Unit/Room ${form.unitNumber}, ` : '';
+    const street = `${form.streetNumber} ${form.streetName}`.trim();
+    const location = `${form.suburb} ${form.state} ${form.postcode}`.trim();
+
+    // Combine them, filtering out any empty parts
+    return [unit + street, location, form.country]
+        .filter(part => part.trim() !== '')
+        .join(', ');
+}
