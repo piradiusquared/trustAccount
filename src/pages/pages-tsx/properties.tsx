@@ -135,6 +135,7 @@ export function NewProperty() {
                         {/* Use joins to identify required information from the user ID */}
                         <span>Owner:</span>
                         <select name="ownerId" value={form.ownerId} onChange={handleChange} required>
+                            <option value="">-- Select an Owner --</option>
                             {ownerList.map((owner) => (
                                 <option key={owner.id} value={owner.id}>
                                     {owner.title || ''} {owner.firstName} {owner.surname || ''}
