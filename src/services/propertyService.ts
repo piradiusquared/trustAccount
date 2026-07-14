@@ -38,12 +38,12 @@ export const propertyService = {
 
     await db.execute(
       `INSERT INTO properties (
-        id, reference, ownerId, propertyType, address, rentFrequency, rentCents,
+        id, reference, ownerId, propertyType, address, isFurnished, rentFrequency, rentCents,
         commissionRatePercent, adminFeeCents, backyardMaintenanceFeeCents,
         advertisementFeeCents, agreedSpendingLimitCents, notes, status, createdAt, updatedAt
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        record.id, record.reference, record.ownerId, record.propertyType, record.address, record.rentFrequency, record.rentCents,
+        record.id, record.reference, record.ownerId, record.propertyType, record.address, record.isFurnished, record.rentFrequency, record.rentCents,
         record.commissionRatePercent, record.adminFeeCents, record.backyardMaintenanceFeeCents,
         record.advertisementFeeCents, record.agreedSpendingLimitCents, record.notes, record.status, record.createdAt, record.updatedAt
       ]
