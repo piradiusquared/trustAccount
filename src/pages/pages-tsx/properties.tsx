@@ -1,19 +1,14 @@
 
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import '../pages-css/form.css'
-import { useEffect, useState } from "react"
-import { OwnerRecord, PropertyRecord } from "../../lib/datatypes"
+import { ChangeEvent, useEffect, useState, SubmitEvent } from "react"
+import { OwnerRecord, PropertyRecord, EmptyPropertyForm, PropertyFormState, CreatePropertyInput } from "../../lib/datatypes"
 import { propertyService } from "../../services/propertyService";
 import { ownerService } from "../../services/ownerService";
+import { formatPostalAddress } from "../../services/utils";
 
 // TODO: create the state and forms
-type PropertyFormState = {
 
-};
-
-const emptyForm: PropertyFormState = {
-
-};
 
 export function Properties() {
     const [properties, setProperties] = useState<PropertyRecord[]>([]);
@@ -70,9 +65,58 @@ export function Properties() {
 
 export function NewProperty() {
     const [ownerList, setOwners] = useState<OwnerRecord[]>([]);
+    const [form, setForm] = useState<PropertyFormState>(EmptyPropertyForm);
     useEffect(() => {
         ownerService.getAll().then(setOwners);
     })
+
+    const navigate = useNavigate();
+
+    // make it shared later on
+    function handleChange(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+        const target = event.target as HTMLInputElement | HTMLSelectElement;
+        const { name, value } = target;
+
+        setForm((current) => ({
+            ...current,
+            [name]: value,
+        }))
+    }
+
+    async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+        event.preventDefault();
+        const combinedAddress = formatPostalAddress(form);
+        let rentFreq = form.propertyType === "Warehouse" ? "monthly" : "weekly";
+
+        const payload: CreatePropertyInput = {
+            reference: form.reference.trim(),
+            ownerId: form.ownerId.trim(),
+            propertyType: form.propertyType.trim(),
+            address: combinedAddress.trim(),
+            isFurnished: form.isFurnished,
+            rentFrequency: rentFreq,
+            rentCents: form.rentCents,
+            commissionRatePercent: form.commissionRatePercent,
+            adminFeeCents: form.adminFeeCents,
+            backyardMaintenanceFeeCents: form.backyardMaintenanceFeeCents ? form.backyardMaintenanceFeeCents : undefined,
+            advertisementFeeCents: form.advertisementFeeCents ? form.advertisementFeeCents : undefined,
+            agreedSpendingLimitCents: form.agreedSpendingLimitCents ? form.agreedSpendingLimitCents : undefined,
+            notes: form.notes ? form.notes.trim() : undefined,
+        }
+        try {
+            const newProperty = await propertyService.create(payload);
+            console.log('[Frontend] Database write success: ', newProperty);
+
+            // const testQuery = await propertyService.getAllWithOwners();
+            // console.log('[Frontend] Current owners in database: ', testQuery);
+            setForm(EmptyPropertyForm);
+            navigate('/properties');
+        } catch (error) {
+            console.error('Failed to create new Property', error);
+        }
+        
+    }
+
     return (
         <div className="content-container">
             <header className="content-header">
@@ -80,19 +124,19 @@ export function NewProperty() {
                 <Link to='/properties'>Back</Link>
             </header>
 
-            <form className="content-form">
+            <form className="content-form" onSubmit={handleSubmit}>
                 <div className="content-form-flex">
                     <label>
                         <span>Property Reference:</span>
-                        <input name="reference" placeholder="e.g. Room 6 - 7 John Street"></input>
+                        <input name="reference" placeholder="e.g. Room 6 - 7 John Street" onChange={handleChange}></input>
                     </label>
 
                     <label>
                         {/* Use joins to identify required information from the user ID */}
                         <span>Owner:</span>
-                        <select name="owner">
+                        <select name="ownerId" value={form.ownerId} onChange={handleChange} required>
                             {ownerList.map((owner) => (
-                                <option key={owner.id}>
+                                <option key={owner.id} value={owner.id}>
                                     {owner.title || ''} {owner.firstName} {owner.surname || ''}
                                 </option>
                             ))}
@@ -102,95 +146,103 @@ export function NewProperty() {
 
                     <label>
                         <span>Property Type:</span>
-                        <select name="property-type">
+                        <select name="propertyType" onChange={handleChange}>
                             <option value="Townhouse">Townhouse</option>
-                            <option value="ApartmentUnit">Apartment/Unit</option>
+                            <option value="Apartment">Apartment/Unit</option>
                             <option value="House">House</option>
                             <option value="Land">Land</option>
+                            <option value="Warehouse">Warehouse</option>
                             {/* TODO: Can easily expand later */}
                         </select>
                     </label>
 
                     <label>
-                        <span>Room Number:</span>
-                        <input name="room-num"></input>
-                    </label>
-
-                    <label>
-                        <span>Unit:</span>
-                        <input name="unit"></input>
+                        <span>Unit/Room:</span>
+                        <input name="unitNumber" onChange={handleChange}></input>
                     </label>
 
                     <label>
                         <span>Street Number:</span>
-                        <input name="street-num"></input>
+                        <input name="streetNumber" onChange={handleChange}></input>
+                    </label>
+                    
+                    <label>
+                        <span>Street Name:</span>
+                        <input name="streetName" onChange={handleChange}></input>
                     </label>
 
                     <label>
                         <span>Suburb:</span>
-                        <input name="suburb"></input>
+                        <input name="suburb" onChange={handleChange}></input>
                     </label>
 
                     <label>
                         <span>Postcode:</span>
-                        <input name="postcode"></input>
+                        <input name="postcode" onChange={handleChange}></input>
                     </label>
 
                     <label>
                         <span>State:</span>
                         <select name="state">
-                            <option value="qld">QLD</option>
-                            <option value="nsw">NSW</option>
-                            <option value="act">ACT</option>
-                            <option value="vic">VIC</option>
-                            <option value="sa">SA</option>
-                            <option value="tas">TAS</option>
-                            <option value="wa">WA</option>
-                            <option value="nt">NT</option>
+                            <option value="QLD">QLD</option>
+                            <option value="NSW">NSW</option>
+                            <option value="ACT">ACT</option>
+                            <option value="VIC">VIC</option>
+                            <option value="SA">SA</option>
+                            <option value="TAS">TAS</option>
+                            <option value="WA">WA</option>
+                            <option value="NT">NT</option>
                         </select>
                     </label>
 
                     <label>
                         <span>Country:</span>
-                        <input name="country"></input>
+                        <input name="country" onChange={handleChange}></input>
                     </label>
 
                     <label>
                         <span>Furnished:</span>
-                        <select name="furnished">
-                            <option value="furnished-y">Yes</option>
-                            <option value="furnished-n">No</option>
+                        <select name="isFurnished">
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
                         </select>
                     </label>
 
                     <label>
                         <span>Owner Suggested Rental Price:</span>
-                        <input name="suggest-rent"></input>
+                        <input name="rentCents" onChange={handleChange}></input>
                     </label>
 
                     <label>
                         <span>Management Commission (%):</span>
-                        <input name="management-commission"></input>
+                        <input name="commissionRatePercent" onChange={handleChange}></input>
                     </label>
 
                     <label>
                         <span>Monthly Administration Fee (excl GST):</span>
-                        <input name="month-admin-fee"></input>
+                        <input name="adminFeeCents" onChange={handleChange}></input>
                     </label>
 
                     <label>
                         <span>Monthly Backyard Maintenance Fee (excl GST):</span>
-                        <input name="month-backyard-fee"></input>
+                        <input name="backyardMaintenanceFeeCents" onChange={handleChange}></input>
                     </label>
 
                     <label>
                         <span>Advertisement and Promotion Fee (excl GST):</span>
-                        <input name="ad-promo-fee"></input>
+                        <input name="advertisementFeeCents" onChange={handleChange}></input>
+                    </label>
+                    
+                    <label>
+                        <span>Agreed Spending Limit:</span>
+                        <input 
+                        type="text" inputMode="numeric" pattern="\d*" 
+                        name="agreedSpendingLimitCents" onChange={handleChange}></input>
                     </label>
 
                     <label>
                         <span>Notes:</span>
-                        <input name="notes"></input>
+                        <input name="notes" onChange={handleChange}></input>
                     </label>
                 </div>
 
