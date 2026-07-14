@@ -53,6 +53,7 @@ pub fn run() {
                         address TEXT NOT NULL,
                         rentFrequency TEXT NOT NULL CHECK (rentFrequency IN ('weekly', 'fortnightly', 'monthly')),
                         rentCents INTEGER NOT NULL,
+                        isFurnished INTEGER,
                         commissionRatePercent REAL NOT NULL,
                         adminFeeCents INTEGER NOT NULL,
                         backyardMaintenanceFeeCents INTEGER,

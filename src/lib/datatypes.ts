@@ -6,8 +6,18 @@ export type LedgerTargetType = 'lease' | 'property' | 'owner';
 export type LedgerKind = 'deposit' | 'payment' | 'expense' | 'withheld' | 'adjustment';
 export type InvoiceStatus = 'unpaid' | 'paid' | 'reversed' | 'void';
 export type RecordStatus = 'active' | 'inactive';
-export type RentFrequency = 'weekly' | 'fortnightly' | 'monthly';
 
+interface DetailedAddress {
+    // Detailed address
+    country: string;
+    overseasAddress: string;
+    unitNumber: string;
+    streetNumber: string;
+    streetName: string;
+    suburb: string;
+    state: string;
+    postcode: string;
+}
 
 /*
 Owner RECORD. Plus Owner fields for entry
@@ -49,6 +59,52 @@ export interface CreateOwnerInput {
   notes?: string;
 }
 
+export interface OwnerFormState extends DetailedAddress{
+    reference: string;
+    title: string;
+    firstName: string;
+    surname: string;
+    email: string;
+    mobile: string;
+
+    // Banking
+    bankName?: string,
+    accountName: string,
+    bsb: string,
+    accountNumber: string,
+    paymentRef: string,
+
+    // Notes
+    notes?: string
+};
+
+export const EmptyOwnerForm: OwnerFormState = {
+    reference: '',
+    title: '-',
+    firstName: '',
+    surname: '',
+    email: '',
+    mobile: '',
+
+    country: 'Australia',
+    overseasAddress: '',
+    unitNumber: '',
+    streetNumber: '',
+    streetName: '',
+    suburb: '',
+    state: '',
+    postcode: '',
+
+    // Banking
+    bankName: '',
+    accountName: '',
+    bsb: '',
+    accountNumber: '',
+    paymentRef: '',
+
+    notes: ''
+};
+
 /*
 Property RECORD. Plus Property entry
 
@@ -59,8 +115,11 @@ export interface PropertyRecord {
   reference: string;
   ownerId: EntityId;
   propertyType: string;
+  rentFrequency: string;
+
   address: string;
-  rentFrequency: RentFrequency;
+
+  isFurnished: string;
   rentCents: MoneyCents;
   commissionRatePercent: number;
   adminFeeCents: MoneyCents;
@@ -68,6 +127,7 @@ export interface PropertyRecord {
   advertisementFeeCents?: MoneyCents;
   agreedSpendingLimitCents?: MoneyCents;
   notes?: string;
+
   status: RecordStatus;
   createdAt: IsoDate;
   updatedAt: IsoDate;
@@ -75,18 +135,62 @@ export interface PropertyRecord {
 
 export interface CreatePropertyInput {
   reference: string;
-  ownerId: EntityId;
+  ownerId: string;
   propertyType: string;
   address: string;
-  rentFrequency: RentFrequency;
-  rentCents: MoneyCents;
+  isFurnished: string;
+  rentFrequency: string;
+  rentCents: number;
   commissionRatePercent: number;
-  adminFeeCents: MoneyCents;
-  backyardMaintenanceFeeCents?: MoneyCents;
-  advertisementFeeCents?: MoneyCents;
-  agreedSpendingLimitCents?: MoneyCents;
+  adminFeeCents: number;
+  backyardMaintenanceFeeCents?: number;
+  advertisementFeeCents?: number;
+  agreedSpendingLimitCents?: number;
   notes?: string;
 }
+
+export interface PropertyFormState extends DetailedAddress {
+    reference: string;
+    ownerId: string;
+    propertyType: string;
+
+    isFurnished: string;
+    rentFrequency: string; // derived from property type use switch statement
+    rentCents: number; // suggested rent price
+    commissionRatePercent: number;
+    adminFeeCents: number;
+    backyardMaintenanceFeeCents?: number;
+    advertisementFeeCents?: number;
+    agreedSpendingLimitCents?: number;
+    notes?: string;
+};
+
+export const EmptyPropertyForm: PropertyFormState = {
+    reference: '',
+    ownerId: '',
+    propertyType: 'Townhouse',
+    
+    overseasAddress: '', // unused
+    unitNumber: '',
+    streetNumber: '',
+    streetName: '',
+    suburb: '',
+    state: '',
+    postcode: '',
+    country: '',
+
+    isFurnished: 'false',
+    rentFrequency: '',
+    rentCents: 0,
+    commissionRatePercent: 0,
+    adminFeeCents: 0,
+    backyardMaintenanceFeeCents: 0,
+    advertisementFeeCents: 0,
+    agreedSpendingLimitCents: 0,
+
+    notes: ''
+};
+
 
 /*
 Lease RECORD. Plus Lease entry
@@ -99,7 +203,7 @@ export interface LeaseRecord {
   tenantName: string;
   startDate: IsoDate;
   endDate: IsoDate;
-  rentFrequency: RentFrequency;
+  rentFrequency: string;
   rentCents: MoneyCents;
   bondCents?: MoneyCents;
   existingTenantCreditCents?: MoneyCents;
@@ -121,7 +225,7 @@ export interface CreateLeaseInput {
   tenantName: string;
   startDate: IsoDate;
   endDate: IsoDate;
-  rentFrequency: RentFrequency;
+  rentFrequency: string;
   rentCents: MoneyCents;
   bondCents?: MoneyCents;
   existingTenantCreditCents?: MoneyCents;
