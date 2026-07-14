@@ -1,68 +1,13 @@
 
 import { Link, useNavigate } from 'react-router'
-import { CreateOwnerInput, OwnerRecord } from '../../lib/datatypes';
+import { CreateOwnerInput, OwnerRecord, OwnerFormState, EmptyOwnerForm } from '../../lib/datatypes';
 import { useState, ChangeEvent, SubmitEvent, useEffect } from 'react';
 
 import '../pages-css/form.css'
 import { ownerService } from '../../services/ownerService';
+import { formatPostalAddress } from '../../services/utils';
 
 // TODO: move to datatypes ts file
-type OwnerFormState = {
-    reference: string;
-    title: string;
-    firstName: string;
-    surname: string;
-    email: string;
-    mobile: string;
-
-    // Detailed address
-    country: string;
-    overseasAddress: string;
-    unitNumber: string;
-    streetNumber: string;
-    streetName: string;
-    suburb: string;
-    state: string;
-    postcode: string;
-
-    // Banking
-    bankName?: string,
-    accountName: string,
-    bsb: string,
-    accountNumber: string,
-    paymentRef: string,
-
-    // Notes
-    notes?: string
-};
-
-const emptyForm: OwnerFormState = {
-    reference: '',
-    title: '-',
-    firstName: '',
-    surname: '',
-    email: '',
-    mobile: '',
-
-    country: 'Australia',
-    overseasAddress: '',
-    unitNumber: '',
-    streetNumber: '',
-    streetName: '',
-    suburb: '',
-    state: '',
-    postcode: '',
-
-    // Banking
-    bankName: '',
-    accountName: '',
-    bsb: '',
-    accountNumber: '',
-    paymentRef: '',
-
-    notes: ''
-};
-
 export function Owners() {
     const [owners, setOwners] = useState<OwnerRecord[]>([]);
     const [inactiveOwners, setInactive] = useState<OwnerRecord[]>([]);
@@ -133,12 +78,12 @@ export function Owners() {
                     </thead>
 
                     <tbody>
-                        {/* TEST FOR DEV ONLY */}
+                        {/* TEST FOR WEB DEV ONLY */}
                         {/* <td className='content-table-td'>Reference: 1</td>
                         <td className='content-table-td'>Title: Ts</td>
                         <td className='content-table-td'>Firstname: test</td>
                         <td className='content-table-td'>Surname: Test</td> */}
-                        {/* END TEST FOR DEV */}
+                        {/* END TEST FOR WEB DEV */}
                         {/* {owners.map(owner => {
                             return (
                                 <tr key={owner.id}>
@@ -160,26 +105,11 @@ export function Owners() {
 }
 
 
-// Combine into a single postal address
-function formatPostalAddress(form: OwnerFormState): string {
-    if (form.country !== "Australia") {
-        return `${form.overseasAddress}, ${form.country}`;
-    }
 
-    // For Australian addresses, build the string step-by-step
-    const unit = form.unitNumber ? `Unit ${form.unitNumber}, ` : '';
-    const street = `${form.streetNumber} ${form.streetName}`.trim();
-    const location = `${form.suburb} ${form.state} ${form.postcode}`.trim();
-
-    // Combine them, filtering out any empty parts
-    return [unit + street, location, form.country]
-        .filter(part => part.trim() !== '')
-        .join(', ');
-}
 
 
 export function NewOwner() {
-    const [form, setForm] = useState<OwnerFormState>(emptyForm);
+    const [form, setForm] = useState<OwnerFormState>(EmptyOwnerForm);
     const navigate = useNavigate();
 
 
@@ -218,7 +148,7 @@ export function NewOwner() {
 
             const testQuery = await ownerService.getAll();
             console.log('[Frontend] Current owners in database: ', testQuery);
-            setForm(emptyForm);
+            setForm(EmptyOwnerForm);
             navigate('/owners');
         } catch (error) {
             console.error('Failed to create new Owner', error);
@@ -335,11 +265,16 @@ export function NewOwner() {
                     {/* State */}
                     <label>
                         <span>State:</span>
-                        <input
-                            name="state"
-                            onChange={handleChange}
-                            disabled={form.country !== 'Australia'}
-                        />
+                        <select name="state" onChange={handleChange} disabled={form.country !== 'Australia'}>
+                            <option value="QLD">QLD</option>
+                            <option value="NSW">NSW</option>
+                            <option value="ACT">ACT</option>
+                            <option value="VIC">VIC</option>
+                            <option value="SA">SA</option>
+                            <option value="TAS">TAS</option>
+                            <option value="WA">WA</option>
+                            <option value="NT">NT</option>
+                        </select>
                     </label>
 
                     {/* Postcode */}
