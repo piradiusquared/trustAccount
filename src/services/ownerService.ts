@@ -64,9 +64,27 @@ export const ownerService = {
     await db.execute(`UPDATE owners SET ${setClause} WHERE id = ?`, values);
   },
 
-  // Delete an owner (Properties and Leases will Cascade delete automatically)
-  async delete(id: EntityId): Promise<void> {
+  async setActivity(id: EntityId, active: boolean): Promise<void> {
     const db = await getDatabase();
+    const now = getLocalIsoString();
+
+    const results = await db.select<{ status: string }[]>('SELECT status FROM owners WHERE id = ?', [id]);
+    if (!results || results.length === 0) return;
+
+    const curr = results[0].status;
+    const newStatus = active ? 'active' : 'inactive';
+    if (curr === newStatus) return;
+
+    await db.execute('UPDATE owners SET status = ?, updatedAt = ? WHERE id = ?', [newStatus, now, id]);
+  },
+
+  
+
+  // Delete an owner (if owner is associated with property or lease, popup warning, cannot cascade)
+  async delete(id: EntityId): Promise<number> {
+    const db = await getDatabase();
+    // check for any foreign references first, then return either 0 or 1 based on success/fail
     await db.execute('DELETE FROM owners WHERE id = ?', [id]);
+    return 0;
   }
 };

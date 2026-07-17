@@ -1,8 +1,8 @@
 
 import { Link, useNavigate } from "react-router"
 import '../pages-css/form.css'
-import { ChangeEvent, useEffect, useState, SubmitEvent } from "react"
-import { OwnerRecord, PropertyRecord, EmptyPropertyForm, PropertyFormState, CreatePropertyInput } from "../../lib/datatypes"
+import { useEffect, useState, SubmitEvent } from "react"
+import { OwnerRecord, PropertyRecord, EmptyPropertyForm, CreatePropertyInput } from "../../lib/datatypes"
 import { propertyService } from "../../services/propertyService";
 import { ownerService } from "../../services/ownerService";
 import { formatPostalAddress, useForm } from "../../services/utils";
