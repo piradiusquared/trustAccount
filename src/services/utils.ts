@@ -42,15 +42,31 @@ export function formatPostalAddress(form: any): string {
         .join(', ');
 }
 
-/*
+// export function handleChange<T>(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>, setter: React.Dispatch<React.SetStateAction<T>>) {
+//     const target = event.target as HTMLInputElement | HTMLSelectElement;
+//     const { name, value } = target;
 
+//     setter((current) => ({
+//         ...current,
+//         [name]: value,
+//     }));
+// }
+
+/*
+Hook used for creating and managing forms. 
 */
-export function handleChange<T>(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>, setter: React.Dispatch<React.SetStateAction<T>>) {
+export function useForm<T>(initial: T) {
+  const [form, setForm] = useState<T>(initial);
+
+  function handleChange(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const target = event.target as HTMLInputElement | HTMLSelectElement;
     const { name, value } = target;
 
-    setter((current) => ({
+    setForm((current) => ({
         ...current,
         [name]: value,
     }));
+  }
+
+  return { form, setForm, handleChange };
 }
