@@ -1,5 +1,8 @@
 import { ChangeEvent, useState } from "react";
 
+/* -----------------------------------------------------------------------------
+Functions used for pre-processing the form data. 
+*/
 
 // Shared function for converting bool to int for sqlite
 export function mapLeaseFromDb(raw: any): any {
@@ -41,6 +44,11 @@ export function formatPostalAddress(form: any): string {
         .filter(part => part.trim() !== '')
         .join(', ');
 }
+
+/* -----------------------------------------------------------------------------
+Shared form behaviour functions.
+*/
+
 
 // export function handleChange<T>(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>, setter: React.Dispatch<React.SetStateAction<T>>) {
 //     const target = event.target as HTMLInputElement | HTMLSelectElement;

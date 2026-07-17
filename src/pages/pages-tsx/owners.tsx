@@ -1,6 +1,6 @@
 
 import { Link, useNavigate } from 'react-router'
-import { CreateOwnerInput, OwnerRecord, OwnerFormState, EmptyOwnerForm } from '../../lib/datatypes';
+import { CreateOwnerInput, OwnerRecord, EmptyOwnerForm } from '../../lib/datatypes';
 import { useState, SubmitEvent, useEffect } from 'react';
 
 import '../pages-css/form.css'

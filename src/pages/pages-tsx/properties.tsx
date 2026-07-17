@@ -5,7 +5,7 @@ import { ChangeEvent, useEffect, useState, SubmitEvent } from "react"
 import { OwnerRecord, PropertyRecord, EmptyPropertyForm, PropertyFormState, CreatePropertyInput } from "../../lib/datatypes"
 import { propertyService } from "../../services/propertyService";
 import { ownerService } from "../../services/ownerService";
-import { formatPostalAddress } from "../../services/utils";
+import { formatPostalAddress, useForm } from "../../services/utils";
 
 // TODO: create the state and forms
 
@@ -64,24 +64,13 @@ export function Properties() {
 }
 
 export function NewProperty() {
+    const { form, setForm, handleChange } = useForm(EmptyPropertyForm);
     const [ownerList, setOwners] = useState<OwnerRecord[]>([]);
-    const [form, setForm] = useState<PropertyFormState>(EmptyPropertyForm);
     useEffect(() => {
         ownerService.getAll().then(setOwners);
     })
 
     const navigate = useNavigate();
-
-    // make it shared later on
-    function handleChange(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-        const target = event.target as HTMLInputElement | HTMLSelectElement;
-        const { name, value } = target;
-
-        setForm((current) => ({
-            ...current,
-            [name]: value,
-        }))
-    }
 
     async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
