@@ -1,3 +1,5 @@
+import { ChangeEvent, useState } from "react";
+
 
 // Shared function for converting bool to int for sqlite
 export function mapLeaseFromDb(raw: any): any {
@@ -38,4 +40,17 @@ export function formatPostalAddress(form: any): string {
     return [unit + street, location, form.country]
         .filter(part => part.trim() !== '')
         .join(', ');
+}
+
+/*
+
+*/
+export function handleChange<T>(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>, setter: React.Dispatch<React.SetStateAction<T>>) {
+    const target = event.target as HTMLInputElement | HTMLSelectElement;
+    const { name, value } = target;
+
+    setter((current) => ({
+        ...current,
+        [name]: value,
+    }));
 }

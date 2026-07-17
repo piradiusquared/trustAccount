@@ -1,11 +1,11 @@
 
 import { Link, useNavigate } from 'react-router'
 import { CreateOwnerInput, OwnerRecord, OwnerFormState, EmptyOwnerForm } from '../../lib/datatypes';
-import { useState, ChangeEvent, SubmitEvent, useEffect } from 'react';
+import { useState, SubmitEvent, useEffect } from 'react';
 
 import '../pages-css/form.css'
 import { ownerService } from '../../services/ownerService';
-import { formatPostalAddress } from '../../services/utils';
+import { formatPostalAddress, handleChange } from '../../services/utils';
 
 // TODO: move to datatypes ts file
 export function Owners() {
@@ -112,17 +112,6 @@ export function NewOwner() {
     const [form, setForm] = useState<OwnerFormState>(EmptyOwnerForm);
     const navigate = useNavigate();
 
-
-    function handleChange(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-        const target = event.target as HTMLInputElement | HTMLSelectElement;
-        const { name, value } = target;
-
-        setForm((current) => ({
-            ...current,
-            [name]: value,
-        }));
-    }
-
     async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
 
@@ -166,12 +155,12 @@ export function NewOwner() {
                 <div className="content-form-flex">
                     <label>
                         <span>Reference:</span>
-                        <input name="reference" onChange={handleChange} placeholder="OWN001" />
+                        <input name="reference" onChange={(e) => handleChange(e, setForm)} placeholder="OWN001" />
                     </label>
 
                     <label>
                         <span>Title:</span>
-                        <select name="title" onChange={handleChange}>
+                        <select name="title" onChange={(e) => handleChange(e, setForm)}>
                             <option value="-">-</option>
                             <option value="Mr.">Mr.</option>
                             <option value="Mrs.">Mrs.</option>
@@ -183,28 +172,28 @@ export function NewOwner() {
 
                     <label>
                         <span>First Name:</span>
-                        <input name="firstName" onChange={handleChange} placeholder="Jane" required />
+                        <input name="firstName" onChange={(e) => handleChange(e, setForm)} placeholder="Jane" required />
                     </label>
 
                     <label>
                         <span>Surname:</span>
-                        <input name="surname" onChange={handleChange} placeholder="Doe" />
+                        <input name="surname" onChange={(e) => handleChange(e, setForm)} placeholder="Doe" />
                     </label>
 
                     <label>
                         <span>Email:</span>
-                        <input name="email" onChange={handleChange} placeholder="jane@example.com" type="email" required />
+                        <input name="email" onChange={(e) => handleChange(e, setForm)} placeholder="jane@example.com" type="email" required />
                     </label>
 
                     <label>
                         <span>Mobile:</span>
-                        <input name="mobile" onChange={handleChange} placeholder="0400 000 000" required />
+                        <input name="mobile" onChange={(e) => handleChange(e, setForm)} placeholder="0400 000 000" required />
                     </label>
 
                     {/* Country Selector */}
                     <label>
                         <span>Country:</span>
-                        <select name="country" onChange={handleChange} >
+                        <select name="country" onChange={(e) => handleChange(e, setForm)} >
                             <option value="Australia">Australia</option>
                             <option value="New Zealand">New Zealand</option>
                             <option value="United Kingdom">United Kingdom</option>
@@ -218,7 +207,7 @@ export function NewOwner() {
                         <input
                             name="overseasAddress"
                             disabled={form.country === 'Australia'}
-                            onChange={handleChange} placeholder="Enter overseas address"
+                            onChange={(e) => handleChange(e, setForm)} placeholder="Enter overseas address"
                         />
                     </label>
 
@@ -227,7 +216,7 @@ export function NewOwner() {
                         <span>Unit Number:</span>
                         <input
                             name="unitNumber"
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e, setForm)}
                             disabled={form.country !== 'Australia'}
                         />
                     </label>
@@ -237,7 +226,7 @@ export function NewOwner() {
                         <span>Street Number:</span>
                         <input
                             name="streetNumber"
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e, setForm)}
                             disabled={form.country !== 'Australia'}
                         />
                     </label>
@@ -247,7 +236,7 @@ export function NewOwner() {
                         <span>Street Name / PO Box:</span>
                         <input
                             name="streetName"
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e, setForm)}
                             disabled={form.country !== 'Australia'}
                         />
                     </label>
@@ -257,7 +246,7 @@ export function NewOwner() {
                         <span>Suburb:</span>
                         <input
                             name="suburb"
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e, setForm)}
                             disabled={form.country !== 'Australia'}
                         />
                     </label>
@@ -265,7 +254,7 @@ export function NewOwner() {
                     {/* State */}
                     <label>
                         <span>State:</span>
-                        <select name="state" onChange={handleChange} disabled={form.country !== 'Australia'}>
+                        <select name="state" onChange={(e) => handleChange(e, setForm)} disabled={form.country !== 'Australia'}>
                             <option value="QLD">QLD</option>
                             <option value="NSW">NSW</option>
                             <option value="ACT">ACT</option>
@@ -282,9 +271,40 @@ export function NewOwner() {
                         <span>Postcode:</span>
                         <input
                             name="postcode"
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e, setForm)}
                             disabled={form.country !== 'Australia'}
                         />
+                    </label>
+
+                    {/* Banking details */}
+                    <label>
+                        <span>Bank:</span>
+                        <input name="bankName" onChange={(e) => handleChange(e, setForm)}></input>
+                    </label>
+
+                    <label>
+                        <span>Account Name:</span>
+                        <input name="accountName" onChange={(e) => handleChange(e, setForm)} />
+                    </label>
+
+                    <label>
+                        <span>BSB:</span>
+                        <input name="bsb" onChange={(e) => handleChange(e, setForm)}></input>
+                    </label>
+
+                    <label>
+                        <span>Account Number:</span>
+                        <input name="accountNumber" onChange={(e) => handleChange(e, setForm)}></input>
+                    </label>
+
+                    <label>
+                        <span>Payment Reference:</span>
+                        <input name="paymentRef" onChange={(e) => handleChange(e, setForm)}></input>
+                    </label>
+
+                    <label>
+                        <span>Notes:</span>
+                        <input name="notes" onChange={(e) => handleChange(e, setForm)}></input>
                     </label>
                 </div>
 
