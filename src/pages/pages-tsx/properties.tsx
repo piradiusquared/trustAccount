@@ -46,7 +46,6 @@ export function Properties() {
                                 <td>{property.reference}</td>
                                 <td>{property.propertyType}</td>
                                 <td>{property.address}</td>
-                                <td>{property.rentCents}</td>
                                 <td>{property.commissionRatePercent}</td>
                                 <td>{property.ownerId}</td>
                             </tr>
@@ -84,7 +83,6 @@ export function NewProperty() {
             address: combinedAddress.trim(),
             isFurnished: form.isFurnished,
             rentFrequency: rentFreq,
-            rentCents: form.rentCents,
             commissionRatePercent: form.commissionRatePercent,
             adminFeeCents: form.adminFeeCents,
             backyardMaintenanceFeeCents: form.backyardMaintenanceFeeCents ? form.backyardMaintenanceFeeCents : undefined,
@@ -196,11 +194,6 @@ export function NewProperty() {
                             <option value="no">No</option>
                             <option value="yes">Yes</option>
                         </select>
-                    </label>
-
-                    <label>
-                        <span>Owner Suggested Rental Price:</span>
-                        <input name="rentCents" onChange={handleChange}></input>
                     </label>
 
                     <label>

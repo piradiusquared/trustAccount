@@ -120,7 +120,6 @@ export interface PropertyRecord {
   address: string;
 
   isFurnished: string;
-  rentCents: MoneyCents;
   commissionRatePercent: number;
   adminFeeCents: MoneyCents;
   backyardMaintenanceFeeCents?: MoneyCents;
@@ -140,7 +139,6 @@ export interface CreatePropertyInput {
   address: string;
   isFurnished: string;
   rentFrequency: string;
-  rentCents: number;
   commissionRatePercent: number;
   adminFeeCents: number;
   backyardMaintenanceFeeCents?: number;
@@ -156,7 +154,6 @@ export interface PropertyFormState extends DetailedAddress {
 
     isFurnished: string;
     rentFrequency: string; // derived from property type use switch statement
-    rentCents: number; // suggested rent price
     commissionRatePercent: number;
     adminFeeCents: number;
     backyardMaintenanceFeeCents?: number;
@@ -181,7 +178,6 @@ export const EmptyPropertyForm: PropertyFormState = {
 
     isFurnished: 'false',
     rentFrequency: '',
-    rentCents: 0,
     commissionRatePercent: 0,
     adminFeeCents: 0,
     backyardMaintenanceFeeCents: 0,
@@ -199,7 +195,7 @@ Depends on Property and Owner
 */
 export interface LeaseRecord {
   id: EntityId;
-  propertyId: EntityId;
+  propertyRef: EntityId;
   tenantName: string;
   startDate: IsoDate;
   endDate: IsoDate;
@@ -221,18 +217,35 @@ export interface LeaseRecord {
 
 export interface CreateLeaseInput {
   // Note: status will automatically be set to "active" for a new lease
-  propertyId: EntityId;
+  propertyRef: string;
   tenantName: string;
-  startDate: IsoDate;
-  endDate: IsoDate;
+  startDate: string;
+  endDate: string;
   rentFrequency: string;
-  rentCents: MoneyCents;
-  bondCents?: MoneyCents;
-  existingTenantCreditCents?: MoneyCents;
+  rentCents: number;
+  bondCents?: number;
+  existingTenantCreditCents?: number;
   tenantCount?: number;
-  petsAllowed?: boolean;
+  petsAllowed?: string;
   petCount?: number;
   notes?: string;
-  actualMoveOutDate?: IsoDate;
+  actualMoveOutDate?: string;
   lettingFeeSelection?: string;
+}
+
+export const EmptyLeaseForm: CreateLeaseInput = {
+  propertyRef: '',
+  tenantName: '',
+  startDate: '',
+  endDate: '',
+  rentFrequency: '',
+  rentCents: 0,
+  bondCents: 0,
+  existingTenantCreditCents: 0,
+  tenantCount: 0,
+  petsAllowed: '',
+  petCount: 0,
+  notes: '',
+  actualMoveOutDate: '',
+  lettingFeeSelection: ''
 }
