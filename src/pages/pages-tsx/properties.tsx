@@ -15,6 +15,7 @@ export function Properties() {
     useEffect(() => {
         propertyService.getAllWithOwners().then(setProperties);
     })
+    
 
     return (
         <section className="content-container">
@@ -32,7 +33,6 @@ export function Properties() {
                             <th className="content-table-th">Reference</th>
                             <th className="content-table-th">Type</th>
                             <th className="content-table-th">Address</th>
-                            <th className="content-table-th">Rent</th>
                             <th className="content-table-th">Commission (%)</th>
                             <th className="content-table-th">Owner</th>
                             <th className="content-table-th">Contract</th>
@@ -41,13 +41,15 @@ export function Properties() {
                     </thead>
 
                     <tbody>
-                        {properties.map(property => (
+                        {
+                        properties.map(property => (
                             <tr key={property.id}>
-                                <td>{property.reference}</td>
-                                <td>{property.propertyType}</td>
-                                <td>{property.address}</td>
-                                <td>{property.commissionRatePercent}</td>
-                                <td>{property.ownerId}</td>
+                                <td className="content-table-td">{property.reference}</td>
+                                <td className="content-table-td">{property.propertyType}</td>
+                                <td className="content-table-td">{property.address}</td>
+                                <td className="content-table-td">{property.commissionRatePercent}</td>
+                                {/* Change ownerid to actual owner name. getbyownerid */}
+                                <td className="content-table-td">{property.ownerName}</td> {/* ownerName is created in getallwith owners. Visual bug*/}
                             </tr>
                         ))}
                     </tbody>
