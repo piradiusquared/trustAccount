@@ -15,7 +15,8 @@
     "@tauri-apps/plugin-sql": "^2.4.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router": "^8.1.0"
+    "react-router": "^8.1.0",
+    "uuidv7": "^1.2.1"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2",

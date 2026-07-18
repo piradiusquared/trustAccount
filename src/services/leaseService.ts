@@ -1,3 +1,4 @@
+import { uuidv7 } from 'uuidv7';
 import { getDatabase } from '../lib/database';
 import { LeaseRecord, CreateLeaseInput, EntityId, IsoDate } from '../lib/datatypes';
 import { mapLeaseFromDb, booleanToSql } from './utils';
@@ -26,7 +27,7 @@ export const leaseService = {
 
     const record: LeaseRecord = {
       ...input,
-      id: crypto.randomUUID(),
+      id: uuidv7(),
       status: 'active', // Might need to do some pre-processing checks if lease can be active (i.e. no lease starting in the future)
       createdAt: now,
       updatedAt: now,
@@ -36,13 +37,13 @@ export const leaseService = {
       `INSERT INTO leases (
         id, propertyId, tenantName, startDate, endDate, rentFrequency, rentCents,
         bondCents, existingTenantCreditCents, tenantCount, petsAllowed, petCount,
-        specialConditionNotes, actualMoveOutDate, lettingFeeSelection, status, createdAt, updatedAt
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        actualMoveOutDate, lettingFeeSelection, status, createdAt, updatedAt
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        record.id, record.propertyId, record.tenantName, record.startDate, record.endDate, record.rentFrequency, record.rentCents,
+        record.id, record.propertyRef, record.tenantName, record.startDate, record.endDate, record.rentFrequency, record.rentCents,
         record.bondCents, record.existingTenantCreditCents, record.tenantCount, 
-        booleanToSql(record.petsAllowed), // Maps boolean to 1 or 0
-        record.petCount, record.specialConditionNotes, record.actualMoveOutDate, record.lettingFeeSelection,
+        booleanToSql(record.petsAllowed), // fix this to be string
+        record.petCount, record.actualMoveOutDate, record.lettingFeeSelection,
         record.status, record.createdAt, record.updatedAt
       ]
     );

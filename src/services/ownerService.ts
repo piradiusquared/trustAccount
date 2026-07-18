@@ -1,6 +1,7 @@
 import { getDatabase } from '../lib/database';
 import { OwnerRecord, CreateOwnerInput, EntityId } from '../lib/datatypes';
 import { getLocalIsoString } from './utils';
+import { uuidv7 } from 'uuidv7';
 
 export const ownerService = {
   // Fetch all owners
@@ -29,7 +30,7 @@ export const ownerService = {
     
     const record: OwnerRecord = {
       ...input,
-      id: crypto.randomUUID(), // Standard UUID generation
+      id: uuidv7(), // uuidv7 generation
       status: "active",
       createdAt: now,
       updatedAt: now,

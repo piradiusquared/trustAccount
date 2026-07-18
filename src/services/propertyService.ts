@@ -1,3 +1,4 @@
+import { uuidv7 } from 'uuidv7';
 import { getDatabase } from '../lib/database';
 import { PropertyRecord, CreatePropertyInput, EntityId } from '../lib/datatypes';
 
@@ -30,7 +31,7 @@ export const propertyService = {
 
     const record: PropertyRecord = {
       ...input,
-      id: crypto.randomUUID(),
+      id: uuidv7(),
       status: 'active',
       createdAt: now,
       updatedAt: now,

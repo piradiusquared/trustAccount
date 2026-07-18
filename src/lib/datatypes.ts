@@ -205,7 +205,7 @@ export interface LeaseRecord {
   bondCents?: MoneyCents;
   existingTenantCreditCents?: MoneyCents;
   tenantCount?: number;
-  petsAllowed?: boolean;
+  petsAllowed?: string;
   petCount?: number;
   notes?: string;
   actualMoveOutDate?: IsoDate;

@@ -68,7 +68,7 @@ pub fn run() {
                     -- 3. Leases Table
                     CREATE TABLE IF NOT EXISTS leases (
                         id TEXT PRIMARY KEY,
-                        propertyId INTEGER NOT NULL,
+                        propertyId TEXT NOT NULL,
                         tenantName TEXT NOT NULL,
                         leaseTerm TEXT NOT NULL,
                         startDate TEXT NOT NULL,
@@ -87,6 +87,19 @@ pub fn run() {
                         createdAt STRING,
                         updatedAt STRING,
                         FOREIGN KEY (propertyId) REFERENCES properties(id) ON DELETE CASCADE
+                    );
+
+                    -- 4. Tenants Table
+                    CREATE TABLE IF NOT EXISTS tenants (
+                        id TEXT PRIMARY KEY,
+                        leaseId TEXT NOT NULL,
+                        firstName TEXT NOT NULL,
+                        surname TEXT,
+                        email TEXT,
+                        mobile TEXT,
+                        createdAt STRING,
+                        updatedAt STRING,
+                        FOREIGN KEY (leaseId) REFERENCES leases(id) ON DELETE CASCADE
                     );
             ",
             kind: MigrationKind::Up,
