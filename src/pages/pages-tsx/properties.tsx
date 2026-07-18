@@ -115,7 +115,7 @@ export function NewProperty() {
                 <div className="content-form-flex">
                     <label>
                         <span>Property Reference:</span>
-                        <input name="reference" placeholder="e.g. Room 6 - 7 John Street" onChange={handleChange}></input>
+                        <input name="reference" placeholder="e.g. Room 6 - 7 John Street" onChange={handleChange} required></input>
                     </label>
 
                     <label>
@@ -134,7 +134,7 @@ export function NewProperty() {
 
                     <label>
                         <span>Property Type:</span>
-                        <select name="propertyType" onChange={handleChange}>
+                        <select name="propertyType" onChange={handleChange} required>
                             <option value="Townhouse">Townhouse</option>
                             <option value="Apartment">Apartment/Unit</option>
                             <option value="House">House</option>
@@ -151,22 +151,22 @@ export function NewProperty() {
 
                     <label>
                         <span>Street Number:</span>
-                        <input name="streetNumber" onChange={handleChange}></input>
+                        <input name="streetNumber" onChange={handleChange} required></input>
                     </label>
                     
                     <label>
                         <span>Street Name:</span>
-                        <input name="streetName" onChange={handleChange}></input>
+                        <input name="streetName" onChange={handleChange} required></input>
                     </label>
 
                     <label>
                         <span>Suburb:</span>
-                        <input name="suburb" onChange={handleChange}></input>
+                        <input name="suburb" onChange={handleChange} required></input>
                     </label>
 
                     <label>
                         <span>Postcode:</span>
-                        <input name="postcode" onChange={handleChange}></input>
+                        <input name="postcode" onChange={handleChange} required></input>
                     </label>
 
                     <label>
@@ -185,7 +185,7 @@ export function NewProperty() {
 
                     <label>
                         <span>Country:</span>
-                        <input name="country" onChange={handleChange}></input>
+                        <input name="country" onChange={handleChange} required></input>
                     </label>
 
                     <label>
@@ -198,29 +198,29 @@ export function NewProperty() {
 
                     <label>
                         <span>Management Commission (%):</span>
-                        <input name="commissionRatePercent" onChange={handleChange}></input>
+                        <input name="commissionRatePercent" onChange={handleChange} required></input>
                     </label>
 
                     <label>
                         <span>Monthly Administration Fee (excl GST):</span>
-                        <input name="adminFeeCents" onChange={handleChange}></input>
+                        <input name="adminFeeCents" onChange={handleChange} required></input>
                     </label>
 
                     <label>
                         <span>Monthly Backyard Maintenance Fee (excl GST):</span>
-                        <input name="backyardMaintenanceFeeCents" onChange={handleChange}></input>
+                        <input name="backyardMaintenanceFeeCents" onChange={handleChange} required></input>
                     </label>
 
                     <label>
                         <span>Advertisement and Promotion Fee (excl GST):</span>
-                        <input name="advertisementFeeCents" onChange={handleChange}></input>
+                        <input name="advertisementFeeCents" onChange={handleChange} required></input>
                     </label>
                     
                     <label>
                         <span>Agreed Spending Limit:</span>
                         <input 
                         type="text" inputMode="numeric" pattern="\d*" 
-                        name="agreedSpendingLimitCents" onChange={handleChange}></input>
+                        name="agreedSpendingLimitCents" onChange={handleChange} required></input>
                     </label>
 
                     <label>
