@@ -9,10 +9,10 @@ export const ownerService = {
     return await db.select<OwnerRecord[]>('SELECT * FROM owners ORDER BY reference ASC');
   },
 
-  // TODO: not done yet, add in active/inactive flag
+  // TODO: add a button that changes activity
   async getInactive(): Promise<OwnerRecord[]> {
     const db = await getDatabase();
-    return await db.select<OwnerRecord[]>('SELECT * FROM owners');
+    return await db.select<OwnerRecord[]>('SELECT * FROM owners WHERE status = "inactive"');
   },
 
   // Fetch a single owner
