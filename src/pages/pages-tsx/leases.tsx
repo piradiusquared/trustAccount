@@ -1,14 +1,10 @@
 
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
+import { LeaseRecord, CreateLeaseInput, EmptyLeaseForm, PropertyRecord } from "../../lib/datatypes"
+import { useForm } from "../../services/utils"
 import '../pages-css/form.css'
-
-type LeaseFormState = {
-
-};
-
-const emptyForm: LeaseFormState = {
-
-};
+import { useEffect, useState, SubmitEvent } from "react"
+import { propertyService } from "../../services/propertyService"
 
 export function Leases() {
 
@@ -58,6 +54,20 @@ export function Leases() {
 }
 
 export function NewLease() {
+    const { form, setForm, handleChange } = useForm(EmptyLeaseForm);
+    const [propertyList, setProperties] = useState<PropertyRecord[]>([]);
+    useEffect(() => {
+        propertyService.getAllWithOwners().then(setProperties);
+    })
+    // const navigate = useNavigate();
+
+    // async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+    //     event.preventDefault();
+        
+    //     const payload: CreateLeaseInput = {   
+    //     }
+    // }
+
     return (
         <div className="content-container">
             <header className="content-header">
@@ -70,6 +80,15 @@ export function NewLease() {
                     <label>
                         {/* TODO: Query from all existing owners and create dropdown */}
                         <span>Property: [INCOMPLETE]</span>
+                        <select name="propertyRef" value={form.propertyRef} onChange={handleChange} required>
+                            <option value="">-- Select a Property--</option>
+                            {propertyList.map((property) => (
+                                <option key={property.reference} value={property.reference}>
+                                    {property.reference} - {property.ownerId} For testing
+
+                                </option>
+                            ))}
+                        </select>
                     </label>
 
                     <label>
@@ -96,16 +115,12 @@ export function NewLease() {
 
                     <label>
                         <span>Rental Price Per Week:</span>
-                        <input name="rentWeekly"></input>
+                        <input name="rentCents" value={form.rentCents} onChange={handleChange} required></input>
                     </label>
 
                     <label>
-                        <span>Owner Suggested Rental Price: [INCOMPLETE, query from db]</span>
-                    </label>
-
-                    <label>
-                        <span>Bond Amount: [SHOULD AUTOFILL]</span>
-                        <input name="leaseBond"></input>
+                        <span>Bond Amount: [SHOULD AUTOFILL from rental price]</span>
+                        <input name="bondCents" value={form.bondCents} onChange={handleChange} required></input>
                     </label>
 
                     <label>

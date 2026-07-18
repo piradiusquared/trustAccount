@@ -70,10 +70,21 @@ export function useForm<T>(initial: T) {
     const target = event.target as HTMLInputElement | HTMLSelectElement;
     const { name, value } = target;
 
-    setForm((current) => ({
+    // setForm((current) => ({
+    //     ...current,
+    //     [name]: value,
+    // }));
+    setForm((current) => {
+      const nextState = {
         ...current,
         [name]: value,
-    }));
+      }
+      if ('bondCents' in nextState && name === 'rentCents') {
+        const rentValue = parseFloat(value);
+        (nextState as any).bondCents = !isNaN(rentValue) && rentValue > 0 ? (rentValue * 4) : 0;
+      }
+      return nextState;
+    })
   }
 
   return { form, setForm, handleChange };
