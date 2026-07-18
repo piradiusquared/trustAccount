@@ -48,8 +48,8 @@ export function Properties() {
                                 <td className="content-table-td">{property.propertyType}</td>
                                 <td className="content-table-td">{property.address}</td>
                                 <td className="content-table-td">{property.commissionRatePercent}</td>
-                                {/* Change ownerid to actual owner name. getbyownerid */}
-                                <td className="content-table-td">{property.ownerName}</td> {/* ownerName is created in getallwith owners. Visual bug*/}
+                                <td className="content-table-td">{property.ownerName}</td>
+                            {/* ownerName is created in getallwith owners. Visual bug*/}
                             </tr>
                         ))}
                     </tbody>
