@@ -61,7 +61,7 @@ export function Owners() {
             
             {/* query inactive */}
             <div className="card-inactive">
-                <h2>Active</h2>
+                <h2>Inactive</h2>
                 {/* Table. thead heading row, tbody actual content. */}
                 <table className='content-table'>
                     <thead>
@@ -84,16 +84,16 @@ export function Owners() {
                         <td className='content-table-td'>Firstname: test</td>
                         <td className='content-table-td'>Surname: Test</td> */}
                         {/* END TEST FOR WEB DEV */}
-                        {/* {owners.map(owner => {
+                        {/* {inactiveOwners.map(inactive => {
                             return (
-                                <tr key={owner.id}>
-                                    <td className='content-table-td'>{owner.reference}</td>
-                                    <td className='content-table-td'>{owner.title}</td>
-                                    <td className='content-table-td'>{owner.firstName}</td>
-                                    <td className='content-table-td'>{owner.surname}</td>
-                                    <td className='content-table-td'>{owner.email}</td>
-                                    <td className='content-table-td'>{owner.mobile}</td>
-                                    <td className='content-table-td'>{owner.postalAddress}</td>
+                                <tr key={inactive.id}>
+                                    <td className='content-table-td'>{inactive.reference}</td>
+                                    <td className='content-table-td'>{inactive.title}</td>
+                                    <td className='content-table-td'>{inactive.firstName}</td>
+                                    <td className='content-table-td'>{inactive.surname}</td>
+                                    <td className='content-table-td'>{inactive.email}</td>
+                                    <td className='content-table-td'>{inactive.mobile}</td>
+                                    <td className='content-table-td'>{inactive.postalAddress}</td>
                                 </tr>
                             )
                         })} */}

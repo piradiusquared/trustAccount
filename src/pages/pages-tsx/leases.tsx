@@ -5,9 +5,13 @@ import { useForm } from "../../services/utils"
 import '../pages-css/form.css'
 import { useEffect, useState, SubmitEvent } from "react"
 import { propertyService } from "../../services/propertyService"
+import { leaseService } from "../../services/leaseService"
 
 export function Leases() {
-
+    const [leases, setLeases] = useState<LeaseRecord[]>([]);
+    useEffect(() => {
+        leaseService.getActive().then(setLeases);
+    })
     return (
         <div className="content-container">
             <header className="content-header">
@@ -18,30 +22,30 @@ export function Leases() {
             <div className="card-active">
                 <h2>Active</h2>
                 {/* Table. thead heading row, tbody actual content. */}
-                <table>
+                <table className="content-table">
                     <thead>
                         <tr>
-                            <th>Property Ref</th>
-                            <th>Tenant</th>
-                            <th>Lease Start</th>
-                            <th>Lease End</th>
-                            <th>Rent (cents)</th>
-                            <th>Tenant Credits</th>
+                            <th className="content-table-th">Property Ref</th>
+                            <th className="content-table-th">Tenant</th>
+                            <th className="content-table-th">Lease Start</th>
+                            <th className="content-table-th">Lease End</th>
+                            <th className="content-table-th">Rent (cents)</th>
+                            <th className="content-table-th">Tenant Credits</th>
                             {/* TODO: contract and actions */}
                         </tr>
                     </thead>
 
                     <tbody>
-                        {/* {leases.map(lease => (
+                        {leases.map(lease => (
                             <tr key={lease.id}>
-                                <td>{lease.propertyId}</td>
-                                <td>{lease.tenantName}</td>
-                                <td>{lease.startDate}</td>
-                                <td>{lease.endDate}</td>
-                                <td>{lease.rentCents}</td>
-                                <td>{lease.existingTenantCreditCents}</td>
+                                <td className="content-table-td">{lease.propertyRef}</td>
+                                <td className="content-table-td">{lease.tenantName}</td>
+                                <td className="content-table-td">{lease.startDate}</td>
+                                <td className="content-table-td">{lease.endDate}</td>
+                                <td className="content-table-td">{lease.rentCents}</td>
+                                <td className="content-table-td">{lease.existingTenantCreditCents}</td>
                             </tr>
-                        ))} */}
+                        ))}
                     </tbody>
                 </table>
             </div>
@@ -79,7 +83,7 @@ export function NewLease() {
                 <div className="content-form-flex">
                     <label>
                         {/* TODO: Query from all existing owners and create dropdown */}
-                        <span>Property: [INCOMPLETE]</span>
+                        <span>Property:</span>
                         <select name="propertyRef" value={form.propertyRef} onChange={handleChange} required>
                             <option value="">-- Select a Property--</option>
                             {propertyList.map((property) => (
