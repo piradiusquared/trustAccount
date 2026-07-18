@@ -1,7 +1,7 @@
 import { getDatabase } from '../lib/database';
 import { OwnerRecord, CreateOwnerInput, EntityId } from '../lib/datatypes';
 import { getLocalIsoString } from './utils';
-import { uuidv7 } from 'uuidv7';
+import { v7 as uuidv7} from 'uuid'
 
 export const ownerService = {
   // Fetch all owners

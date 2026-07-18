@@ -1,4 +1,4 @@
-import { uuidv7 } from 'uuidv7';
+import { v7 as uuidv7 } from 'uuid';
 import { getDatabase } from '../lib/database';
 import { PropertyRecord, CreatePropertyInput, EntityId } from '../lib/datatypes';
 
