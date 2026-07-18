@@ -70,6 +70,7 @@ pub fn run() {
                         id TEXT PRIMARY KEY,
                         propertyId INTEGER NOT NULL,
                         tenantName TEXT NOT NULL,
+                        leaseTerm TEXT NOT NULL,
                         startDate TEXT NOT NULL,
                         endDate TEXT NOT NULL,
                         rentFrequency TEXT NOT NULL CHECK (rentFrequency IN ('weekly', 'fortnightly', 'monthly')),
