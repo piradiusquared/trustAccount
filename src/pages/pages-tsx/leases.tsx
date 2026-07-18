@@ -109,12 +109,12 @@ export function NewLease() {
 
                     <label>
                         <span>Lease Start Date:</span>
-                        <input type="date" name="leaseStart"></input>
+                        <input type="date" name="startDate"></input>
                     </label>
 
                     <label>
                         <span>Lease End Date:</span>
-                        <input type="date" name="leaseEnd"></input>
+                        <input type="date" name="endDate"></input>
                     </label>
 
                     <label>
@@ -123,13 +123,13 @@ export function NewLease() {
                     </label>
 
                     <label>
-                        <span>Bond Amount: [SHOULD AUTOFILL from rental price]</span>
+                        <span>Bond Amount:</span>
                         <input name="bondCents" value={form.bondCents} onChange={handleChange} required></input>
                     </label>
 
                     <label>
                         <span>Existing Tenant Credit:</span>
-                        <input name="tenantCredit"></input>
+                        <input name="existingTenantCreditCents"></input>
                     </label>
 
                     <br></br>
@@ -137,11 +137,6 @@ export function NewLease() {
                     <label>
                         <span>No. of Tenants:</span>
                         <input name="tenantCount"></input>
-                    </label>
-
-                    <label>
-                        <span>Notes:</span>
-                        <input name="notes"></input>
                     </label>
 
                     <br></br>
@@ -161,6 +156,11 @@ export function NewLease() {
                     <label>
                         <span>Actual Move Out Date:</span>
                         <input type="date" name="actualMoveOutDate"></input>
+                    </label>
+
+                    <label>
+                        <span>Notes:</span>
+                        <input name="notes"></input>
                     </label>
 
                     <label>
