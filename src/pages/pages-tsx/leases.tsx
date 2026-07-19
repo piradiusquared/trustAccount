@@ -69,6 +69,9 @@ export function NewLease() {
     //     event.preventDefault();
         
     //     const payload: CreateLeaseInput = {   
+    //         propertyRef : form.propertyRef.trim(),
+    //         leaseTerm : form.leaseTerm.trim(),
+    //         tenantName : 
     //     }
     // }
 
@@ -88,8 +91,7 @@ export function NewLease() {
                             <option value="">-- Select a Property--</option>
                             {propertyList.map((property) => (
                                 <option key={property.reference} value={property.reference}>
-                                    {property.reference} - {property.ownerId} For testing
-
+                                    {property.reference} - {property.ownerName}
                                 </option>
                             ))}
                         </select>
@@ -97,7 +99,7 @@ export function NewLease() {
 
                     <label>
                         <span>Lease Term:</span>
-                        <select name="leaseTerm">
+                        <select name="leaseTerm" onChange={handleChange} required>
                             <option value="26week">6 Months (26 weeks)</option>
                             <option value="52week">12 Months (52 weeks)</option>
                             <option value="78week">18 Months (78 weeks)</option>
@@ -109,12 +111,12 @@ export function NewLease() {
 
                     <label>
                         <span>Lease Start Date:</span>
-                        <input type="date" name="startDate"></input>
+                        <input type="date" name="startDate" onChange={handleChange} required></input>
                     </label>
 
                     <label>
                         <span>Lease End Date:</span>
-                        <input type="date" name="endDate"></input>
+                        <input type="date" name="endDate" onChange={handleChange} required></input>
                     </label>
 
                     <label>
@@ -129,43 +131,43 @@ export function NewLease() {
 
                     <label>
                         <span>Existing Tenant Credit:</span>
-                        <input name="existingTenantCreditCents"></input>
+                        <input name="existingTenantCreditCents" onChange={handleChange}></input>
                     </label>
 
                     <br></br>
 
                     <label>
                         <span>No. of Tenants:</span>
-                        <input name="tenantCount"></input>
+                        <input name="tenantCount" onChange={handleChange}></input>
                     </label>
 
                     <br></br>
                     <label> 
                         <span>Pets Allowed:</span>
-                        <select name="petAllowed">
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
+                        <select name="petsAllowed" onChange={handleChange} >
+                            <option value="petsYes">Yes</option>
+                            <option value="petsNo">No</option>
                         </select>
                     </label>
 
                     <label>
                         <span>Pets Count:</span>
-                        <input name="petCount"></input>
+                        <input name="petCount" onChange={handleChange} disabled={form.petsAllowed === "petsNo"}></input>
                     </label>
 
                     <label>
                         <span>Actual Move Out Date:</span>
-                        <input type="date" name="actualMoveOutDate"></input>
+                        <input type="date" name="actualMoveOutDate" onChange={handleChange}></input>
                     </label>
 
                     <label>
                         <span>Notes:</span>
-                        <input name="notes"></input>
+                        <input name="notes" onChange={handleChange}></input>
                     </label>
 
                     <label>
                         <span>New Lease Letting Fee:</span>
-                        <select name="lettingFee">
+                        <select name="lettingFee" onChange={handleChange}>
                             <option value="100">100%</option>
                             <option value="50">50%</option>
                             <option value="0">0%, Manual</option>
