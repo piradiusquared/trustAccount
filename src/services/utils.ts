@@ -6,23 +6,23 @@ Functions used for pre-processing the form data.
 
 // Shared function for converting bool to int for sqlite
 export function mapLeaseFromDb(raw: any): any {
-  return {
-    ...raw,
-    petsAllowed: raw.petsAllowed === undefined ? undefined : raw.petsAllowed === 1,
-  };
+    return {
+        ...raw,
+        petsAllowed: raw.petsAllowed === undefined ? undefined : raw.petsAllowed === 1,
+    };
 }
 
 export function booleanToSql(val?: boolean): number | undefined {
-  if (val === undefined) return undefined;
-  return val ? 1 : 0;
+    if (val === undefined) return undefined;
+    return val ? 1 : 0;
 }
 
 export function getLocalIsoString(): string {
-  const date = new Date();
-  const timezoneOffset = date.getTimezoneOffset() * 60000;
-  const localDate = new Date(date.getTime() - timezoneOffset);
+    const date = new Date();
+    const timezoneOffset = date.getTimezoneOffset() * 60000;
+    const localDate = new Date(date.getTime() - timezoneOffset);
 
-  return localDate.toISOString().slice(0, -1);
+    return localDate.toISOString().slice(0, -1);
 }
 
 /*
@@ -64,28 +64,28 @@ Shared form behaviour functions.
 Hook used for creating and managing forms. 
 */
 export function useForm<T>(initial: T) {
-  const [form, setForm] = useState<T>(initial);
+    const [form, setForm] = useState<T>(initial);
 
-  function handleChange(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-    const target = event.target as HTMLInputElement | HTMLSelectElement;
-    const { name, value } = target;
+    function handleChange(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+        const target = event.target as HTMLInputElement | HTMLSelectElement;
+        const { name, value } = target;
 
-    // setForm((current) => ({
-    //     ...current,
-    //     [name]: value,
-    // }));
-    setForm((current) => {
-      const nextState = {
-        ...current,
-        [name]: value,
-      }
-      if ('bondCents' in nextState && name === 'rentCents') {
-        const rentValue = parseFloat(value);
-        (nextState as any).bondCents = !isNaN(rentValue) && rentValue > 0 ? (rentValue * 4) : 0;
-      }
-      return nextState;
-    })
-  }
+        // setForm((current) => ({
+        //     ...current,
+        //     [name]: value,
+        // }));
+        setForm((current) => {
+            const nextState = {
+                ...current,
+                [name]: value,
+            }
+            if ('bondCents' in nextState && name === 'rentCents') {
+                const rentValue = parseFloat(value);
+                (nextState as any).bondCents = !isNaN(rentValue) && rentValue > 0 ? (rentValue * 4) : 0;
+            }
+            return nextState;
+        })
+    }
 
-  return { form, setForm, handleChange };
+    return { form, setForm, handleChange };
 }
