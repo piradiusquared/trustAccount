@@ -69,7 +69,6 @@ pub fn run() {
                     CREATE TABLE IF NOT EXISTS leases (
                         id TEXT PRIMARY KEY,
                         propertyId TEXT NOT NULL,
-                        tenantName TEXT NOT NULL,
                         leaseTerm TEXT NOT NULL,
                         startDate TEXT NOT NULL,
                         endDate TEXT NOT NULL,

@@ -197,7 +197,6 @@ export interface LeaseRecord {
     id: EntityId;
     propertyRef: EntityId;
     leaseTerm: string;
-    tenantName: string;
     startDate: IsoDate;
     endDate: IsoDate;
     rentFrequency: string;
@@ -220,7 +219,6 @@ export interface CreateLeaseInput {
     // Note: status will automatically be set to "active" for a new lease
     propertyRef: string;
     leaseTerm: string;
-    tenantName: string;
     startDate: string;
     endDate: string;
     rentFrequency: string;
@@ -238,7 +236,6 @@ export interface CreateLeaseInput {
 export const EmptyLeaseForm: CreateLeaseInput = {
     propertyRef: '',
     leaseTerm: '',
-    tenantName: '',
     startDate: '',
     endDate: '',
     rentFrequency: '',
@@ -253,6 +250,7 @@ export const EmptyLeaseForm: CreateLeaseInput = {
     lettingFee: ''
 }
 
+// Used in pair with creating a lease
 export interface CreateTenantInput {
     firstName: string;
     lastName?: string;

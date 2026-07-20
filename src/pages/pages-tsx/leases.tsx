@@ -39,7 +39,7 @@ export function Leases() {
                         {leases.map(lease => (
                             <tr key={lease.id}>
                                 <td className="content-table-td">{lease.propertyRef}</td>
-                                <td className="content-table-td">{lease.tenantName}</td>
+                                <td className="content-table-td">[PLACEHOLDER]</td>
                                 <td className="content-table-td">{lease.startDate}</td>
                                 <td className="content-table-td">{lease.endDate}</td>
                                 <td className="content-table-td">{lease.rentCents}</td>
