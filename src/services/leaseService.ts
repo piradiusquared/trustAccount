@@ -44,8 +44,7 @@ export const leaseService = {
             [
                 record.id, record.propertyRef, record.tenantName, record.startDate, record.endDate, record.rentFrequency, record.rentCents,
                 record.bondCents, record.existingTenantCreditCents, record.tenantCount,
-                booleanToSql(record.petsAllowed), // fix this to be string
-                record.petCount, record.actualMoveOutDate, record.lettingFee,
+                record.petsAllowed, record.petCount, record.actualMoveOutDate, record.lettingFee,
                 record.status, record.createdAt, record.updatedAt
             ]
         );
@@ -75,45 +74,4 @@ export const leaseService = {
             [moveOutDate, now, id]
         );
     },
-
-    async createLeaseWithTenants(
-      leaseInput: CreateLeaseInput, 
-      tenants: CreateTenantInput[] // This array can have a length of 1 to 4
-    ): Promise<void> {
-      const db = await getDatabase();
-      const leaseId = crypto.randomUUID(); // Generate parent UUID first
-      const now = new Date().toISOString();
-
-      // 1. Insert the parent Lease record
-      await db.execute(
-        `INSERT INTO leases (
-          id, propertyId, startDate, endDate, rentFrequency, rentCents, status, createdAt, updatedAt
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-          leaseId, leaseInput.propertyId, leaseInput.startDate, leaseInput.endDate, 
-          leaseInput.rentFrequency, leaseInput.rentCents, 'active', now, now
-        ]
-      );
-
-      // 2. Loop through and insert ONLY the actual tenants in the array
-      for (const tenant of tenants) {
-        await db.execute(
-          `INSERT INTO tenants (
-            id, leaseId, firstName, lastName, email, mobile, dob, notes, createdAt, updatedAt
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          [
-            crypto.randomUUID(), // Unique UUID for this specific tenant row
-            leaseId,             // Foreign key linking back to the parent lease
-            tenant.firstName,
-            tenant.lastName || null,
-            tenant.email || null,
-            tenant.mobile || null,
-            tenant.dob || null,
-            tenant.notes || null,
-            now,
-            now
-          ]
-        );
-      }
-    }
 };

@@ -144,15 +144,15 @@ export function NewLease() {
                     <br></br>
                     <label> 
                         <span>Pets Allowed:</span>
-                        <select name="petsAllowed" onChange={handleChange} >
-                            <option value="petsYes">Yes</option>
-                            <option value="petsNo">No</option>
+                        <select name="petsAllowed" onChange={handleChange} required>
+                            <option value={1}>Yes</option>
+                            <option value={0}>No</option>
                         </select>
                     </label>
 
                     <label>
                         <span>Pets Count:</span>
-                        <input name="petCount" onChange={handleChange} disabled={form.petsAllowed === "petsNo"}></input>
+                        <input name="petCount" onChange={handleChange} disabled={form.petsAllowed == 0}></input>
                     </label>
 
                     <label>
