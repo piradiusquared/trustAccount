@@ -205,7 +205,7 @@ export interface LeaseRecord {
     bondCents?: MoneyCents;
     existingTenantCreditCents?: MoneyCents;
     tenantCount?: number;
-    petsAllowed?: string;
+    petsAllowed?: number;
     petCount?: number;
     notes?: string;
     actualMoveOutDate?: IsoDate;
@@ -228,7 +228,7 @@ export interface CreateLeaseInput {
     bondCents?: number;
     existingTenantCreditCents?: number;
     tenantCount?: number;
-    petsAllowed?: string;
+    petsAllowed?: number;
     petCount?: number;
     notes?: string;
     actualMoveOutDate?: string;
@@ -246,7 +246,7 @@ export const EmptyLeaseForm: CreateLeaseInput = {
     bondCents: 0,
     existingTenantCreditCents: 0,
     tenantCount: 0,
-    petsAllowed: '',
+    petsAllowed: 1,
     petCount: 0,
     notes: '',
     actualMoveOutDate: '',
