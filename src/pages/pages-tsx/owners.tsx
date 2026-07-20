@@ -20,7 +20,7 @@ export function Owners() {
         <section className='content-container'>
             <header className='content-header'>
                 <h1>Owners</h1>
-                <Link to='/owners/new-owner'>New Owner</Link>
+                <Link className='new-entry' to='/owners/new-owner'>New Owner</Link>
             </header>
 
             {/* query active */}
@@ -144,8 +144,8 @@ export function NewOwner() {
     return (
         <div className="content-container">
             <div className="content-header">
-                <h1> New Owner</h1>
-                <Link to='/owners'>Back</Link>
+                <h1>New Owner</h1>
+                <Link className='new-entry' to='/owners'>Back</Link>
             </div>
 
             <form className="content-form" onSubmit={handleSubmit}>

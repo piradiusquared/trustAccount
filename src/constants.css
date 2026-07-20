@@ -1,0 +1,11 @@
+:root {
+    --dry-sage: #CCD5AE;
+    --papaya-whip: #faedcd;
+    --cornsilk: #fefae0;
+
+}
+
+@font-face {
+    font-family: inter;
+    src: url(/src/fonts/inter/Inter-VariableFont_opsz\,wght.ttf);
+}

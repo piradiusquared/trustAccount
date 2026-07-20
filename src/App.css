@@ -3,6 +3,8 @@ app.css
 Persistent React styling ONLY
 */
 
+@import url(/src/constants.css);
+
 /* Top navigation styling */
 
 .topnav {
@@ -17,12 +19,15 @@ Persistent React styling ONLY
   width: fit-content;
   height: 100vh;
 
-  background-color: lightblue;
   height: calc(100vh - 2rem);
 }
 
 .topnav > .toplink {
   text-decoration: none;
   color: black;
+  font-family: inter; /* custom font */
+}
 
+.content-container {
+  background-color: var(--cornsilk);
 }

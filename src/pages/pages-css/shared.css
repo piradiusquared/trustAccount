@@ -76,3 +76,9 @@ Used for GLOBAL styling of entire React APP
     transform: translate(-6px, 4px);
     filter: none;
 }
+
+/* New x button */
+.new-entry {
+    text-decoration: none;
+    color: black;
+}
