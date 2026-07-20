@@ -91,7 +91,7 @@ export function NewLease() {
                             <option value="">-- Select a Property--</option>
                             {propertyList.map((property) => (
                                 <option key={property.reference} value={property.reference}>
-                                    {property.reference} - {property.ownerName}
+                                    {property.reference} - {(property as any).ownerName}
                                 </option>
                             ))}
                         </select>
