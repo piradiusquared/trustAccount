@@ -4,6 +4,15 @@ import { ChangeEvent, useState } from "react";
 Functions used for pre-processing the form data. 
 */
 
+// Shared function for converting bool to int for sqlite
+export function mapLeaseFromDb(raw: any): any {
+    return {
+        ...raw,
+        petsAllowed: raw.petsAllowed === undefined ? undefined : raw.petsAllowed === 0,
+    };
+}
+
+
 export function getLocalIsoString(): string {
     const date = new Date();
     const timezoneOffset = date.getTimezoneOffset() * 60000;

@@ -1,7 +1,7 @@
 
 import { getDatabase } from '../lib/database';
 import { LeaseRecord, CreateLeaseInput, EntityId, IsoDate, CreateTenantInput } from '../lib/datatypes';
-import { mapLeaseFromDb, booleanToSql } from './utils';
+import { mapLeaseFromDb } from './utils';
 import { v7 as uuidv7 } from 'uuid'
 
 export interface LeaseWithPropertyDetails extends LeaseRecord {

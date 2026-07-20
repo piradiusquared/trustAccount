@@ -246,7 +246,7 @@ export const EmptyLeaseForm: CreateLeaseInput = {
     bondCents: 0,
     existingTenantCreditCents: 0,
     tenantCount: 0,
-    petsAllowed: 1,
+    petsAllowed: 0,
     petCount: 0,
     notes: '',
     actualMoveOutDate: '',

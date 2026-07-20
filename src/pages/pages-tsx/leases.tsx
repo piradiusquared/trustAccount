@@ -145,8 +145,8 @@ export function NewLease() {
                     <label> 
                         <span>Pets Allowed:</span>
                         <select name="petsAllowed" onChange={handleChange} required>
-                            <option value={1}>Yes</option>
                             <option value={0}>No</option>
+                            <option value={1}>Yes</option>
                         </select>
                     </label>
 
