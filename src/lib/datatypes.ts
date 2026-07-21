@@ -258,3 +258,11 @@ export interface CreateTenantInput {
     mobile?: string;
     notes?: string;
 }
+
+export const EmptyTenantForm: CreateTenantInput = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    mobile: '',
+    notes: ''
+}

@@ -59,7 +59,7 @@ Shared form behaviour functions.
 /*
 Hook used for creating and managing forms. 
 */
-export function useForm<T>(initial: T) {
+export function useForm<T extends object>(initial: T) {
     const [form, setForm] = useState<T>(initial);
 
     function handleChange(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
@@ -82,6 +82,35 @@ export function useForm<T>(initial: T) {
             return nextState;
         })
     }
-
     return { form, setForm, handleChange };
+}
+
+export function useFormArray<T extends object>(initial: T, maxEntries: number) {
+    const [ formArr, setFormArr ] = useState<T[]>([{ ...initial }]);
+
+    function addEntry() {
+        if (formArr.length < maxEntries) {
+            setFormArr((prev) => [
+                ...prev,
+                { ...initial }
+            ]);
+        }
+    };
+
+    // Add in popup to confirm with user
+    function removeEntry(removeIdx: number) {
+        if (formArr.length > 1) {
+            setFormArr((prev) => prev.filter((_, i) => i !== removeIdx));
+        }
+    };
+
+    function handleEntryChange<K extends keyof T>(idx: number, field: keyof typeof initial, value: T[K]) {
+        setFormArr((prev) => {
+            const updated = [...prev];
+            updated[idx] = { ...updated[idx], [field]: value};
+            return updated
+        })
+    };
+
+    return { formArr, setFormArr, addEntry, removeEntry, handleEntryChange };
 }

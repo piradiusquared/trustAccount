@@ -1,7 +1,7 @@
 
 import { Link, useNavigate } from "react-router"
-import { LeaseRecord, CreateLeaseInput, EmptyLeaseForm, PropertyRecord } from "../../lib/datatypes"
-import { useForm } from "../../services/utils"
+import { LeaseRecord, CreateLeaseInput, EmptyLeaseForm, PropertyRecord, EmptyTenantForm, CreateTenantInput } from "../../lib/datatypes"
+import { useForm, useFormArray } from "../../services/utils"
 import '../pages-css/form.css'
 import { useEffect, useState, SubmitEvent } from "react"
 import { propertyService } from "../../services/propertyService"
@@ -59,10 +59,12 @@ export function Leases() {
 
 export function NewLease() {
     const { form, setForm, handleChange } = useForm(EmptyLeaseForm);
+    const { formArr, setFormArr, addEntry, removeEntry, handleEntryChange } = useFormArray(EmptyTenantForm, 4); // hardcoded 4 tenant limit
     const [propertyList, setProperties] = useState<PropertyRecord[]>([]);
     useEffect(() => {
         propertyService.getAllWithOwners().then(setProperties);
     })
+
     // const navigate = useNavigate();
 
     // async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
@@ -173,6 +175,72 @@ export function NewLease() {
                             <option value="0">0%, Manual</option>
                         </select>
                     </label>
+
+                    {/* Tenants section */}
+
+                    <h2>Tenant Details</h2>
+                    {formArr.map((tenant, index) => (
+                        <div key={index}>
+                            <div>
+                                <h3>Tenant #{index + 1}</h3>
+                                {formArr.length > 1 && (
+                                    <button type="button" onClick={() => removeEntry(index)}>
+                                        Remove Tenant
+                                    </button>
+                                )}
+                            </div>
+
+                            <div>
+                                <label>
+                                    <span>First Name:</span>
+                                    <input type="text" 
+                                        value={tenant.firstName}
+                                        onChange={(e) => handleEntryChange(index, 'firstName', e.target.value)}
+                                        required
+                                    />
+                                </label>
+
+                                <label>
+                                    <span>Surname:</span>
+                                    <input type="text"
+                                        value={tenant.lastName || ''}
+                                        onChange={(e) => handleEntryChange(index, 'lastName', e.target.value)}
+                                    />
+                                </label>
+
+                                <label>
+                                    <span>Email:</span>
+                                    <input type="text"
+                                        value={tenant.email || ''}
+                                        onChange={(e) => handleEntryChange(index, 'email', e.target.value)}
+                                    />
+                                </label>
+
+                                <label>
+                                    <span>Mobile:</span>
+                                    <input type="text"
+                                        value={tenant.mobile || ''}
+                                        onChange={(e) => handleEntryChange(index, 'mobile', e.target.value)}
+                                    />
+                                </label>
+
+                                <label>
+                                    <span>Notes:</span>
+                                    <input type="text"
+                                        value={tenant.notes || ''}
+                                        onChange={(e) => handleEntryChange(index, 'notes', e.target.value)}
+                                    />
+                                </label>
+                            </div>
+                        </div>
+                    ))}
+
+                    {/* Only show add if under tenant limit, make a constant later */}
+                    {formArr.length < 4 && (
+                        <button type="button" onClick={addEntry}>
+                            + Add another Tenant
+                        </button>
+                    )}
                 </div>
 
                 <div className="content-form-actions">
