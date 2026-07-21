@@ -40,7 +40,7 @@
 
     border: 1px solid black;
     border-radius: 5px;
-    outline-color: lightskyblue;
+    outline-color: var(--accent-dark);
 
     padding: 0.2rem;
 }
