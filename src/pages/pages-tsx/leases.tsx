@@ -16,7 +16,7 @@ export function Leases() {
         <div className="content-container">
             <header className="content-header">
                 <h1>leases</h1>
-                <Link to='/leases/new-lease'>New Lease</Link>
+                <Link className="new-entry" to='/leases/new-lease'>New Lease</Link>
 
             </header>
             <div className="card-active">
@@ -176,12 +176,16 @@ export function NewLease() {
                         </select>
                     </label>
 
-                    {/* Tenants section */}
+                </div>
 
-                    <h2>Tenant Details</h2>
+                {/* Tenants section */}
+                <h2>Tenant Details</h2>
+
+                <div className="tenant-form-container">
+
                     {formArr.map((tenant, index) => (
-                        <div key={index}>
-                            <div>
+                        <div className="tenant-form-panels" key={index}>
+                            <div className="tenant-form-header">
                                 <h3>Tenant #{index + 1}</h3>
                                 {formArr.length > 1 && (
                                     <button type="button" onClick={() => removeEntry(index)}>
@@ -190,7 +194,7 @@ export function NewLease() {
                                 )}
                             </div>
 
-                            <div>
+                            <div className="content-form-flex">
                                 <label>
                                     <span>First Name:</span>
                                     <input type="text" 
@@ -242,6 +246,7 @@ export function NewLease() {
                         </button>
                     )}
                 </div>
+
 
                 <div className="content-form-actions">
                     <button type="submit" className="drop-right">

@@ -21,7 +21,7 @@ export function Properties() {
         <section className="content-container">
             <header className="content-header">
                 <h1>properties</h1>
-                <Link to='/properties/new-property'>New Property</Link>
+                <Link className="new-entry" to='/properties/new-property'>New Property</Link>
             </header>
 
             <div className="card-active">

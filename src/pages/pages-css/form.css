@@ -52,7 +52,7 @@
 }
 
 .content-form-actions > button {
-    background-color: lightskyblue;
+    background-color: var(--accent-dark);
     padding: 0.6rem 0.8rem;
     border-radius: 10px;
 
@@ -74,4 +74,38 @@
     border: 1px solid black;
     padding: 0.65rem 0.5rem;
     text-align: left;
+}
+
+/* Tenant forms dynamic */
+.tenant-form-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.tenant-form-panels {
+    width: inherit;
+}
+
+.tenant-form-header {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.tenant-form-container > button {
+    display: flex;
+    justify-self: center;
+    
+    background-color: var(--accent-light);
+    border-radius: 2rem;
+    padding: 0.5rem;
+
+    transition: all 250ms ease;
+}
+
+.tenant-form-container > button:hover {
+    background-color: var(--accent-dark);
 }
