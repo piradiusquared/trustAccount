@@ -95,7 +95,7 @@
     justify-content: space-evenly;
 }
 
-.tenant-form-container > button {
+.tenant-form-container button {
     display: flex;
     justify-self: center;
     
@@ -106,6 +106,6 @@
     transition: all 250ms ease;
 }
 
-.tenant-form-container > button:hover {
+.tenant-form-container button:hover {
     background-color: var(--accent-dark);
 }
