@@ -65,17 +65,30 @@ export function NewLease() {
         propertyService.getAllWithOwners().then(setProperties);
     })
 
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
-    // async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
-    //     event.preventDefault();
+    async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+        event.preventDefault();
         
-    //     const payload: CreateLeaseInput = {   
-    //         propertyRef : form.propertyRef.trim(),
-    //         leaseTerm : form.leaseTerm.trim(),
-    //         tenantName : 
-    //     }
-    // }
+        const payload: CreateLeaseInput = {   
+            propertyRef : form.propertyRef.trim(),
+            leaseTerm : form.leaseTerm.trim(),
+            startDate : form.startDate.trim(),
+            endDate : form.endDate.trim(),
+
+            // default behaviour to be "" if no match found
+            rentFrequency : getRentFreq(propertyList, form.propertyRef.trim()),
+            rentCents : form.rentCents,
+            bondCents : form.bondCents,
+            existingTenantCreditCents : form.existingTenantCreditCents ? form.existingTenantCreditCents : undefined,
+            tenantCount : form.tenantCount ? form.tenantCount : undefined,
+            petsAllowed : form.petsAllowed ? form.petsAllowed : undefined,
+            petCount : form.petCount ? form.petCount : undefined,
+            notes : form.notes ? form.notes.trim() : undefined,
+            actualMoveOutDate : form.actualMoveOutDate ? form.actualMoveOutDate.trim() : undefined,
+            lettingFee : form.lettingFee ? form.lettingFee.trim() : undefined,      
+        }
+    }
 
     return (
         <div className="content-container">
@@ -257,4 +270,15 @@ export function NewLease() {
         </div>
 
     )
+}
+
+// Helper functions purely for leases
+
+function getRentFreq(propertyList: PropertyRecord[], propertyRef: string): string {
+    for (const property of propertyList) {
+        if (property.reference === propertyRef) {
+            return property.rentFrequency;
+        }
+    }
+    return "";
 }
