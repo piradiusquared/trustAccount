@@ -1,7 +1,7 @@
 
 import { Link, useNavigate } from "react-router"
 import { LeaseRecord, CreateLeaseInput, EmptyLeaseForm, PropertyRecord, EmptyTenantForm, CreateTenantInput } from "../../lib/datatypes"
-import { useForm, useFormArray } from "../../services/utils"
+import { formatPostalAddress, useForm, useFormArray } from "../../services/utils"
 import '../pages-css/form.css'
 import { useEffect, useState, SubmitEvent } from "react"
 import { propertyService } from "../../services/propertyService"
@@ -38,7 +38,7 @@ export function Leases() {
                     <tbody>
                         {leases.map(lease => (
                             <tr key={lease.id}>
-                                <td className="content-table-td">{lease.propertyRef}</td>
+                                <td className="content-table-td">{lease.propertyId}</td>
                                 <td className="content-table-td">[PLACEHOLDER]</td>
                                 <td className="content-table-td">{lease.startDate}</td>
                                 <td className="content-table-td">{lease.endDate}</td>
@@ -70,23 +70,37 @@ export function NewLease() {
     async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
         
-        const payload: CreateLeaseInput = {   
-            propertyRef : form.propertyRef.trim(),
+        const tenantCount = formArr.length;
+
+        const leasePayload: CreateLeaseInput = {   
+            propertyId : form.propertyId.trim(),
             leaseTerm : form.leaseTerm.trim(),
             startDate : form.startDate.trim(),
             endDate : form.endDate.trim(),
 
             // default behaviour to be "" if no match found
-            rentFrequency : getRentFreq(propertyList, form.propertyRef.trim()),
+            rentFrequency : getRentFreq(propertyList, form.propertyId),
             rentCents : form.rentCents,
             bondCents : form.bondCents,
             existingTenantCreditCents : form.existingTenantCreditCents ? form.existingTenantCreditCents : undefined,
-            tenantCount : form.tenantCount ? form.tenantCount : undefined,
+            tenantCount : tenantCount,
             petsAllowed : form.petsAllowed ? form.petsAllowed : undefined,
             petCount : form.petCount ? form.petCount : undefined,
             notes : form.notes ? form.notes.trim() : undefined,
             actualMoveOutDate : form.actualMoveOutDate ? form.actualMoveOutDate.trim() : undefined,
             lettingFee : form.lettingFee ? form.lettingFee.trim() : undefined,      
+        }
+        
+        const tenantPayload = processTenants(formArr, tenantCount);
+
+        try {
+            const newLease = await leaseService.create(leasePayload, tenantPayload);
+            console.log('[Frontend] Database write success: ', newLease);
+            setForm(EmptyLeaseForm);
+            setFormArr([EmptyTenantForm]);
+            navigate('/leases');
+        } catch (error) {
+            console.error('Failed to create new Lease', error);
         }
     }
 
@@ -97,15 +111,15 @@ export function NewLease() {
                 <Link to='/leases'>Back</Link>
             </header>
 
-            <form className="content-form">
+            <form className="content-form" onSubmit={handleSubmit}>
                 <div className="content-form-flex">
                     <label>
                         {/* TODO: Query from all existing owners and create dropdown */}
                         <span>Property:</span>
-                        <select name="propertyRef" value={form.propertyRef} onChange={handleChange} required>
+                        <select name="propertyId" value={form.propertyId} onChange={handleChange} required>
                             <option value="">-- Select a Property--</option>
                             {propertyList.map((property) => (
-                                <option key={property.reference} value={property.reference}>
+                                <option key={property.reference} value={property.id}>
                                     {property.reference} - {(property as any).ownerName}
                                 </option>
                             ))}
@@ -152,8 +166,7 @@ export function NewLease() {
                     <br></br>
 
                     <label>
-                        <span>No. of Tenants:</span>
-                        <input name="tenantCount" onChange={handleChange}></input>
+                        <span>No. of Tenants. Automatic</span>
                     </label>
 
                     <br></br>
@@ -274,11 +287,26 @@ export function NewLease() {
 
 // Helper functions purely for leases
 
-function getRentFreq(propertyList: PropertyRecord[], propertyRef: string): string {
+function getRentFreq(propertyList: PropertyRecord[], propertySearch: string): string {
     for (const property of propertyList) {
-        if (property.reference === propertyRef) {
+        if (property.id == propertySearch) {
             return property.rentFrequency;
         }
     }
     return "";
+}
+
+function processTenants(tenantList: typeof EmptyTenantForm[], tenantCount: number): CreateTenantInput[] {
+    const tenantPayload: CreateTenantInput[] = [];
+
+    for (let i = 0; i < tenantCount; i++) {
+        tenantPayload[i] = {
+            firstName : tenantList[i].firstName.trim(),
+            lastName : tenantList[i].lastName ? tenantList[i].lastName?.trim() : undefined,
+            mobile : tenantList[i].mobile ? tenantList[i].mobile?.trim() : undefined,
+            email : tenantList[i].email ? tenantList[i].email?.trim() : undefined,
+            notes : tenantList[i].notes ? tenantList[i].notes?.trim() : undefined,
+        }
+    }
+    return tenantPayload;
 }
