@@ -37,12 +37,12 @@ export const leaseService = {
 
         await db.execute(
             `INSERT INTO leases (
-        id, propertyId, startDate, endDate, rentFrequency, rentCents,
+        id, propertyId, leaseTerm, startDate, endDate, rentFrequency, rentCents,
         bondCents, existingTenantCreditCents, tenantCount, petsAllowed, petCount,
         actualMoveOutDate, lettingFeeSelection, status, createdAt, updatedAt
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
-                record.id, record.propertyRef, record.startDate, record.endDate, record.rentFrequency, record.rentCents,
+                record.id, record.propertyId, record.leaseTerm, record.startDate, record.endDate, record.rentFrequency, record.rentCents,
                 record.bondCents, record.existingTenantCreditCents, record.tenantCount,
                 record.petsAllowed, record.petCount, record.actualMoveOutDate, record.lettingFee,
                 record.status, record.createdAt, record.updatedAt
