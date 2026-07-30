@@ -27,7 +27,7 @@ export interface OwnerRecord {
     reference: string;
     title?: string;
     firstName: string;
-    surname?: string;
+    lastName?: string;
     email?: string;
     mobile?: string;
     postalAddress?: string;
@@ -46,7 +46,7 @@ export interface CreateOwnerInput {
     reference: string;
     title?: string;
     firstName: string;
-    surname?: string;
+    lastName?: string;
     email?: string;
     mobile?: string;
 
@@ -63,7 +63,7 @@ export interface OwnerFormState extends DetailedAddress {
     reference: string;
     title: string;
     firstName: string;
-    surname: string;
+    lastName: string;
     email: string;
     mobile: string;
 
@@ -82,7 +82,7 @@ export const EmptyOwnerForm: OwnerFormState = {
     reference: '',
     title: '-',
     firstName: '',
-    surname: '',
+    lastName: '',
     email: '',
     mobile: '',
 

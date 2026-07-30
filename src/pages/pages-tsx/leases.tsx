@@ -231,7 +231,7 @@ export function NewLease() {
                                 </label>
 
                                 <label>
-                                    <span>Surname:</span>
+                                    <span>lastName:</span>
                                     <input type="text"
                                         value={tenant.lastName || ''}
                                         onChange={(e) => handleEntryChange(index, 'lastName', e.target.value)}

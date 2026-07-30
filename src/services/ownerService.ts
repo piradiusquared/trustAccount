@@ -38,11 +38,11 @@ export const ownerService = {
 
         await db.execute(
             `INSERT INTO owners (
-        id, reference, title, firstName, surname, email, mobile, postalAddress,
+        id, reference, title, firstName, lastName, email, mobile, postalAddress,
         bankName, accountName, bsb, accountNumber, paymentRef, notes, status, createdAt, updatedAt
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
-                record.id, record.reference, record.title, record.firstName, record.surname, record.email, record.mobile, record.postalAddress,
+                record.id, record.reference, record.title, record.firstName, record.lastName, record.email, record.mobile, record.postalAddress,
                 record.bankName, record.accountName, record.bsb, record.accountNumber, record.paymentRef, record.notes, record.status, record.createdAt, record.updatedAt
             ]
         );

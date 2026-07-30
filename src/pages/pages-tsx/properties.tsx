@@ -127,7 +127,7 @@ export function NewProperty() {
                             <option value="">-- Select an Owner --</option>
                             {ownerList.map((owner) => (
                                 <option key={owner.id} value={owner.id}>
-                                    {owner.title || ''} {owner.firstName} {owner.surname || ''}
+                                    {owner.title || ''} {owner.firstName} {owner.lastName || ''}
                                 </option>
                             ))}
                         </select>

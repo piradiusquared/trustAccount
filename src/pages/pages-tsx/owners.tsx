@@ -33,7 +33,7 @@ export function Owners() {
                             <th className='content-table-th'>Reference</th>
                             <th className='content-table-th'>Title</th>
                             <th className='content-table-th'>First Name</th>
-                            <th className='content-table-th'>Surname</th>
+                            <th className='content-table-th'>lastName</th>
                             <th className='content-table-th'>Email</th>
                             <th className='content-table-th'>Mobile Number</th>
                             <th className='content-table-th'>Postal Address</th>
@@ -48,7 +48,7 @@ export function Owners() {
                                     <td className='content-table-td'>{owner.reference}</td>
                                     <td className='content-table-td'>{owner.title}</td>
                                     <td className='content-table-td'>{owner.firstName}</td>
-                                    <td className='content-table-td'>{owner.surname}</td>
+                                    <td className='content-table-td'>{owner.lastName}</td>
                                     <td className='content-table-td'>{owner.email}</td>
                                     <td className='content-table-td'>{owner.mobile}</td>
                                     <td className='content-table-td'>{owner.postalAddress}</td>
@@ -69,7 +69,7 @@ export function Owners() {
                             <th className='content-table-th'>Reference</th>
                             <th className='content-table-th'>Title</th>
                             <th className='content-table-th'>First Name</th>
-                            <th className='content-table-th'>Surname</th>
+                            <th className='content-table-th'>lastName</th>
                             <th className='content-table-th'>Email</th>
                             <th className='content-table-th'>Mobile Number</th>
                             <th className='content-table-th'>Postal Address</th>
@@ -82,7 +82,7 @@ export function Owners() {
                         {/* <td className='content-table-td'>Reference: 1</td>
                         <td className='content-table-td'>Title: Ts</td>
                         <td className='content-table-td'>Firstname: test</td>
-                        <td className='content-table-td'>Surname: Test</td> */}
+                        <td className='content-table-td'>lastName: Test</td> */}
                         {/* END TEST FOR WEB DEV */}
                         {/* {inactiveOwners.map(inactive => {
                             return (
@@ -90,7 +90,7 @@ export function Owners() {
                                     <td className='content-table-td'>{inactive.reference}</td>
                                     <td className='content-table-td'>{inactive.title}</td>
                                     <td className='content-table-td'>{inactive.firstName}</td>
-                                    <td className='content-table-td'>{inactive.surname}</td>
+                                    <td className='content-table-td'>{inactive.lastName}</td>
                                     <td className='content-table-td'>{inactive.email}</td>
                                     <td className='content-table-td'>{inactive.mobile}</td>
                                     <td className='content-table-td'>{inactive.postalAddress}</td>
@@ -117,7 +117,7 @@ export function NewOwner() {
             reference: form.reference.trim(),
             title: form.title === '-' ? undefined : form.title,
             firstName: form.firstName.trim(),
-            surname: form.surname ? form.surname.trim() : undefined,
+            lastName: form.lastName ? form.lastName.trim() : undefined,
             email: form.email ? form.email.trim() : undefined,
             mobile: form.mobile ? form.mobile.trim() : undefined,
             postalAddress: combinedAddress || undefined,
@@ -173,8 +173,8 @@ export function NewOwner() {
                     </label>
 
                     <label>
-                        <span>Surname:</span>
-                        <input name="surname" onChange={handleChange} placeholder="Doe" />
+                        <span>lastName:</span>
+                        <input name="lastName" onChange={handleChange} placeholder="Doe" />
                     </label>
 
                     <label>

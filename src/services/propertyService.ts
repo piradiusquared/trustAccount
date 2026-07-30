@@ -11,7 +11,7 @@ export const propertyService = {
     async getAllWithOwners(): Promise<PropertyWithOwner[]> {
         const db = await getDatabase();
         return await db.select<PropertyWithOwner[]>(
-            `SELECT p.*, (o.firstName || ' ' || o.surname) as ownerName
+            `SELECT p.*, (o.firstName || ' ' || o.lastName) as ownerName
        FROM properties p
        INNER JOIN owners o ON p.ownerId = o.id
        ORDER BY p.reference ASC`
