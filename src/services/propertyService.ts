@@ -8,13 +8,34 @@ export interface PropertyWithOwner extends PropertyRecord {
 
 export const propertyService = {
     // Fetch properties and join the owner's name for your master property list dashboard
-    async getAllWithOwners(): Promise<PropertyWithOwner[]> {
+    async getActive(): Promise<PropertyWithOwner[]> {
         const db = await getDatabase();
         return await db.select<PropertyWithOwner[]>(
             `SELECT p.*, (o.firstName || ' ' || o.lastName) as ownerName
-       FROM properties p
-       INNER JOIN owners o ON p.ownerId = o.id
-       ORDER BY p.reference ASC`
+            FROM properties p
+            INNER JOIN owners o ON p.ownerId = o.id
+            WHERE status = 'active'
+            ORDER BY p.reference ASC`
+        );
+    },
+
+    async getInactive(): Promise<PropertyWithOwner[]> {
+        const db = await getDatabase();
+        return await db.select<PropertyWithOwner[]>(
+            `SELECT p.*, (o.firstName || ' ' || o.lastName) as ownerName
+            FROM properties p
+            INNER JOIN owners o ON p.ownerId = o.id
+            WHERE status = 'inactive'
+            ORDER BY p.reference ASC`
+        );
+    },
+
+    async updateStatus(id: EntityId, status: 'active' | 'inactive'): Promise<void> {
+        const db = await getDatabase();
+        const now = new Date().toISOString();
+        await db.execute(
+        'UPDATE properties SET status = ?, updatedAt = ? WHERE id = ?',
+        [status, now, id]
         );
     },
 
