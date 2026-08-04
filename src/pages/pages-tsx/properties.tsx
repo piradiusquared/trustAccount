@@ -55,7 +55,8 @@ export function Properties() {
                                 <td className="content-table-td">{property.address}</td>
                                 <td className="content-table-td">{property.commissionRatePercent}</td>
                                 <td className="content-table-td">{(property as any).ownerName}</td>
-                                <td>
+                                <td className="content-table-td">[FORM 6 PLACEHOLDER]</td>
+                                <td className="content-table-td">
                                     <button onClick={() => toggleStatus(property.id, 'active')}>Deactivate</button>
                                 </td>
                             {/* currently casting as any to suppress warning. LATER: extend interface for each new created SQL variable*/}
@@ -83,15 +84,16 @@ export function Properties() {
 
                     <tbody>
                         {
-                        activeProperties.map(property => (
+                        inactiveProperties.map(property => (
                             <tr key={property.id}>
                                 <td className="content-table-td">{property.reference}</td>
                                 <td className="content-table-td">{property.propertyType}</td>
                                 <td className="content-table-td">{property.address}</td>
                                 <td className="content-table-td">{property.commissionRatePercent}</td>
                                 <td className="content-table-td">{(property as any).ownerName}</td>
-                                <td>
-                                    {/* <button onClick={() => toggleStatus(property.id, 'inactive')}>Activate</button> */}
+                                <td className="content-table-td">[FORM 6 PLACEHOLDER]</td>
+                                <td className="content-table-td">
+                                    <button onClick={() => toggleStatus(property.id, 'inactive')}>Activate</button>
                                 </td>
                             </tr>
                         ))}
