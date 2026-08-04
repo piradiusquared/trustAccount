@@ -37,7 +37,7 @@ export interface OwnerRecord {
     accountNumber?: string;
     paymentRef?: string;
     notes?: string;
-    status?: RecordStatus;
+    status: RecordStatus;
     createdAt: IsoDate;
     updatedAt: IsoDate;
 }
