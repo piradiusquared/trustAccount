@@ -21,11 +21,11 @@ export const ownerService = {
     },
 
     // Fetch a single owner
-    async getById(id: EntityId): Promise<OwnerRecord | null> {
-        const db = await getDatabase();
-        const results = await db.select<OwnerRecord[]>('SELECT * FROM owners WHERE id = ?', [id]);
-        return results.length > 0 ? results[0] : null;
-    },
+    // async getById(id: EntityId): Promise<OwnerRecord | null> {
+    //     const db = await getDatabase();
+    //     const results = await db.select<OwnerRecord[]>('SELECT * FROM owners WHERE id = ?', [id]);
+    //     return results.length > 0 ? results[0] : null;
+    // },
 
     // Create a new owner
     async create(input: CreateOwnerInput): Promise<OwnerRecord> {
