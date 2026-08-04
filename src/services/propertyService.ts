@@ -8,24 +8,24 @@ export interface PropertyWithOwner extends PropertyRecord {
 
 export const propertyService = {
     // Fetch properties and join the owner's name for your master property list dashboard
-    async getActive(): Promise<PropertyWithOwner[]> {
+    async getActive(): Promise<PropertyRecord[]> {
         const db = await getDatabase();
-        return await db.select<PropertyWithOwner[]>(
+        return await db.select<PropertyRecord[]>(
             `SELECT p.*, (o.firstName || ' ' || o.lastName) as ownerName
             FROM properties p
             INNER JOIN owners o ON p.ownerId = o.id
-            WHERE status = 'active'
+            WHERE p.status = 'active'
             ORDER BY p.reference ASC`
         );
     },
 
-    async getInactive(): Promise<PropertyWithOwner[]> {
+    async getInactive(): Promise<PropertyRecord[]> {
         const db = await getDatabase();
-        return await db.select<PropertyWithOwner[]>(
+        return await db.select<PropertyRecord[]>(
             `SELECT p.*, (o.firstName || ' ' || o.lastName) as ownerName
             FROM properties p
             INNER JOIN owners o ON p.ownerId = o.id
-            WHERE status = 'inactive'
+            WHERE p.status = 'inactive'
             ORDER BY p.reference ASC`
         );
     },

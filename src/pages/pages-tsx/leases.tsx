@@ -1,7 +1,7 @@
 
 import { Link, useNavigate } from "react-router"
 import { LeaseRecord, CreateLeaseInput, EmptyLeaseForm, PropertyRecord, EmptyTenantForm, CreateTenantInput } from "../../lib/datatypes"
-import { formatPostalAddress, useForm, useFormArray } from "../../services/utils"
+import { useForm, useFormArray } from "../../services/utils"
 import '../pages-css/form.css'
 import { useEffect, useState, SubmitEvent } from "react"
 import { propertyService } from "../../services/propertyService"

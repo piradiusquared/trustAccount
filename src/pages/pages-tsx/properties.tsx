@@ -2,19 +2,24 @@
 import { Link, useNavigate } from "react-router"
 import '../pages-css/form.css'
 import { useEffect, useState, SubmitEvent } from "react"
-import { OwnerRecord, PropertyRecord, EmptyPropertyForm, CreatePropertyInput } from "../../lib/datatypes"
+import { OwnerRecord, EmptyPropertyForm, CreatePropertyInput } from "../../lib/datatypes"
 import { propertyService } from "../../services/propertyService";
 import { ownerService } from "../../services/ownerService";
-import { formatPostalAddress, useForm } from "../../services/utils";
+import { formatPostalAddress, useData, useForm } from "../../services/utils";
 
 // TODO: create the state and forms
 
 
 export function Properties() {
-    const [properties, setProperties] = useState<PropertyRecord[]>([]);
-    useEffect(() => {
-        propertyService.getAllWithOwners().then(setProperties);
-    })
+    
+    const {
+        active: activeProperties,
+        inactive: inactiveProperties,
+        loading,
+        toggleStatus
+    } = useData(propertyService);
+    if (loading) return <div>Loading...</div>
+
     
 
     return (
@@ -36,19 +41,23 @@ export function Properties() {
                             <th className="content-table-th">Commission (%)</th>
                             <th className="content-table-th">Owner</th>
                             <th className="content-table-th">Contract</th>
+                            <th className="content-table-th">Actions</th>
                             {/* TODO: contract and actions */}
                         </tr>
                     </thead>
 
                     <tbody>
                         {
-                        properties.map(property => (
+                        activeProperties.map(property => (
                             <tr key={property.id}>
                                 <td className="content-table-td">{property.reference}</td>
                                 <td className="content-table-td">{property.propertyType}</td>
                                 <td className="content-table-td">{property.address}</td>
                                 <td className="content-table-td">{property.commissionRatePercent}</td>
                                 <td className="content-table-td">{(property as any).ownerName}</td>
+                                <td>
+                                    <button onClick={() => toggleStatus(property.id, 'active')}>Deactivate</button>
+                                </td>
                             {/* currently casting as any to suppress warning. LATER: extend interface for each new created SQL variable*/}
                             </tr>
                         ))}
@@ -57,7 +66,37 @@ export function Properties() {
             </div>
 
             <div className="card-inactive">
+                <h2>Inactive</h2>
+                <table className="content-table">
+                    <thead>
+                        <tr>
+                            <th className="content-table-th">Reference</th>
+                            <th className="content-table-th">Type</th>
+                            <th className="content-table-th">Address</th>
+                            <th className="content-table-th">Commission (%)</th>
+                            <th className="content-table-th">Owner</th>
+                            <th className="content-table-th">Contract</th>
+                            <th className="content-table-th">Actions</th>
+                            {/* TODO: contract and actions */}
+                        </tr>
+                    </thead>
 
+                    <tbody>
+                        {
+                        activeProperties.map(property => (
+                            <tr key={property.id}>
+                                <td className="content-table-td">{property.reference}</td>
+                                <td className="content-table-td">{property.propertyType}</td>
+                                <td className="content-table-td">{property.address}</td>
+                                <td className="content-table-td">{property.commissionRatePercent}</td>
+                                <td className="content-table-td">{(property as any).ownerName}</td>
+                                <td>
+                                    {/* <button onClick={() => toggleStatus(property.id, 'inactive')}>Activate</button> */}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </section>
 
