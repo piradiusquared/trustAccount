@@ -62,7 +62,7 @@ export function NewLease() {
     const { formArr, setFormArr, addEntry, removeEntry, handleEntryChange } = useFormArray(EmptyTenantForm, 4); // hardcoded 4 tenant limit
     const [propertyList, setProperties] = useState<PropertyRecord[]>([]);
     useEffect(() => {
-        propertyService.getAllWithOwners().then(setProperties);
+        propertyService.getActive().then(setProperties);
     })
 
     const navigate = useNavigate();

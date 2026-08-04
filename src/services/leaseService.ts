@@ -21,6 +21,26 @@ export const leaseService = {
         return raws.map((raw) => mapLeaseFromDb(raw) as LeaseWithPropertyDetails);
     },
 
+    async getInactive(): Promise<LeaseWithPropertyDetails[]> {
+        const db = await getDatabase();
+        const raws = await db.select<any[]>(
+            `SELECT l.*, p.address as propertyAddress 
+       FROM leases l
+       INNER JOIN properties p ON l.propertyId = p.id
+       WHERE l.status = 'inactive'`
+        );
+        return raws.map((raw) => mapLeaseFromDb(raw) as LeaseWithPropertyDetails);
+    },
+
+    async updateStatus(id: EntityId, status: 'active' | 'inactive'): Promise<void> {
+        const db = await getDatabase();
+        const now = new Date().toISOString();
+        await db.execute(
+        'UPDATE leases SET status = ?, updatedAt = ? WHERE id = ?',
+        [status, now, id]
+        );
+    },
+
     // Create a lease
     async create(input: CreateLeaseInput, tenants: CreateTenantInput[]): Promise<LeaseRecord> {
         const db = await getDatabase();
