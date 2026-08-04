@@ -10,10 +10,14 @@ export const ownerService = {
         return await db.select<OwnerRecord[]>('SELECT * FROM owners ORDER BY reference ASC');
     },
 
-    // TODO: add a button that changes activity
+    async getActive(): Promise<OwnerRecord[]> {
+        const db = await getDatabase();
+        return await db.select<OwnerRecord[]>('SELECT * FROM owners WHERE status = "active" ORDER BY reference ASC');
+    },
+
     async getInactive(): Promise<OwnerRecord[]> {
         const db = await getDatabase();
-        return await db.select<OwnerRecord[]>('SELECT * FROM owners WHERE status = "inactive"');
+        return await db.select<OwnerRecord[]>('SELECT * FROM owners WHERE status = "inactive" ORDER BY reference ASC');
     },
 
     // Fetch a single owner
@@ -65,18 +69,13 @@ export const ownerService = {
         await db.execute(`UPDATE owners SET ${setClause} WHERE id = ?`, values);
     },
 
-    async setActivity(id: EntityId, active: boolean): Promise<void> {
+    async updateStatus(id: EntityId, status: 'active' | 'inactive'): Promise<void> {
         const db = await getDatabase();
-        const now = getLocalIsoString();
-
-        const results = await db.select<{ status: string }[]>('SELECT status FROM owners WHERE id = ?', [id]);
-        if (!results || results.length === 0) return;
-
-        const curr = results[0].status;
-        const newStatus = active ? 'active' : 'inactive';
-        if (curr === newStatus) return;
-
-        await db.execute('UPDATE owners SET status = ?, updatedAt = ? WHERE id = ?', [newStatus, now, id]);
+        const now = new Date().toISOString();
+        await db.execute(
+        'UPDATE owners SET status = ?, updatedAt = ? WHERE id = ?',
+        [status, now, id]
+        );
     },
 
 

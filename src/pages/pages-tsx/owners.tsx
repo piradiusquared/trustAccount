@@ -9,12 +9,44 @@ import { formatPostalAddress, useForm } from '../../services/utils';
 
 // TODO: move to datatypes ts file
 export function Owners() {
-    const [owners, setOwners] = useState<OwnerRecord[]>([]);
-    const [inactiveOwners, setInactive] = useState<OwnerRecord[]>([]);
+    const [activeOwners, setActiveOwners] = useState<OwnerRecord[]>([]);
+    const [inactiveOwners, setInactiveOwners] = useState<OwnerRecord[]>([]);
+
+    const [loading, setLoading] = useState(true);
+
+     const fetchOwners = async () => {
+        try {
+            const [activeData, inactiveData] = await Promise.all([
+                ownerService.getActive(),
+                ownerService.getInactive()
+            ]);
+            
+            setActiveOwners(activeData);
+            setInactiveOwners(inactiveData);
+            
+        } catch (err) {
+            console.error('Failed to fetch owners:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+        // Toggle status on button click
+    const handleToggleStatus = async (id: string, currentStatus: string) => {
+        const nextStatus = currentStatus === 'active' ? 'inactive' : 'active';
+        try {
+            await ownerService.updateStatus(id, nextStatus);
+            await fetchOwners(); // Refetch to instantly move the row on the UI
+        } catch (err) {
+            console.error('Failed to update status:', err);
+        }
+    };
+
     useEffect(() => {
-        ownerService.getAll().then(setOwners);
-        ownerService.getInactive().then(setInactive);
-    })
+        fetchOwners();
+    }, []);
+
+    if (loading) return <div>Loading...</div>
 
     return (
         <section className='content-container'>
@@ -37,12 +69,13 @@ export function Owners() {
                             <th className='content-table-th'>Email</th>
                             <th className='content-table-th'>Mobile Number</th>
                             <th className='content-table-th'>Postal Address</th>
+                            <th className='content-table-th'>Actions</th>
                             {/* TODO: actions */}
                         </tr>
                     </thead>
 
                     <tbody>
-                        {owners.map(owner => {
+                        {activeOwners.map(owner => {
                             return (
                                 <tr key={owner.id}>
                                     <td className='content-table-td'>{owner.reference}</td>
@@ -52,6 +85,10 @@ export function Owners() {
                                     <td className='content-table-td'>{owner.email}</td>
                                     <td className='content-table-td'>{owner.mobile}</td>
                                     <td className='content-table-td'>{owner.postalAddress}</td>
+
+                                    <td>
+                                        <button onClick={() => handleToggleStatus(owner.id, 'active')}>Deactivate</button>
+                                    </td>
                                 </tr>
                             )
                         })}
@@ -73,30 +110,28 @@ export function Owners() {
                             <th className='content-table-th'>Email</th>
                             <th className='content-table-th'>Mobile Number</th>
                             <th className='content-table-th'>Postal Address</th>
-                            {/* TODO: actions */}
+                            <th className='content-table-th'>Actions</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        {/* TEST FOR WEB DEV ONLY */}
-                        {/* <td className='content-table-td'>Reference: 1</td>
-                        <td className='content-table-td'>Title: Ts</td>
-                        <td className='content-table-td'>Firstname: test</td>
-                        <td className='content-table-td'>lastName: Test</td> */}
-                        {/* END TEST FOR WEB DEV */}
-                        {/* {inactiveOwners.map(inactive => {
+                        {inactiveOwners.map(owner => {
                             return (
-                                <tr key={inactive.id}>
-                                    <td className='content-table-td'>{inactive.reference}</td>
-                                    <td className='content-table-td'>{inactive.title}</td>
-                                    <td className='content-table-td'>{inactive.firstName}</td>
-                                    <td className='content-table-td'>{inactive.lastName}</td>
-                                    <td className='content-table-td'>{inactive.email}</td>
-                                    <td className='content-table-td'>{inactive.mobile}</td>
-                                    <td className='content-table-td'>{inactive.postalAddress}</td>
+                                <tr key={owner.id}>
+                                    <td className='content-table-td'>{owner.reference}</td>
+                                    <td className='content-table-td'>{owner.title}</td>
+                                    <td className='content-table-td'>{owner.firstName}</td>
+                                    <td className='content-table-td'>{owner.lastName}</td>
+                                    <td className='content-table-td'>{owner.email}</td>
+                                    <td className='content-table-td'>{owner.mobile}</td>
+                                    <td className='content-table-td'>{owner.postalAddress}</td>
+
+                                    <td>
+                                        <button onClick={() => handleToggleStatus(owner.id, 'inactive')}>Activate</button>
+                                    </td>
                                 </tr>
                             )
-                        })} */}
+                        })}
                     </tbody>
                 </table>
             </div>
@@ -106,7 +141,6 @@ export function Owners() {
 
 export function NewOwner() {
     const { form, setForm, handleChange } = useForm(EmptyOwnerForm);
-    // const [form, setForm] = useState<OwnerFormState>(EmptyOwnerForm);
     const navigate = useNavigate();
 
     async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
