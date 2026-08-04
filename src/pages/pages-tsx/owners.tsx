@@ -5,47 +5,18 @@ import { useState, SubmitEvent, useEffect } from 'react';
 
 import '../pages-css/form.css'
 import { ownerService } from '../../services/ownerService';
-import { formatPostalAddress, useForm } from '../../services/utils';
+import { formatPostalAddress, useForm, useData } from '../../services/utils';
 
 // TODO: move to datatypes ts file
 export function Owners() {
-    const [activeOwners, setActiveOwners] = useState<OwnerRecord[]>([]);
-    const [inactiveOwners, setInactiveOwners] = useState<OwnerRecord[]>([]);
 
-    const [loading, setLoading] = useState(true);
-
-     const fetchOwners = async () => {
-        try {
-            const [activeData, inactiveData] = await Promise.all([
-                ownerService.getActive(),
-                ownerService.getInactive()
-            ]);
-            
-            setActiveOwners(activeData);
-            setInactiveOwners(inactiveData);
-            
-        } catch (err) {
-            console.error('Failed to fetch owners:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-        // Toggle status on button click
-    const handleToggleStatus = async (id: string, currentStatus: string) => {
-        const nextStatus = currentStatus === 'active' ? 'inactive' : 'active';
-        try {
-            await ownerService.updateStatus(id, nextStatus);
-            await fetchOwners(); // Refetch to instantly move the row on the UI
-        } catch (err) {
-            console.error('Failed to update status:', err);
-        }
-    };
-
-    useEffect(() => {
-        fetchOwners();
-    }, []);
-
+    const {
+        active: activeOwners,
+        inactive: inactiveOwners,
+        loading,
+        toggleStatus
+    } = useData(ownerService);
+   
     if (loading) return <div>Loading...</div>
 
     return (
@@ -87,7 +58,7 @@ export function Owners() {
                                     <td className='content-table-td'>{owner.postalAddress}</td>
 
                                     <td>
-                                        <button onClick={() => handleToggleStatus(owner.id, 'active')}>Deactivate</button>
+                                        <button onClick={() => toggleStatus(owner.id, 'active')}>Deactivate</button>
                                     </td>
                                 </tr>
                             )
@@ -127,7 +98,7 @@ export function Owners() {
                                     <td className='content-table-td'>{owner.postalAddress}</td>
 
                                     <td>
-                                        <button onClick={() => handleToggleStatus(owner.id, 'inactive')}>Activate</button>
+                                        <button onClick={() => toggleStatus(owner.id, 'inactive')}>Activate</button>
                                     </td>
                                 </tr>
                             )
