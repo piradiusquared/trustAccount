@@ -114,3 +114,62 @@ export function useFormArray<T extends object>(initial: T, maxEntries: number) {
 
     return { formArr, setFormArr, addEntry, removeEntry, handleEntryChange };
 }
+
+// Imports for below
+import { useEffect, useCallback } from "react";
+import { EntityId, RecordStatus } from "../lib/datatypes";
+
+export interface StatusRec {
+    id: EntityId;
+    status: RecordStatus;
+}
+
+export interface IsStatusService<T> {
+    getActive(): Promise<T[]>;
+    getInactive(): Promise<T[]>;
+    updateStatus(id: string, status: any): Promise<void>;
+}
+
+export function useData<T extends StatusRec>(service: IsStatusService<T>) {
+
+    const [active, setActiveItems] = useState<T[]>([]);
+    const [inactive, setInactiveItems] = useState<T[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<Error | null>(null);
+
+    // Use useCallback so we can safely include this in useEffect dependencies
+    const fetchAll = useCallback(async () => {
+        setLoading(true);
+        try {
+            const [active, inactive] = await Promise.all([
+            service.getActive(),
+            service.getInactive(),
+            ]);
+            setActiveItems(active);
+            setInactiveItems(inactive);
+            setError(null);
+        } catch (err) {
+            setError(err as Error);
+        } finally {
+            setLoading(false);
+        }
+    }, [service]);
+
+    // Toggle status dynamically
+    const toggleStatus = async (id: string, currentStatus: string, inactiveValue: string = 'inactive') => {
+        const nextStatus = currentStatus === 'active' ? inactiveValue : 'active';
+        try {
+            await service.updateStatus(id, nextStatus);
+            await fetchAll(); // Auto-reload the lists on success
+        } catch (err) {
+            console.error('Failed to toggle status:', err);
+            throw err;
+        }
+    };
+
+    useEffect(() => {
+        fetchAll();
+    }, [fetchAll]);
+
+    return { active, inactive, loading, error, refresh: fetchAll, toggleStatus };
+}
