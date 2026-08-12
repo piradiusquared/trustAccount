@@ -58,7 +58,29 @@ export function Leases() {
 }
 
 export function NewLease() {
-    const { form, setForm, handleChange } = useForm(EmptyLeaseForm);
+    const { form, setForm, handleChange } = useForm(
+        EmptyLeaseForm,
+        // Custom updates here
+        (form, field) => {
+            if (field === 'rentCents') {
+                const rent = Number(form.rentCents);
+                form.bondCents = Number.isFinite(rent) ? rent * 4 : 0;
+            } else if ((field === 'startDate' && form.leaseTerm != '') || (field === 'leaseTerm' && form.startDate != '')) {
+                const [year, month, day] = form.startDate.split('-').map(Number);
+
+                const date = new Date(year, month - 1, day);
+
+                date.setDate(date.getDate() + Number(form.leaseTerm) * 7);
+
+                const y = date.getFullYear();
+                const m = String(date.getMonth() + 1).padStart(2, '0');
+                const d = String(date.getDate()).padStart(2, '0');
+
+                form.endDate = `${y}-${m}-${d}`;
+            }
+            return form;
+        }
+    );
     const { formArr, setFormArr, addEntry, removeEntry, handleEntryChange } = useFormArray(EmptyTenantForm, 4); // hardcoded 4 tenant limit
     const [propertyList, setProperties] = useState<PropertyRecord[]>([]);
     useEffect(() => {
@@ -128,24 +150,25 @@ export function NewLease() {
 
                     <label>
                         <span>Lease Term:</span>
-                        <select name="leaseTerm" onChange={handleChange} required>
-                            <option value="26week">6 Months (26 weeks)</option>
-                            <option value="52week">12 Months (52 weeks)</option>
-                            <option value="78week">18 Months (78 weeks)</option>
-                            <option value="104week">24 Months (104 weeks)</option>
-                            <option value="156week">36 Months (156 weeks)</option>
+                        <select name="leaseTerm" value={form.leaseTerm} onChange={handleChange} required>
+                            <option value="26">6 Months (26 weeks)</option>
+                            <option value="52">12 Months (52 weeks)</option>
+                            <option value="78">18 Months (78 weeks)</option>
+                            <option value="104">24 Months (104 weeks)</option>
+                            <option value="156">36 Months (156 weeks)</option>
                             <option value="periodic">No fixed term (periodic)</option>
                         </select>
                     </label>
 
                     <label>
                         <span>Lease Start Date:</span>
-                        <input type="date" name="startDate" onChange={handleChange} required></input>
+                        <input type="date" name="startDate" value={form.startDate} onChange={handleChange} required></input>
+                        {/* <span>Wednesday</span> quality of life change */}
                     </label>
 
                     <label>
                         <span>Lease End Date:</span>
-                        <input type="date" name="endDate" onChange={handleChange} required></input>
+                        <input type="date" name="endDate" value={form.endDate} onChange={handleChange} required></input>
                     </label>
 
                     <label>

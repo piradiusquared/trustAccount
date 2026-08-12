@@ -59,12 +59,18 @@ Shared form behaviour functions.
 /*
 Hook used for creating and managing forms. 
 */
-export function useForm<T extends object>(initial: T) {
+export function useForm<T extends object>(
+    initial: T,
+    processChange?: (
+        nextState: T,
+        field: string
+    ) => T
+) {
     const [form, setForm] = useState<T>(initial);
 
     function handleChange(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-        const target = event.target as HTMLInputElement | HTMLSelectElement;
-        const { name, value } = target;
+        // const target = event.target as HTMLInputElement | HTMLSelectElement;
+        const { name, value } = event.target;
 
         // setForm((current) => ({
         //     ...current,
@@ -75,11 +81,11 @@ export function useForm<T extends object>(initial: T) {
                 ...current,
                 [name]: value,
             }
-            if ('bondCents' in nextState && name === 'rentCents') {
-                const rentValue = parseFloat(value);
-                (nextState as any).bondCents = !isNaN(rentValue) && rentValue > 0 ? (rentValue * 4) : 0;
-            }
-            return nextState;
+            // if ('bondCents' in nextState && name === 'rentCents') {
+            //     const rentValue = parseFloat(value);
+            //     (nextState as any).bondCents = !isNaN(rentValue) && rentValue > 0 ? (rentValue * 4) : 0;
+            // }
+            return processChange ? processChange(nextState, name) : nextState;
         })
     }
     return { form, setForm, handleChange };
@@ -116,8 +122,9 @@ export function useFormArray<T extends object>(initial: T, maxEntries: number) {
 }
 
 // Imports for below
+// Changing the activity of an entry
 import { useEffect, useCallback } from "react";
-import { EntityId, RecordStatus } from "../lib/datatypes";
+import { EmptyLeaseForm, EntityId, RecordStatus } from "../lib/datatypes";
 
 export interface StatusRec {
     id: EntityId;
