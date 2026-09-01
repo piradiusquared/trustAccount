@@ -23,6 +23,7 @@ pub fn run() {
             version: 1,
             description: "create_initial_schema",
             sql: "
+                    -- general note: store all 'floats' like $2.39 in cents. Dinero takes cents as a default to initiate object.
                     -- 1. Owners Table
                     CREATE TABLE IF NOT EXISTS owners (
                         id TEXT PRIMARY KEY, -- uuid
@@ -53,7 +54,7 @@ pub fn run() {
                         address TEXT NOT NULL,
                         rentFrequency TEXT NOT NULL CHECK (rentFrequency IN ('weekly', 'fortnightly', 'monthly')),
                         isFurnished INTEGER,
-                        commissionRatePercent REAL NOT NULL,
+                        commissionRatePercent INTEGER NOT NULL,
                         adminFeeCents INTEGER NOT NULL,
                         backyardMaintenanceFeeCents INTEGER,
                         advertisementFeeCents INTEGER,
@@ -100,6 +101,23 @@ pub fn run() {
                         createdAt STRING,
                         updatedAt STRING,
                         FOREIGN KEY (leaseId) REFERENCES leases(id) ON DELETE CASCADE
+                    );
+
+                    -- 5. Rent Tracking Table
+                    CREATE TABLE IF NOT EXISTS rent (
+                        id TEXT PRIMARY KEY,
+                        leaseID TEXT NOT NULL,
+                        rentCents INTEGER NOT NULL,
+                        creditCents INTEGER,
+                        rentFrequency TEXT NOT NULL CHECK (rentFrequency IN ('weekly', 'fortnightly', 'monthly')),
+                        startDate TEXT NOT NULL,
+                        endDate TEXT NOT NULL,
+                        nextDue TEXT, -- Next due date after payment
+                        leaseRemainCents INTEGER,
+
+                        createdAt STRING,
+                        updatedAt STRING,
+                        FOREIGN KEY (leaseID) REFERENCES leases(id) ON DELETE CASCADE
                     );
             ",
             kind: MigrationKind::Up,
