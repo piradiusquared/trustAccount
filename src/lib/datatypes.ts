@@ -266,3 +266,29 @@ export const EmptyTenantForm: CreateTenantInput = {
     mobile: '',
     notes: ''
 }
+
+/*
+Rent tracking
+
+                        id TEXT PRIMARY KEY,
+                        leaseID TEXT NOT NULL,
+                        rentCents INTEGER NOT NULL,
+                        creditCents INTEGER,
+                        rentFrequency TEXT NOT NULL CHECK (rentFrequency IN ('weekly', 'fortnightly', 'monthly')),
+                        startDate TEXT NOT NULL,
+                        endDate TEXT NOT NULL,
+                        nextDue TEXT, -- Next due date after payment
+                        leaseRemainCents INTEGER,
+*/
+
+export interface RentRecord {
+    id: EntityId;
+    leaseId: EntityId;
+    rentCents: MoneyCents;
+    creditCents: MoneyCents;
+    rentFrequency: string;
+    startDate: IsoDate;
+    endDate: IsoDate;
+    nextDue: IsoDate;
+    leaseRemainCents: MoneyCents
+}
