@@ -269,26 +269,48 @@ export const EmptyTenantForm: CreateTenantInput = {
 
 /*
 Rent tracking
-
-                        id TEXT PRIMARY KEY,
-                        leaseID TEXT NOT NULL,
-                        rentCents INTEGER NOT NULL,
-                        creditCents INTEGER,
-                        rentFrequency TEXT NOT NULL CHECK (rentFrequency IN ('weekly', 'fortnightly', 'monthly')),
-                        startDate TEXT NOT NULL,
-                        endDate TEXT NOT NULL,
-                        nextDue TEXT, -- Next due date after payment
-                        leaseRemainCents INTEGER,
+id TEXT PRIMARY KEY,
+leaseID TEXT NOT NULL,
+rentCents INTEGER NOT NULL,
+creditCents INTEGER,
+rentFrequency TEXT NOT NULL CHECK (rentFrequency IN ('weekly', 'fortnightly', 'monthly')),
+startDate TEXT NOT NULL,
+endDate TEXT NOT NULL,
+nextDue TEXT, -- Next due date after payment
+leaseRemainCents INTEGER,
 */
 
 export interface RentRecord {
     id: EntityId;
     leaseId: EntityId;
-    rentCents: MoneyCents;
-    creditCents: MoneyCents;
+    rentCents: number;
+    creditCents: number;
     rentFrequency: string;
-    startDate: IsoDate;
-    endDate: IsoDate;
-    nextDue: IsoDate;
-    leaseRemainCents: MoneyCents
+    startDate: string;
+    endDate: string;
+    nextDue: string;
+    leaseRemainCents: number;
+
+    createdAt: IsoDate;
+    updatedAt: IsoDate;
+}
+
+export interface CreateRentInput {
+    rentCents: number;
+    creditCents: number;
+    rentFrequency: string;
+    startDate: string;
+    endDate: string;
+    nextDue: string;
+    leaseRemainCents: number;
+}
+
+export const EmptyRentForm: CreateRentInput = {
+    rentCents: 0,
+    creditCents: 0,
+    rentFrequency: '',
+    startDate: '',
+    endDate: '',
+    nextDue: '',
+    leaseRemainCents: 0
 }

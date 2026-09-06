@@ -42,6 +42,7 @@ export const leaseService = {
     },
 
     // Create a lease
+    // Also adds to tenant table, AND one entry for rent
     async create(input: CreateLeaseInput, tenants: CreateTenantInput[]): Promise<LeaseRecord> {
         const db = await getDatabase();
         const leaseId = uuidv7();
@@ -80,6 +81,23 @@ export const leaseService = {
             ]
             );
         }
+
+        const leaseRemaining = record.rentCents * ((record.leaseTerm as unknown) as number);
+        console.log(record.rentCents);
+        console.log(((record.leaseTerm as unknown) as number));
+        console.log(leaseRemaining);
+
+        await db.execute(
+            `INSERT INTO rent (
+                id, leaseId, rentCents, creditCents, rentFrequency, startDate,
+                endDate, nextDue, leaseRemainCents
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                uuidv7(), leaseId, record.rentCents, record.existingTenantCreditCents,
+                record.rentFrequency, record.startDate, record.endDate, record.startDate, // 1 week rent due at lease start
+                
+            ]
+        )
         return record;
     },
     // Terminate/Expire a lease

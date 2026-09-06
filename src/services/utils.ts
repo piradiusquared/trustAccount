@@ -124,7 +124,7 @@ export function useFormArray<T extends object>(initial: T, maxEntries: number) {
 // Imports for below
 // Changing the activity of an entry
 import { useEffect, useCallback } from "react";
-import { EmptyLeaseForm, EntityId, RecordStatus } from "../lib/datatypes";
+import { EntityId, RecordStatus } from "../lib/datatypes";
 
 export interface StatusRec {
     id: EntityId;

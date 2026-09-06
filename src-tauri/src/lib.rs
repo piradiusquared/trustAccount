@@ -106,7 +106,7 @@ pub fn run() {
                     -- 5. Rent Tracking Table
                     CREATE TABLE IF NOT EXISTS rent (
                         id TEXT PRIMARY KEY,
-                        leaseID TEXT NOT NULL,
+                        leaseId TEXT NOT NULL,
                         rentCents INTEGER NOT NULL,
                         creditCents INTEGER,
                         rentFrequency TEXT NOT NULL CHECK (rentFrequency IN ('weekly', 'fortnightly', 'monthly')),
@@ -117,7 +117,7 @@ pub fn run() {
 
                         createdAt STRING,
                         updatedAt STRING,
-                        FOREIGN KEY (leaseID) REFERENCES leases(id) ON DELETE CASCADE
+                        FOREIGN KEY (leaseId) REFERENCES leases(id) ON DELETE CASCADE
                     );
             ",
             kind: MigrationKind::Up,
