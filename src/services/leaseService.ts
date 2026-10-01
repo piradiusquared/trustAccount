@@ -83,18 +83,19 @@ export const leaseService = {
         }
 
         const leaseRemaining = record.rentCents * ((record.leaseTerm as unknown) as number);
-        const amountDue = record.rentCents;
-        let daysLeft = -7;
+        const amountDueCents = record.rentCents;
+        const daysLeft = -7;
+        const paidTo = record.startDate;
 
         await db.execute(
             `INSERT INTO rent (
                 id, leaseId, rentCents, creditCents, rentFrequency, startDate,
-                endDate, nextDue, leaseRemainCents
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                endDate, paidTo, daysLeft, amountDueCents, leaseRemainCents
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 uuidv7(), leaseId, record.rentCents, record.existingTenantCreditCents,
-                record.rentFrequency, record.startDate, record.endDate, record.startDate, 
-                leaseRemaining // 1 week rent due at lease start
+                record.rentFrequency, record.startDate, record.endDate, paidTo, // paidto = lease start 
+                daysLeft, amountDueCents, leaseRemaining // 1 week rent due at lease start
                 
             ]
         )
