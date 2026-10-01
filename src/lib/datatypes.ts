@@ -120,7 +120,7 @@ export interface PropertyRecord {
     address: string;
 
     isFurnished: string;
-    commissionRatePercent: number;
+    commissionRatePercent: string;
     adminFeeCents: MoneyCents;
     backyardMaintenanceFeeCents?: MoneyCents;
     advertisementFeeCents?: MoneyCents;
@@ -139,7 +139,7 @@ export interface CreatePropertyInput {
     address: string;
     isFurnished: string;
     rentFrequency: string;
-    commissionRatePercent: number;
+    commissionRatePercent: string;
     adminFeeCents: number;
     backyardMaintenanceFeeCents?: number;
     advertisementFeeCents?: number;
@@ -154,7 +154,7 @@ export interface PropertyFormState extends DetailedAddress {
 
     isFurnished: string;
     rentFrequency: string; // derived from property type use switch statement
-    commissionRatePercent: number;
+    commissionRatePercent: string;
     adminFeeCents: number;
     backyardMaintenanceFeeCents?: number;
     advertisementFeeCents?: number;
@@ -178,7 +178,7 @@ export const EmptyPropertyForm: PropertyFormState = {
 
     isFurnished: 'false',
     rentFrequency: '',
-    commissionRatePercent: 0,
+    commissionRatePercent: '0',
     adminFeeCents: 0,
     backyardMaintenanceFeeCents: 0,
     advertisementFeeCents: 0,
