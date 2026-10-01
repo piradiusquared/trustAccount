@@ -112,7 +112,9 @@ pub fn run() {
                         rentFrequency TEXT NOT NULL CHECK (rentFrequency IN ('weekly', 'fortnightly', 'monthly')),
                         startDate TEXT NOT NULL,
                         endDate TEXT NOT NULL,
-                        nextDue TEXT, -- Next due date after payment
+                        paidTo TEXT NOT NULL, -- paid to date
+                        daysLeft INTEGER NOT NULL,
+                        amountDueCents INTEGER NOT NULL,
                         leaseRemainCents INTEGER,
 
                         createdAt STRING,

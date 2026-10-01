@@ -1,6 +1,5 @@
 export type EntityId = string;
 export type IsoDate = string;
-export type MoneyCents = number;
 
 export type LedgerTargetType = 'lease' | 'property' | 'owner';
 export type LedgerKind = 'deposit' | 'payment' | 'expense' | 'withheld' | 'adjustment';
@@ -121,10 +120,10 @@ export interface PropertyRecord {
 
     isFurnished: string;
     commissionRatePercent: string;
-    adminFeeCents: MoneyCents;
-    backyardMaintenanceFeeCents?: MoneyCents;
-    advertisementFeeCents?: MoneyCents;
-    agreedSpendingLimitCents?: MoneyCents;
+    adminFeeCents: number;
+    backyardMaintenanceFeeCents?: number;
+    advertisementFeeCents?: number;
+    agreedSpendingLimitCents?: number;
     notes?: string;
 
     status: RecordStatus;
@@ -200,9 +199,9 @@ export interface LeaseRecord {
     startDate: IsoDate;
     endDate: IsoDate;
     rentFrequency: string;
-    rentCents: MoneyCents;
-    bondCents?: MoneyCents;
-    existingTenantCreditCents?: MoneyCents;
+    rentCents: number;
+    bondCents?: number;
+    existingTenantCreditCents?: number;
     tenantCount?: number;
     petsAllowed?: number;
     petCount?: number;
@@ -288,7 +287,9 @@ export interface RentRecord {
     rentFrequency: string;
     startDate: string;
     endDate: string;
-    nextDue: string;
+    paidTo: string;
+    daysLeft: number;
+    amountDueCents: number;
     leaseRemainCents: number;
 
     createdAt: IsoDate;
@@ -301,7 +302,9 @@ export interface CreateRentInput {
     rentFrequency: string;
     startDate: string;
     endDate: string;
-    nextDue: string;
+    paidTo: string;
+    daysLeft: number;
+    amountDueCents: number;
     leaseRemainCents: number;
 }
 
@@ -311,6 +314,8 @@ export const EmptyRentForm: CreateRentInput = {
     rentFrequency: '',
     startDate: '',
     endDate: '',
-    nextDue: '',
+    paidTo: '',
+    daysLeft: 0,
+    amountDueCents: 0,
     leaseRemainCents: 0
 }
