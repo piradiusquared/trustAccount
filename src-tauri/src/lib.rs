@@ -108,14 +108,15 @@ pub fn run() {
                         id TEXT PRIMARY KEY,
                         leaseId TEXT NOT NULL,
                         rentCents INTEGER NOT NULL,
-                        creditCents INTEGER,
                         rentFrequency TEXT NOT NULL CHECK (rentFrequency IN ('weekly', 'fortnightly', 'monthly')),
                         startDate TEXT NOT NULL,
                         endDate TEXT NOT NULL,
+
                         paidTo TEXT NOT NULL, -- paid to date
                         daysLeft INTEGER NOT NULL,
                         amountDueCents INTEGER NOT NULL,
                         leaseRemainCents INTEGER,
+                        creditCents INTEGER,
 
                         createdAt STRING,
                         updatedAt STRING,
