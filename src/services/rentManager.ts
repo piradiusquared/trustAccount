@@ -33,6 +33,11 @@ export const RentManager = {
     //     const newCredit = rawPayment - (daysPaid * rentDaily); // money left -> goes to credit
     // }
 
+    /**
+     * Processes incoming rent. Deducts "total" due in the lease, and updates stored credit
+     * @param id lease id to update
+     * @param rentInc **incoming** rent to be processed
+     */
     async processRent(id: EntityId, rentInc: number): Promise<void> {
         const db = await getDatabase();
         const now = new Date().toISOString();
@@ -60,7 +65,7 @@ export const RentManager = {
         paidToDate.setUTCDate(paidToDate.getUTCDate() + daysPaid);
         const newPaidTo = paidToDate.toISOString();
 
-        // 4. Save the updated paidTo, creditCents, and updatedAt back to SQLite
+        // Save the updated paidTo, creditCents, and updatedAt back to SQLite
         await db.execute(
             `UPDATE rent 
             SET paidTo = ?, creditCents = ?, daysLeft = ?, leaseRemainCents = ?, updatedAt = ? 

@@ -4,7 +4,13 @@ import { ChangeEvent, useState } from "react";
 Functions used for pre-processing the form data. 
 */
 
-// Shared function for converting bool to int for sqlite
+
+/**
+ * Shared function for converting bool to int for sqlite
+ * > Note: Deprecated
+ * @param raw form
+ * @returns processed form only containing int
+ */
 export function mapLeaseFromDb(raw: any): any {
     return {
         ...raw,
@@ -12,7 +18,10 @@ export function mapLeaseFromDb(raw: any): any {
     };
 }
 
-
+/**
+ * Gets local ISO string according to current timezone
+ * @returns local iso time
+ */
 export function getLocalIsoString(): string {
     const date = new Date();
     const timezoneOffset = date.getTimezoneOffset() * 60000;
@@ -21,10 +30,12 @@ export function getLocalIsoString(): string {
     return localDate.toISOString().slice(0, -1);
 }
 
-/*
-Combines detailed address components into a single address.
-Overseas address is optional for now
-*/
+/**
+ * Combines detailed address components into a single address.  
+ * Overseas address is optional
+ * @param form raw form
+ * @returns form with compressed address for displaying only
+ */
 export function formatPostalAddress(form: any): string {
     if (form.country !== "Australia") {
         return `${form.overseasAddress}, ${form.country}`;
@@ -45,20 +56,15 @@ export function formatPostalAddress(form: any): string {
 Shared form behaviour functions.
 */
 
-
-// export function handleChange<T>(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>, setter: React.Dispatch<React.SetStateAction<T>>) {
-//     const target = event.target as HTMLInputElement | HTMLSelectElement;
-//     const { name, value } = target;
-
-//     setter((current) => ({
-//         ...current,
-//         [name]: value,
-//     }));
-// }
-
 /*
 Hook used for creating and managing forms. 
 */
+/**
+ * Hook to create and manage forms. Compatible with any form
+ * @param initial form type (any)
+ * @param processChange function accepting any generic form field, and updates
+ * @returns form, setform function and generic handlechange function
+ */
 export function useForm<T extends object>(
     initial: T,
     processChange?: (
@@ -72,10 +78,6 @@ export function useForm<T extends object>(
         // const target = event.target as HTMLInputElement | HTMLSelectElement;
         const { name, value } = event.target;
 
-        // setForm((current) => ({
-        //     ...current,
-        //     [name]: value,
-        // }));
         setForm((current) => {
             const nextState = {
                 ...current,
@@ -91,6 +93,13 @@ export function useForm<T extends object>(
     return { form, setForm, handleChange };
 }
 
+
+/**
+ * Based on *useForm*, but stored as an array (used by tenants)
+ * @param initial form type (any)
+ * @param maxEntries maximum entries in array (fixed memory)
+ * @returns form array. Functions: set form arr, add entry, remove entry, handle entry change
+ */
 export function useFormArray<T extends object>(initial: T, maxEntries: number) {
     const [ formArr, setFormArr ] = useState<T[]>([{ ...initial }]);
 
@@ -137,6 +146,11 @@ export interface IsStatusService<T> {
     updateStatus(id: string, status: any): Promise<void>;
 }
 
+/**
+ * Fetches data required by a specific service (i.e. lease, property)
+ * @param service generic service 
+ * @returns array of functions for activity, loading and error if applicable
+ */
 export function useData<T extends StatusRec>(service: IsStatusService<T>) {
 
     const [active, setActiveItems] = useState<T[]>([]);

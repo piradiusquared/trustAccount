@@ -4,17 +4,28 @@ import { getLocalIsoString } from './utils';
 import { v7 as uuidv7 } from 'uuid'
 
 export const ownerService = {
-    // Fetch all owners
+    /**
+     * Fetches all owners
+     * @returns owner record of ALL owners
+     */
     async getAll(): Promise<OwnerRecord[]> {
         const db = await getDatabase();
         return await db.select<OwnerRecord[]>('SELECT * FROM owners ORDER BY reference ASC');
     },
 
+    /**
+     * Fetches active owners
+     * @returns only active owners
+     */
     async getActive(): Promise<OwnerRecord[]> {
         const db = await getDatabase();
         return await db.select<OwnerRecord[]>('SELECT * FROM owners WHERE status = "active" ORDER BY reference ASC');
     },
 
+    /**
+     * Fetches inactive owners
+     * @returns only inactive owners
+     */
     async getInactive(): Promise<OwnerRecord[]> {
         const db = await getDatabase();
         return await db.select<OwnerRecord[]>('SELECT * FROM owners WHERE status = "inactive" ORDER BY reference ASC');
@@ -27,7 +38,11 @@ export const ownerService = {
     //     return results.length > 0 ? results[0] : null;
     // },
 
-    // Create a new owner
+    /**
+     * Creates a new owner and adds to the database
+     * @param input new owner input based on forms
+     * @returns copy of to be inserted owner form
+     */
     async create(input: CreateOwnerInput): Promise<OwnerRecord> {
         const db = await getDatabase();
         const now = getLocalIsoString();
@@ -54,6 +69,11 @@ export const ownerService = {
     },
 
     // Update an existing owner
+    /**
+     * Update an existing owner in specific fields
+     * @param id owner id to update
+     * @param input partial fields to be updated
+     */
     async update(id: EntityId, input: Partial<CreateOwnerInput>): Promise<void> {
         const db = await getDatabase();
         const now = new Date().toISOString();
@@ -69,6 +89,11 @@ export const ownerService = {
         await db.execute(`UPDATE owners SET ${setClause} WHERE id = ?`, values);
     },
 
+    /**
+     * Changes the status of a specific owner
+     * @param id ownerid to update
+     * @param status active or inactive
+     */
     async updateStatus(id: EntityId, status: 'active' | 'inactive'): Promise<void> {
         const db = await getDatabase();
         const now = new Date().toISOString();
@@ -77,10 +102,13 @@ export const ownerService = {
         [status, now, id]
         );
     },
-
-
-
-    // Delete an owner (if owner is associated with property or lease, popup warning, cannot cascade)
+    
+    /**
+     * WORK IN PROGRESS
+     * Attempts to delete an owner. If references found, prevent any changes made
+     * @param id owner id to delete
+     * @returns 0 if successful
+     */
     async delete(id: EntityId): Promise<number> {
         const db = await getDatabase();
         // check for any foreign references first, then return either 0 or 1 based on success/fail

@@ -9,7 +9,10 @@ export interface LeaseWithPropertyDetails extends LeaseRecord {
 }
 
 export const leaseService = {
-    // Fetch only active leases (ignoring historic/expired ones)
+    /**
+     * Fetches only active leases (ignoring historic/expired ones)
+     * @returns record with address of all active leases
+     */
     async getActive(): Promise<LeaseWithPropertyDetails[]> {
         const db = await getDatabase();
         const raws = await db.select<any[]>(
@@ -21,6 +24,10 @@ export const leaseService = {
         return raws.map((raw) => mapLeaseFromDb(raw) as LeaseWithPropertyDetails);
     },
 
+    /**
+     * Fetches only inactive leases
+     * @returns record with address of all inactive leases
+     */
     async getInactive(): Promise<LeaseWithPropertyDetails[]> {
         const db = await getDatabase();
         const raws = await db.select<any[]>(
@@ -32,6 +39,11 @@ export const leaseService = {
         return raws.map((raw) => mapLeaseFromDb(raw) as LeaseWithPropertyDetails);
     },
 
+    /**
+     * Sets status of a specific lease
+     * @param id lease id
+     * @param status active or inactive
+     */
     async updateStatus(id: EntityId, status: 'active' | 'inactive'): Promise<void> {
         const db = await getDatabase();
         const now = new Date().toISOString();
@@ -41,8 +53,13 @@ export const leaseService = {
         );
     },
 
-    // Create a lease
     // Also adds to tenant table, AND one entry for rent
+    /**
+     * Creates a new lease. Adds into tenant table AND rent table
+     * @param input new lease entry
+     * @param tenants tenants associated with lease
+     * @returns 
+     */
     async create(input: CreateLeaseInput, tenants: CreateTenantInput[]): Promise<LeaseRecord> {
         const db = await getDatabase();
         const leaseId = uuidv7();
@@ -101,7 +118,12 @@ export const leaseService = {
         )
         return record;
     },
-    // Terminate/Expire a lease
+
+    /**
+     * Terminates a lease and sets the destined move out date
+     * @param id lease id to terminate
+     * @param moveOutDate date which tenants must move out by
+     */
     async terminateLease(id: EntityId, moveOutDate: IsoDate): Promise<void> {
         const db = await getDatabase();
         const now = new Date().toISOString();

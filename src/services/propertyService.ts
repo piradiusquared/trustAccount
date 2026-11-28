@@ -7,7 +7,10 @@ export interface PropertyWithOwner extends PropertyRecord {
 }
 
 export const propertyService = {
-    // Fetch properties and join the owner's name for your master property list dashboard
+    /**
+     * Fetch ***active*** properties and join the owner's name for your master property list dashboard
+     * @returns property records joined with respective owners
+     */
     async getActive(): Promise<PropertyRecord[]> {
         const db = await getDatabase();
         return await db.select<PropertyRecord[]>(
@@ -19,6 +22,10 @@ export const propertyService = {
         );
     },
 
+    /**
+     * Fetch ***inactive*** properties and join the owner's name for your master property list dashboard
+     * @returns property records joined with respective owners
+     */
     async getInactive(): Promise<PropertyRecord[]> {
         const db = await getDatabase();
         return await db.select<PropertyRecord[]>(
@@ -30,6 +37,11 @@ export const propertyService = {
         );
     },
 
+    /**
+     * Changes the status of a specific property
+     * @param id property to update
+     * @param status active or inactive
+     */
     async updateStatus(id: EntityId, status: 'active' | 'inactive'): Promise<void> {
         const db = await getDatabase();
         const now = new Date().toISOString();
@@ -39,13 +51,21 @@ export const propertyService = {
         );
     },
 
-    // Fetch properties belonging to a specific owner
+    /**
+     * Fetch properties belonging to a specific owner
+     * @param ownerId owner id to find properties
+     * @returns property list belonging to owner
+     */
     async getByOwnerId(ownerId: EntityId): Promise<PropertyRecord[]> {
         const db = await getDatabase();
         return await db.select<PropertyRecord[]>('SELECT * FROM properties WHERE ownerId = ?', [ownerId]);
     },
 
-    // Create a property
+    /**
+     * Creates a new property
+     * @param input from from the new property form
+     * @returns copy of to be inserted data
+     */
     async create(input: CreatePropertyInput): Promise<PropertyRecord> {
         const db = await getDatabase();
         const now = new Date().toISOString();
