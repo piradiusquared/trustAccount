@@ -6,6 +6,13 @@ export type LedgerKind = 'deposit' | 'payment' | 'expense' | 'withheld' | 'adjus
 export type InvoiceStatus = 'unpaid' | 'paid' | 'reversed' | 'void';
 export type RecordStatus = 'active' | 'inactive';
 
+/**
+ * Note:
+ * ...Record: Full record which is saved into the sqlite db
+ * Create...Input: Compact template used by forms
+ * Empty...Form: Empty version used by forms in the app
+ */
+
 interface DetailedAddress {
     // Detailed address
     country: string;
@@ -266,19 +273,10 @@ export const EmptyTenantForm: CreateTenantInput = {
     notes: ''
 }
 
-/*
-Rent tracking
-id TEXT PRIMARY KEY,
-leaseID TEXT NOT NULL,
-rentCents INTEGER NOT NULL,
-creditCents INTEGER,
-rentFrequency TEXT NOT NULL CHECK (rentFrequency IN ('weekly', 'fortnightly', 'monthly')),
-startDate TEXT NOT NULL,
-endDate TEXT NOT NULL,
-nextDue TEXT, -- Next due date after payment
-leaseRemainCents INTEGER,
-*/
-
+/**
+ * Rent management. Record, input, empty
+ * Used in the background and by the lease page
+ */
 export interface RentRecord {
     id: EntityId;
     leaseId: EntityId;

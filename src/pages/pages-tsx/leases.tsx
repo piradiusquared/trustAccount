@@ -7,6 +7,10 @@ import { useEffect, useState, SubmitEvent } from "react"
 import { propertyService } from "../../services/propertyService"
 import { leaseService } from "../../services/leaseService"
 
+/**
+ * Function that holds html to view all active/inactive leases
+ * @returns HTML used in leases page
+ */
 export function Leases() {
     const [leases, setLeases] = useState<LeaseRecord[]>([]);
     useEffect(() => {
@@ -57,6 +61,10 @@ export function Leases() {
     )
 }
 
+/**
+ * Function that manages new lease logic. Deals with form entries and saving to db
+ * @returns HTML for the new lease subpage
+ */
 export function NewLease() {
     const { form, setForm, handleChange } = useForm(
         EmptyLeaseForm,
@@ -310,6 +318,12 @@ export function NewLease() {
 
 // Helper functions purely for leases
 
+/**
+ * Gets the frequency of a specific rental property
+ * @param propertyList all properties stored in db
+ * @param propertySearch id of property to search for
+ * @returns rent freq if found, blank otherwise
+ */
 function getRentFreq(propertyList: PropertyRecord[], propertySearch: string): string {
     for (const property of propertyList) {
         if (property.id == propertySearch) {
@@ -319,6 +333,12 @@ function getRentFreq(propertyList: PropertyRecord[], propertySearch: string): st
     return "";
 }
 
+/**
+ * Adds new tenants based on the form
+ * @param tenantList new list of tenants to insert to db
+ * @param tenantCount count of new tenants
+ * @returns copy of tenant payloads that will be added
+ */
 function processTenants(tenantList: typeof EmptyTenantForm[], tenantCount: number): CreateTenantInput[] {
     const tenantPayload: CreateTenantInput[] = [];
 

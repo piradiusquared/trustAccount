@@ -1,13 +1,16 @@
 
 import { Link, useNavigate } from 'react-router'
-import { CreateOwnerInput, OwnerRecord, EmptyOwnerForm } from '../../lib/datatypes';
-import { useState, SubmitEvent, useEffect } from 'react';
+import { CreateOwnerInput, EmptyOwnerForm } from '../../lib/datatypes';
+import { SubmitEvent } from 'react';
 
 import '../pages-css/form.css'
 import { ownerService } from '../../services/ownerService';
 import { formatPostalAddress, useForm, useData } from '../../services/utils';
 
-// TODO: move to datatypes ts file
+/**
+ * Fetch and returns HTML containing all active/inactive owners in db.
+ * @returns HTML for owner table
+ */
 export function Owners() {
 
     const {
@@ -110,6 +113,10 @@ export function Owners() {
     );
 }
 
+/**
+ * Creates and manages new owner form logic. Processing and storing of data
+ * @returns HTML containing forms to add new owners
+ */
 export function NewOwner() {
     const { form, setForm, handleChange } = useForm(EmptyOwnerForm);
     const navigate = useNavigate();

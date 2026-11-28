@@ -1,4 +1,7 @@
-
+/**
+ * Dashboard html
+ * @returns None
+ */
 export default function Dashboard() {
     return (
         <div className="content-container">

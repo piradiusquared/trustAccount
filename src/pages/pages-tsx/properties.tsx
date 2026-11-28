@@ -7,9 +7,10 @@ import { propertyService } from "../../services/propertyService";
 import { ownerService } from "../../services/ownerService";
 import { formatPostalAddress, useData, useForm } from "../../services/utils";
 
-// TODO: create the state and forms
-
-
+/**
+ * Fetches and maps all properties stored in db to tables
+ * @returns HTML for all properties
+ */
 export function Properties() {
     
     const {
@@ -20,7 +21,6 @@ export function Properties() {
     } = useData(propertyService);
     if (loading) return <div>Loading...</div>
 
-    
 
     return (
         <section className="content-container">
@@ -105,6 +105,10 @@ export function Properties() {
     )
 }
 
+/**
+ * Function that creates and manages new property forms and storage in db.
+ * @returns HTML of new property forms
+ */
 export function NewProperty() {
     const { form, setForm, handleChange } = useForm(EmptyPropertyForm);
     const [ownerList, setOwners] = useState<OwnerRecord[]>([]);
@@ -136,9 +140,6 @@ export function NewProperty() {
         try {
             const newProperty = await propertyService.create(payload);
             console.log('[Frontend] Database write success: ', newProperty);
-
-            // const testQuery = await propertyService.getAllWithOwners();
-            // console.log('[Frontend] Current owners in database: ', testQuery);
             setForm(EmptyPropertyForm);
             navigate('/properties');
         } catch (error) {
@@ -183,7 +184,7 @@ export function NewProperty() {
                             <option value="House">House</option>
                             <option value="Land">Land</option>
                             <option value="Warehouse">Warehouse</option>
-                            {/* TODO: Can easily expand later */}
+                            {/* Can easily expand later */}
                         </select>
                     </label>
 
