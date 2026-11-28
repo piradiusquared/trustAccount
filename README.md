@@ -5,4 +5,5 @@
 
 ### Updates
 - [x] v0.0.1 Current preliminary development
-- [ ] v0.0.2 Working DB storage for entry forms
+- [x] v0.0.2 Working DB storage for entry forms
+- [ ] Rent logic

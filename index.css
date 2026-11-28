@@ -1,3 +1,4 @@
+/* Frontend of actual window Vite loads */
 #root {
     display: flex;
     flex-direction: row;
